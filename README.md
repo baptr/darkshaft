@@ -1,6 +1,6 @@
 Operation: Darkshaft
 ====================
-Multi-player, persistent progression, cross-platform Tower-D.
+Cooperative multi-player, persistent progression, cross-platform Tower-D.
 
 Building and Running
 --------------------
@@ -24,3 +24,6 @@ Once that's done, the build itself isn't too bad...
     $ ant debug
 
 With any luck, you'll end with "Success" and be able to `ant installd`.
+
+### Eclipse
+To Be Determined...
