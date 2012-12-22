@@ -33,7 +33,6 @@ Theres a couple steps to get everything set up and imported into an eclipse work
 * Click Help > Install New Software.
 * Choose "--All Available Sites--" from the drop down
 * Search for and install Eclipse EGit
-* See [http://www.vogella.com/articles/EGit/article.html](Basic EGit documentation)
 
 ##### Download code
 
@@ -41,6 +40,7 @@ Theres a couple steps to get everything set up and imported into an eclipse work
 * Copy git url in the URI box `https://github.com/<username>/darkshaft.git`
 * Click Next a few times
 * Import existing projects > Check Darkshaft
+* Read through [this EGit documentation](http://www.vogella.com/articles/EGit/article.html) for more info
 
 ##### Set up JDK
 
