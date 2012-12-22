@@ -15,17 +15,17 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
-import com.baptr.darkshaft.gfx.Sprite;
+import com.baptr.darkshaft.gfx.Entity;
 
 public class Game implements ApplicationListener {
     OrthographicCamera camera;
     SpriteBatch batch;
     BitmapFont font;
 
-    Sprite tower;
+    Entity tower;
 
     public void create() {
-        tower = new Sprite("tower.png", 20, 20);
+        tower = new Entity("tower.png", 20, 20);
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
@@ -46,6 +46,7 @@ public class Game implements ApplicationListener {
         batch.begin();
 
         tower.draw(batch);
+        tower.moveBy(4.0f*Gdx.graphics.getDeltaTime(),0);
 
         font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
         font.draw(batch, "fps: " + Gdx.graphics.getFramesPerSecond(), 20, 100);
