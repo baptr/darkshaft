@@ -7,7 +7,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.MathUtils;
@@ -16,16 +15,17 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import com.baptr.darkshaft.gfx.Sprite;
+
 public class Game implements ApplicationListener {
-    Texture towerImage;
     OrthographicCamera camera;
     SpriteBatch batch;
     BitmapFont font;
 
-    Rectangle tower;
+    Sprite tower;
 
     public void create() {
-        towerImage = new Texture(Gdx.files.internal("tower.png"));
+        tower = new Sprite("tower.png", 20, 20);
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
@@ -34,11 +34,6 @@ public class Game implements ApplicationListener {
                 Gdx.files.internal("arial-15.png"), false, true);
         batch = new SpriteBatch();
 
-        tower = new Rectangle();
-        tower.x = 20;
-        tower.y = 20;
-        tower.width = 32;
-        tower.height = 64;
     }
 
     public void render() {
@@ -49,7 +44,9 @@ public class Game implements ApplicationListener {
 
         //batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        batch.draw(towerImage, tower.x, tower.y);
+
+        tower.draw(batch);
+
         font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
         font.draw(batch, "fps: " + Gdx.graphics.getFramesPerSecond(), 20, 100);
         batch.end();
