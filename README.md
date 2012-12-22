@@ -33,6 +33,7 @@ Theres a couple steps to get everything set up and imported into an eclipse work
 * Click Help > Install New Software
 * .Choose "--All Available Sites--" from the drop down
 * Search for and install Eclipse EGit
+* Basic documentation can be found at http://www.vogella.com/articles/EGit/article.html
 
 ##### Download code
 
