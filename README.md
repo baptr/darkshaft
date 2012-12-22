@@ -28,26 +28,30 @@ With any luck, you'll end with "Success" and be able to `ant installd`.
 ### Eclipse Setup
 Theres a couple steps to get everything set up and imported into an eclipse workspace
 
-# Install Git
-Click Help > Install New Software
-Choose "--All Available Sites--" from the drop down
-Search for and install Eclipse EGit
+##### Install 
 
-# Download code
-File > Import > Git > Projects from Git > URI
-Copy git url in the URI box (https://github.com/<username>/darkshaft.git)
-Click Next a few times
-Import existing projects > Check Darkshaft
+* Click Help > Install New Software
+* .Choose "--All Available Sites--" from the drop down
+* Search for and install Eclipse EGit
 
-# Set up JDK
-Click Window > Preferences > Java > Installed JREs
-Add \Program Files\Java\jdk1.7.0_10
-Uncheck the JRE box and check the JDK that was added
+##### Download code
 
-# Build + Run
-Right click the build.xml you want to run > Run As > Ant Build
-Right click DesktopGame.java > Run As > Java Application
-This will automatically create a Run Configuration for the desktop version of the game
-Click Run > Run Configuration > DesktopGame > Classpath > User Entries > Advanced > Add Folder
-Add Main > Assets
-Re-run game
+* File > Import > Git > Projects from Git > URI
+* Copy git url in the URI box (https://github.com/<username>/darkshaft.git)
+* Click Next a few times
+* Import existing projects > Check Darkshaft
+
+##### Set up JDK
+
+* Click Window > Preferences > Java > Installed JREs
+* Add \Program Files\Java\jdk1.7.0_10
+* Uncheck the JRE box and check the JDK that was added
+
+##### Build + Run
+
+* Right click the build.xml you want to run > Run As > Ant Build
+* Right click DesktopGame.java > Run As > Java Application
+* This will automatically create a Run Configuration for the desktop version of the game
+* Click Run > Run Configuration > DesktopGame > Classpath > User Entries > Advanced > Add Folder
+* Add Main > Assets
+* Re-run game
