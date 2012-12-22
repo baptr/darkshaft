@@ -14,6 +14,11 @@ public class Sprite {
         pos = p;
     }
 
+    public Sprite(Texture t, float x, float y) {
+        img = t;
+        pos = new Rectangle(x, y, img.getWidth(), img.getHeight());
+    }
+
     public Sprite(String imgPath, float x, float y) {
         img = new Texture(Gdx.files.internal(imgPath));
         pos = new Rectangle(x, y, img.getWidth(), img.getHeight());

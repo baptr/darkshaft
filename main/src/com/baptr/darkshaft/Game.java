@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,17 +16,26 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
-import com.baptr.darkshaft.gfx.Entity;
+import com.baptr.darkshaft.gfx.*;
 
 public class Game implements ApplicationListener {
     OrthographicCamera camera;
     SpriteBatch batch;
     BitmapFont font;
 
-    Entity tower;
+    AssetManager manager;
+
+    Tower tower;
+    Terrain terrain;
 
     public void create() {
-        tower = new Entity("tower.png", 20, 20);
+        manager = new AssetManager();
+        Terrain.init(this, manager); 
+
+        manager.finishLoading();
+
+        tower = new Tower("tower.png", 20, 20);
+        terrain = new Terrain(manager, 20, 100 );
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
@@ -44,6 +54,8 @@ public class Game implements ApplicationListener {
 
         //batch.setProjectionMatrix(camera.combined);
         batch.begin();
+
+        terrain.draw(batch);
 
         tower.draw(batch);
         tower.moveBy(4.0f*Gdx.graphics.getDeltaTime(),0);
