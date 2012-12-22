@@ -1,6 +1,7 @@
 package com.baptr.darkshaft;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
@@ -18,7 +19,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import com.baptr.darkshaft.gfx.*;
 
-public class Game implements ApplicationListener {
+public class Darkshaft extends Game {
     OrthographicCamera camera;
     SpriteBatch batch;
     BitmapFont font;
@@ -27,7 +28,8 @@ public class Game implements ApplicationListener {
 
     Tower tower;
     Terrain terrain;
-
+    
+    @Override
     public void create() {
         manager = new AssetManager();
         Terrain.init(this, manager); 
@@ -46,7 +48,10 @@ public class Game implements ApplicationListener {
 
     }
 
+    @Override
     public void render() {
+    	super.render();
+    	
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
@@ -65,16 +70,24 @@ public class Game implements ApplicationListener {
         batch.end();
     }
 
+    @Override
     public void resize(int width, int height) {
+    	super.resize(width, height);
     }
 
+    @Override
     public void pause() {
+    	super.pause();
     }
 
+    @Override
     public void resume() {
+    	super.resume();
     }
 
+    @Override
     public void dispose() {
+    	super.dispose();
     }
 }
 
