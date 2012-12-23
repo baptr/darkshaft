@@ -18,9 +18,17 @@ public class TowerScreen extends AbstractScreen {
         super(game);
 
         tower = new Tower("tower.png", 20, 20);
-        terrain = new Terrain[4];
-        for(int i = 0; i < 4; i++) {
-            terrain[i] = new Terrain(game.manager, i, 20+64*i, 100 );
+        terrain = new Terrain[12];
+        for(int i = 0; i < 4*3; i++) {
+            int col = i % Terrain.TILE_TYPES;
+            int row = i / Terrain.TILE_TYPES;
+            int odd = row % 2;
+            int tileX = 20 + col * Terrain.TILE_WIDTH;
+            if(odd == 1) {
+                tileX += Terrain.TILE_X_OFFSET;
+            }
+            int tileY = 100 + row * Terrain.TILE_Y_OFFSET;
+            terrain[i] = new Terrain(game.manager, col, tileX, tileY);
         }
     }
 
@@ -38,7 +46,7 @@ public class TowerScreen extends AbstractScreen {
 
         batch.begin();
 
-        for(int i = 0; i < 4; i++) {
+        for(int i = 0; i < 12; i++) {
             terrain[i].draw(batch);
         }
 
