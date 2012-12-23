@@ -90,6 +90,17 @@
         </jar>
     </target>
 
+    <target name="minijar" depends="pack-textures">
+        <jar 
+            destfile="${out.absolute.dir}/${projname}-nodeps.jar"
+            basedir="${out.classes.absolute.dir}">
+            <fileset dir="${assets.dir}" />
+            <manifest>
+                <attribute name="Main-Class" value="${package}.DesktopGame"/>
+            </manifest>
+        </jar>
+    </target>
+
     <target name="runjar" depends="dist">
         <java jar="${out.absolute.dir}/${projname}.jar" fork="true"/>
     </target>
