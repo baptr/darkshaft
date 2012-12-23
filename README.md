@@ -28,6 +28,10 @@ With any luck, you'll end with "Success" and be able to `ant installd`.
 ### Eclipse Setup
 Theres a couple steps to get everything set up and imported into an eclipse workspace
 
+##### Configuration
+
+* Window->Preferences->Java->Code Style->Formatter->Edit->Indentation = "Spaces Only" (4 spaces)
+
 ##### Install 
 
 * Click Help > Install New Software.
