@@ -5,6 +5,10 @@ import com.baptr.darkshaft.Darkshaft;
 
 public class DesktopGame {
     public static void main(String[] args) {
-        new LwjglApplication(new Darkshaft(), "Operation: Darkshaft", 800, 600, true);
+        boolean splash = true;
+        if(args.length > 0) {
+            splash = false;
+        }
+        new LwjglApplication(new Darkshaft(splash), "Operation: Darkshaft", 800, 600, true);
     }
 }

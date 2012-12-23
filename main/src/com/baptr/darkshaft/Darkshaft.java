@@ -1,6 +1,5 @@
 package com.baptr.darkshaft;
 
-import com.baptr.darkshaft.screen.*;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -20,6 +19,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import com.baptr.darkshaft.screen.*;
 import com.baptr.darkshaft.gfx.*;
 
 public class Darkshaft extends Game {
@@ -28,7 +28,14 @@ public class Darkshaft extends Game {
     OrthographicCamera camera;
     FPSLogger fpsLogger;
 
+    private boolean showSplash = true;
+
     public AssetManager manager;
+
+    public Darkshaft(boolean showSplash) {
+        super();
+        this.showSplash = showSplash;
+    }
 
     @Override
     public void create() {
@@ -41,7 +48,11 @@ public class Darkshaft extends Game {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 600);
         
-        setScreen(GetSplashScreen());
+        if(showSplash) {
+            setScreen(GetSplashScreen());
+        } else {
+            setScreen(new TowerScreen(this));
+        }
 
     }
 
