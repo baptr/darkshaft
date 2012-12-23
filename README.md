@@ -26,7 +26,7 @@ Once that's done, the build itself isn't too bad...
 With any luck, you'll end with "Success" and be able to `ant installd`.
 
 ### Eclipse Setup
-Theres a couple steps to get everything set up and imported into an eclipse workspace
+There are a couple steps to get everything set up and imported into an eclipse workspace
 
 ##### Configuration
 
