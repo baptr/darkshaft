@@ -11,21 +11,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
-import com.baptr.darkshaft.Darkshaft;	
+import com.baptr.darkshaft.Darkshaft;
 
 public class SplashScreen extends AbstractScreen {
 
-	private Image splashImage;
- 
-    public SplashScreen(
-        Darkshaft game )
-    {
+    private Image splashImage;
+
+    public SplashScreen( Darkshaft game ) {
         super( game );
     }
- 
+
     @Override
-    public void show()
-    {
+    public void show() {
         super.show();
 
         // retrieve the splash image's region from the atlas
@@ -43,24 +40,21 @@ public class SplashScreen extends AbstractScreen {
 
         // configure the fade-in/out effect on the splash image
         splashImage.addAction( sequence( fadeIn( 0.75f ), delay( 1.75f ), fadeOut( 0.75f ),
-            new Action() {
-                @Override
-                public boolean act(
-                    float delta )
-                {
-                    // the last action will move to the next screen
-                    game.setScreen( new TowerScreen( game ) );
-                    return true;
-                }
-            } ) );
+                new Action() {
+                    @Override
+                    public boolean act( float delta ) {
+                        // the last action will move to the next screen
+                        game.setScreen( new TowerScreen( game ) );
+                        return true;
+                    }
+                } ) );
 
         // and finally we add the actor to the stage
         stage.addActor( splashImage );
     }
- 
+
     @Override
-    public void dispose()
-    {
+    public void dispose() {
         super.dispose();
     }
 

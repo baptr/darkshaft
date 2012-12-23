@@ -1,19 +1,13 @@
 package com.baptr.darkshaft.gfx;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+
 public class Entity extends Sprite {
 
     public Entity(String imgPath, float x, float y) {
-        super(imgPath, x, y);
+        super(new Texture(Gdx.files.internal(imgPath)));
+        this.setPosition(x, y);
     }
-
-    public void moveBy(float dx, float dy) {
-        pos.x += dx;
-        pos.y += dy;
-    }
-
-    public void moveTo(float x, float y) {
-        pos.x = x;
-        pos.y = y;
-    }
-
 }
