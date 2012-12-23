@@ -6,15 +6,12 @@ import com.badlogic.gdx.tools.imagepacker.TexturePacker2.Settings;
 /**
  * Packs single images into image atlases.
  */
-public class DarkshaftTexturePacker
-{
-    private static final String INPUT_DIR = "etc/images";
-    private static final String OUTPUT_DIR = "../darkshaft/main/assets/image-atlases";
+public class DarkshaftTexturePacker {
+    private static final String INPUT_DIR = "../main/images";
+    private static final String OUTPUT_DIR = "../main/assets/image-atlases";
     private static final String PACK_FILE = "pages-info";
 
-    public static void main(
-        String[] args )
-    {
+    public static void main( String[] args ) {
         // create the packing's settings
         Settings settings = new Settings();
 
