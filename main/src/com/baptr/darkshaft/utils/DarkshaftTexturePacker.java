@@ -7,8 +7,8 @@ import com.badlogic.gdx.tools.imagepacker.TexturePacker2.Settings;
  * Packs single images into image atlases.
  */
 public class DarkshaftTexturePacker {
-    private static final String INPUT_DIR = "../main/images";
-    private static final String OUTPUT_DIR = "../main/assets/image-atlases";
+    private static final String INPUT_DIR = "./main/images";
+    private static final String OUTPUT_DIR = "./main/assets/image-atlases";
     private static final String PACK_FILE = "pages-info";
 
     public static void main( String[] args ) {
