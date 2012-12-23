@@ -11,7 +11,8 @@
 # generated files
 bin/
 gen/
-image-atlases
+main/assets/image-atlases
+main/assets/maps
 
 # Local configuration file (sdk path, etc)
 local.properties
