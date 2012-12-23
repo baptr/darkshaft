@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.TileMapRendererLoader.TileMapParameter;
+import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.baptr.darkshaft.Darkshaft;
 
@@ -11,15 +14,20 @@ import com.baptr.darkshaft.gfx.*;
 
 public class DemoScreen extends AbstractScreen {
 
+    private TileMapRenderer tileMapRenderer;
+
     public DemoScreen(Darkshaft game) {
         super(game);
 
-        
+        TileMapParameter tileMapParameter = new TileMapParameter("maps", 8, 8);
+        assetManager.load("maps/demo.tmx", TileMapRenderer.class, tileMapParameter);
     }
 
     @Override
     public void show() {
         super.show();
+        assetManager.finishLoading();
+        tileMapRenderer = assetManager.get("maps/demo.tmx", TileMapRenderer.class);
     }
 
     @Override
@@ -31,15 +39,8 @@ public class DemoScreen extends AbstractScreen {
 
         batch.begin();
 
-        for(int i = 0; i < 12; i++) {
-            terrain[i].draw(batch);
-        }
+        tileMapRenderer.render(camera);
 
-        tower.draw(batch);
-        tower.translate(4.0f*Gdx.graphics.getDeltaTime(),0);
-
-        font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        font.draw(batch, "fps: " + Gdx.graphics.getFramesPerSecond(), 20, 100);
         batch.end();
     }
 

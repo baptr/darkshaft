@@ -99,7 +99,7 @@
         </java>
     </target>
 
-    <target name="dist" depends="pack-textures">
+    <target name="dist" depends="compile">
         <jar 
             destfile="${out.absolute.dir}/${projname}.jar"
             basedir="${out.classes.absolute.dir}">
@@ -112,7 +112,7 @@
         </jar>
     </target>
 
-    <target name="minijar" depends="pack-textures">
+    <target name="minijar" depends="compile">
         <jar 
             destfile="${out.absolute.dir}/${projname}-nodeps.jar"
             basedir="${out.classes.absolute.dir}">
@@ -127,7 +127,7 @@
         <java jar="${out.absolute.dir}/${projname}.jar" fork="true"/>
     </target>
 
-    <target name="run" depends="pack-textures">
+    <target name="run" depends="compile">
         <path id="java.classpath">
             <fileset dir="${libs.absolute.dir}">
                 <include name="**/*.jar" />
@@ -142,6 +142,7 @@
             classname="${package}.DesktopGame"
             classpath="${out.classes.absolute.dir}"
             classpathref="java.classpath"/>
+            <arg value="-skipsplash"/>
     </target>
 
 </project>
