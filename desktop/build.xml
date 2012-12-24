@@ -141,8 +141,9 @@
             fork="true"
             classname="${package}.DesktopGame"
             classpath="${out.classes.absolute.dir}"
-            classpathref="java.classpath"/>
+            classpathref="java.classpath">
             <arg value="-skipsplash"/>
+        </java>
     </target>
 
 </project>

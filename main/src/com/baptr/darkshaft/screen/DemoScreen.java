@@ -6,9 +6,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TileMapRendererLoader.TileMapParameter;
-import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.baptr.darkshaft.Darkshaft;
+
+import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
+//import com.baptr.darkshaft.core.TileMapRenderer;
 
 import com.baptr.darkshaft.gfx.*;
 
@@ -20,7 +22,7 @@ public class DemoScreen extends AbstractScreen {
         super(game);
 
         TileMapParameter tileMapParameter = new TileMapParameter("maps", 8, 8);
-        assetManager.load("maps/demo.tmx", TileMapRenderer.class, tileMapParameter);
+        assetManager.load("maps/demo.tmx", com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer.class, tileMapParameter);
     }
 
     @Override
