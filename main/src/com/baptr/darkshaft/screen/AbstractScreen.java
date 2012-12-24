@@ -1,6 +1,7 @@
 package com.baptr.darkshaft.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -20,6 +21,7 @@ public abstract class AbstractScreen implements Screen {
     protected final Stage stage;
     protected final AssetManager assetManager;
     protected final OrthographicCamera camera;
+    protected final InputMultiplexer input;
     private TextureAtlas atlas;
 
     public AbstractScreen( Darkshaft game ) {
@@ -29,6 +31,9 @@ public abstract class AbstractScreen implements Screen {
                 Gdx.files.internal("arial-15.png"), false, true);
         this.batch = new SpriteBatch();
         this.stage = new Stage(0, 0, true);
+        input = new InputMultiplexer();
+        Gdx.input.setInputProcessor(input);
+        input.addProcessor(stage);
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, 800, 600);
     }

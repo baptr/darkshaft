@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
 //import com.baptr.darkshaft.core.TileMapRenderer;
 
 import com.baptr.darkshaft.gfx.*;
+import com.baptr.darkshaft.input.CameraInputProcessor;
 
 public class DemoScreen extends AbstractScreen {
 
@@ -20,7 +21,7 @@ public class DemoScreen extends AbstractScreen {
 
     public DemoScreen(Darkshaft game) {
         super(game);
-
+        input.addProcessor(new CameraInputProcessor(camera));
         TileMapParameter tileMapParameter = new TileMapParameter("maps", 8, 8);
         assetManager.load("maps/demo.tmx", com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer.class, tileMapParameter);
     }
@@ -35,7 +36,7 @@ public class DemoScreen extends AbstractScreen {
     @Override
     public void render( float delta ) {
         super.render( delta );	
-
+        
         Gdx.gl.glClearColor( 0f, 0f, 0.5f, 1f );
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
 
