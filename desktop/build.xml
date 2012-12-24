@@ -99,7 +99,7 @@
         </java>
     </target>
 
-    <target name="dist" depends="compile">
+    <target name="dist" depends="compile,pack-maps">
         <jar 
             destfile="${out.absolute.dir}/${projname}.jar"
             basedir="${out.classes.absolute.dir}">
