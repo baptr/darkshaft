@@ -29,6 +29,10 @@ public class Darkshaft extends Game {
     private boolean showSplash = true;
 
     public AssetManager manager;
+    
+    public Darkshaft() {
+        this(true);
+    }
 
     public Darkshaft(boolean showSplash) {
         super();

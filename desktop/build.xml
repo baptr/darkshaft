@@ -1,24 +1,7 @@
 <!-- based on https://raw.github.com/Quixotix/agenthon/master/desktop/build.xml -->
 <project name="darkshaft" default="dist">
-    <property name="verbose" value="no" />
-    <property name="projname" value="darkshaft"/>
-    <property name="package" value="com.baptr.darkshaft"/>
-    
-    <property name="root.dir" value=".." />
-    <property name="images.absolute.dir" location="${root.dir}/images" />
-    
-    <property name="main.dir" value="${root.dir}/main" />
-    <property name="main.tools.dir" value="${main.dir}/tools" />
-    <property name="main.src.dir" value="${main.dir}/src"/>
-    <property name="main.libs.dir" value="${main.dir}/libs"/>
-    <property name="main.libs.absolute.dir" location="${main.libs.dir}" />
-    
-    <property name="maps.input.dir" value="${main.dir}/maps"/>
-    <property name="assets.dir" value="${main.dir}/assets"/>
-    <property name="maps.output.dir" value="${assets.dir}/maps"/>
-    <property name="atlases.dir" value="${assets.dir}/image-atlases"/>
-    <property name="assets.absolute.dir" location="${assets.dir}"/>
-    
+    <import file="../main/common_build.xml"/>
+
     <property name="src.dir" value="src" />
     <property name="src.absolute.dir" location="${src.dir}" />
     
@@ -35,7 +18,7 @@
     
     <target name="init-build">
         <mkdir dir="${out.dir}" />
-        <mkdir dir="${atlases.dir}" />
+        <mkdir dir="${atlas.output.dir}" />
         <mkdir dir="${out.classes.absolute.dir}" />
     </target>
 
@@ -58,45 +41,6 @@
             <src path="${main.src.dir}" />
             <src path="${assets.dir}" />
         </javac>
-    </target>
-
-    <target name="pack-textures" depends="compile">
-        <!-- pack textures -->
-        <path id="java.classpath">
-            <fileset dir="${main.libs.absolute.dir}">
-                <include name="**/*.jar" />
-            </fileset>
-            <fileset dir="${main.tools.dir}">
-                <include name="gdx-tools.jar" />
-            </fileset>
-        </path>
-        <java 
-            fork="true"
-            classname="${package}.utils.DarkshaftTexturePacker"
-            classpath="${out.classes.absolute.dir}"
-            classpathref="java.classpath">
-        </java>
-    </target>
-
-    <target name="pack-maps">
-        <!-- pack textures -->
-        <delete dir="${maps.output.dir}" verbose="${verbose}" />
-        <path id="java.classpath">
-            <fileset dir="${main.libs.absolute.dir}">
-                <include name="**/*.jar" />
-            </fileset>
-            <fileset dir="${main.tools.dir}">
-                <include name="gdx-tools.jar" />
-                <include name="gdx-tiled-preprocessor.jar" />
-            </fileset>
-        </path>
-        <java 
-            fork="true"
-            classname="com.badlogic.gdx.tiledmappacker.TiledMapPacker"
-            classpathref="java.classpath" >
-            <arg value="${maps.input.dir}" />
-            <arg value="${maps.output.dir}" />
-        </java>
     </target>
 
     <target name="dist" depends="compile,pack-maps">
