@@ -282,9 +282,14 @@ public class TileMapRenderer implements Disposable {
 					if (blended == blendedTiles.contains(tile)) {
 						TextureRegion reg = atlas.getRegion(tile);
 						if (reg != null) {
-							
-							float x = (col - row) * unitsPerTileX - offsetX;
-							float y = (layer.length - row - col - 1) * unitsPerTileY - offsetY;
+							float x, y;
+                                                        if(isIsometric) {
+							    x = (col - row) * unitsPerTileX - offsetX;
+							    y = (layer.length - row - col - 1) * unitsPerTileY - offsetY;
+                                                        } else {
+                                                            x = col * unitsPerTileX - offsetX;
+                                                            y = (layer.length - row - 1) * unitsPerTileY - offsetY;
+                                                        }
 							float width = reg.getRegionWidth();
 							float height = reg.getRegionHeight();							
 							float originX = width * 0.5f;
@@ -408,13 +413,29 @@ public class TileMapRenderer implements Disposable {
 	 * @param layers The list of layers to draw, 0 being the lowest layer. You will get an IndexOutOfBoundsException if a layer
 	 *           number is too high. */
 	public void render (float x, float y, float width, float height, int[] layers) {
-		lastRow = (int)((mapHeightUnits - (y - height + overdrawY)) / (unitsPerBlockY));
-		initialRow = (int)((mapHeightUnits - (y - overdrawY)) / (unitsPerBlockY));
-		initialRow = (initialRow > 0) ? initialRow : 0; // Clamp initial Row > 0
+                if(!isIsometric) {
+                    lastRow = (int)((mapHeightUnits - (y - height + overdrawY)) / (unitsPerBlockY));
+                    initialRow = (int)((mapHeightUnits - (y - overdrawY)) / (unitsPerBlockY));
 
-		lastCol = (int)((x + width + overdrawX) / (unitsPerBlockX));
-		initialCol = (int)((x - overdrawX) / (unitsPerBlockX));
-		initialCol = (initialCol > 0) ? initialCol : 0; // Clamp initial Col > 0
+                    lastCol = (int)((x + width + overdrawX) / (unitsPerBlockX));
+                    initialCol = (int)((x - overdrawX) / (unitsPerBlockX));
+                } else {
+                    int top = (int)(mapHeightUnits/2 - y - overdrawY);
+                    int bottom = (int)(mapHeightUnits/2 - y + height + overdrawY);
+                    int left = (int)(x - overdrawX);
+                    int right = (int)(x + width + overdrawX);
+
+                    // firstRow -> lastRow = top-right -> bottom-left
+                    initialRow = getIsoRow(right, top) / tilesPerBlockY;
+                    lastRow = getIsoRow(left, bottom) / tilesPerBlockY;
+
+                    // firstCol -> lastCol = top-left -> bottom-right
+                    initialCol = getIsoCol(left, top) / tilesPerBlockX;
+                    lastCol = getIsoCol(right, bottom) / tilesPerBlockX;
+                }
+
+                initialRow = (initialRow > 0) ? initialRow : 0; // Clamp initial Row > 0
+                initialCol = (initialCol > 0) ? initialCol : 0; // Clamp initial Col > 0
 
 		Gdx.gl.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
@@ -494,6 +515,16 @@ public class TileMapRenderer implements Disposable {
 	public int getCol (int worldX) {
 		return (int)(worldX / unitsPerTileX);
 	}
+
+        public int getIsoRow(float worldX, float worldY) {
+            int row = (int)((worldY / unitsPerTileY) - (worldX / unitsPerTileX)) / 2;
+            return row;
+        }
+
+        public int getIsoCol(float worldX, float worldY) {
+            int col = (int)((worldY / unitsPerTileY) + (worldX / unitsPerTileX)) / 2;
+            return col;
+        }
 
 	/** Returns the initial drawn block row, for debugging purposes. Use this along with {@link TileMapRenderer#getLastRow()} to
 	 * compute the number of rows drawn in the last call to {@link TileMapRenderer#render(float, float, float, float, int[])}. */
