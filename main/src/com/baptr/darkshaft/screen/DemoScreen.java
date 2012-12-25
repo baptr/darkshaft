@@ -18,12 +18,15 @@ import com.baptr.darkshaft.input.CameraInputProcessor;
 public class DemoScreen extends AbstractScreen {
 
     private TileMapRenderer tileMapRenderer;
+    private Tower tower;
 
     public DemoScreen(Darkshaft game) {
         super(game);
         input.addProcessor(new CameraInputProcessor(camera));
         TileMapParameter tileMapParameter = new TileMapParameter("maps", 8, 8);
         assetManager.load("maps/demo.tmx", com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer.class, tileMapParameter);
+
+        tower = new Tower(Tower.TowerType.BASIC, 0, 0);
     }
 
     @Override
@@ -43,8 +46,15 @@ public class DemoScreen extends AbstractScreen {
         Gdx.gl.glClearColor( 0f, 0f, 0.5f, 1f );
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
 
-        batch.begin();
+        camera.update();
+
         tileMapRenderer.render(camera);
+
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        tower.draw(batch);
+        tower.translate(4.0f*Gdx.graphics.getDeltaTime(),0);
+
         batch.end();
     }
 

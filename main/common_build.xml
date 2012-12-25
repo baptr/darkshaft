@@ -1,5 +1,5 @@
 <project name="darkshaft-main" default="help">
-    <property name="verbose" value="yes" />
+    <property name="verbose" value="no" />
     <property name="projname" value="darkshaft"/>
     <property name="package" value="com.baptr.darkshaft"/>
     

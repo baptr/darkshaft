@@ -50,6 +50,7 @@ public class Darkshaft extends Game {
         if(showSplash) {
             setScreen(GetSplashScreen());
         } else {
+            //setScreen(new TowerScreen(this));
             setScreen(new DemoScreen(this));
         }
 
