@@ -22,7 +22,7 @@ public class DemoScreen extends AbstractScreen {
     public DemoScreen(Darkshaft game) {
         super(game);
         input.addProcessor(new CameraInputProcessor(camera));
-        TileMapParameter tileMapParameter = new TileMapParameter("maps", 2, 2);
+        TileMapParameter tileMapParameter = new TileMapParameter("maps", 8, 8);
         assetManager.load("maps/demo.tmx", com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer.class, tileMapParameter);
     }
 
@@ -32,7 +32,7 @@ public class DemoScreen extends AbstractScreen {
         assetManager.finishLoading();
         tileMapRenderer = assetManager.get("maps/demo.tmx", TileMapRenderer.class);
 
-        camera.translate(200, -250, 0);
+        camera.translate(-200, 0, 0);
         camera.update();
     }
 
