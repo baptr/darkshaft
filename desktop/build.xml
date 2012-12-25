@@ -13,7 +13,9 @@
     <property name="main.libs.dir" value="${main.dir}/libs"/>
     <property name="main.libs.absolute.dir" location="${main.libs.dir}" />
     
-    <property name="assets.dir" value="${root.dir}/main/assets"/>
+    <property name="maps.input.dir" value="${main.dir}/maps"/>
+    <property name="assets.dir" value="${main.dir}/assets"/>
+    <property name="maps.output.dir" value="${assets.dir}/maps"/>
     <property name="atlases.dir" value="${assets.dir}/image-atlases"/>
     <property name="assets.absolute.dir" location="${assets.dir}"/>
     
@@ -68,7 +70,6 @@
                 <include name="gdx-tools.jar" />
             </fileset>
         </path>
-        <echo>${toString:java.classpath}</echo>
         <java 
             fork="true"
             classname="${package}.utils.DarkshaftTexturePacker"
@@ -77,7 +78,28 @@
         </java>
     </target>
 
-    <target name="dist" depends="pack-textures">
+    <target name="pack-maps">
+        <!-- pack textures -->
+        <delete dir="${maps.output.dir}" verbose="${verbose}" />
+        <path id="java.classpath">
+            <fileset dir="${main.libs.absolute.dir}">
+                <include name="**/*.jar" />
+            </fileset>
+            <fileset dir="${main.tools.dir}">
+                <include name="gdx-tools.jar" />
+                <include name="gdx-tiled-preprocessor.jar" />
+            </fileset>
+        </path>
+        <java 
+            fork="true"
+            classname="com.badlogic.gdx.tiledmappacker.TiledMapPacker"
+            classpathref="java.classpath" >
+            <arg value="${maps.input.dir}" />
+            <arg value="${maps.output.dir}" />
+        </java>
+    </target>
+
+    <target name="dist" depends="compile,pack-maps">
         <jar 
             destfile="${out.absolute.dir}/${projname}.jar"
             basedir="${out.classes.absolute.dir}">
@@ -90,7 +112,7 @@
         </jar>
     </target>
 
-    <target name="minijar" depends="pack-textures">
+    <target name="minijar" depends="compile">
         <jar 
             destfile="${out.absolute.dir}/${projname}-nodeps.jar"
             basedir="${out.classes.absolute.dir}">
@@ -105,7 +127,7 @@
         <java jar="${out.absolute.dir}/${projname}.jar" fork="true"/>
     </target>
 
-    <target name="run" depends="pack-textures">
+    <target name="run" depends="compile">
         <path id="java.classpath">
             <fileset dir="${libs.absolute.dir}">
                 <include name="**/*.jar" />
@@ -119,7 +141,9 @@
             fork="true"
             classname="${package}.DesktopGame"
             classpath="${out.classes.absolute.dir}"
-            classpathref="java.classpath"/>
+            classpathref="java.classpath">
+            <arg value="-skipsplash"/>
+        </java>
     </target>
 
 </project>

@@ -1,12 +1,15 @@
 package com.baptr.darkshaft.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.FPSLogger;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.baptr.darkshaft.Darkshaft;
 
@@ -16,14 +19,23 @@ public abstract class AbstractScreen implements Screen {
     protected final BitmapFont font;
     protected final SpriteBatch batch;
     protected final Stage stage;
+    protected final AssetManager assetManager;
+    protected final OrthographicCamera camera;
+    protected final InputMultiplexer input;
     private TextureAtlas atlas;
 
     public AbstractScreen( Darkshaft game ) {
         this.game = game;
+        this.assetManager = game.manager;
         this.font = new BitmapFont(Gdx.files.internal("arial-15.fnt"),
                 Gdx.files.internal("arial-15.png"), false, true);
         this.batch = new SpriteBatch();
         this.stage = new Stage(0, 0, true);
+        input = new InputMultiplexer();
+        Gdx.input.setInputProcessor(input);
+        input.addProcessor(stage);
+        this.camera = new OrthographicCamera();
+        this.camera.setToOrtho(false, 800, 600);
     }
 
     protected String getName()
@@ -64,6 +76,9 @@ public abstract class AbstractScreen implements Screen {
     public void render(
         float delta )
     {
+        // Continue loading any queued assets
+        assetManager.update();
+
         // the following code clears the screen with the given RGB color (black)
         Gdx.gl.glClearColor( 0f, 0f, 0f, 1f );
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );

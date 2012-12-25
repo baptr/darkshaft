@@ -10,7 +10,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.MathUtils;
@@ -25,7 +24,6 @@ import com.baptr.darkshaft.gfx.*;
 public class Darkshaft extends Game {
     
     public static final String LOG = Darkshaft.class.getSimpleName();
-    OrthographicCamera camera;
     FPSLogger fpsLogger;
 
     private boolean showSplash = true;
@@ -41,17 +39,14 @@ public class Darkshaft extends Game {
     public void create() {
     	fpsLogger =  new FPSLogger();
         manager = new AssetManager();
-        Terrain.init(this, manager); 
+        //Terrain.init(this, manager); 
 
         manager.finishLoading();
-        
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 600);
         
         if(showSplash) {
             setScreen(GetSplashScreen());
         } else {
-            setScreen(new TowerScreen(this));
+            setScreen(new DemoScreen(this));
         }
 
     }
