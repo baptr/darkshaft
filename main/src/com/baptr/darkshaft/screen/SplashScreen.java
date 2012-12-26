@@ -39,12 +39,12 @@ public class SplashScreen extends AbstractScreen {
         splashImage.getColor().a = 0f;
 
         // configure the fade-in/out effect on the splash image
-        splashImage.addAction( sequence( fadeIn( 0.75f ), delay( 1.75f ), fadeOut( 0.75f ),
+        splashImage.addAction( sequence( fadeIn( 0.25f ), delay( 0f ), fadeOut( 0.25f ),
                 new Action() {
                     @Override
                     public boolean act( float delta ) {
                         // the last action will move to the next screen
-                        game.setScreen( new DemoScreen( game ) );
+                        game.setScreen( new MenuScreen( game ) );
                         return true;
                     }
                 } ) );

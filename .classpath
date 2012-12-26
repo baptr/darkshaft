@@ -7,11 +7,10 @@
 	<classpathentry kind="lib" path="android/libs/gdx-backend-android.jar"/>
 	<classpathentry kind="lib" path="desktop/libs/gdx-backend-lwjgl-natives.jar"/>
 	<classpathentry kind="lib" path="desktop/libs/gdx-backend-lwjgl-sources.jar"/>
-	<classpathentry kind="lib" path="desktop/libs/gdx-backend-lwjgl.jar"/>
+	<classpathentry kind="lib" path="desktop/libs/gdx-backend-lwjgl.jar" sourcepath="C:/ws2/darkshaftrjr/main/libs/gdx.jar"/>
 	<classpathentry kind="lib" path="desktop/libs/gdx-natives.jar"/>
 	<classpathentry kind="lib" path="main/libs/gdx-sources.jar"/>
 	<classpathentry kind="lib" path="main/libs/gdx.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="main/libs/gdx-tools.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

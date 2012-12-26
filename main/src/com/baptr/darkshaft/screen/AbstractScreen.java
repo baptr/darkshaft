@@ -1,8 +1,10 @@
 package com.baptr.darkshaft.screen;
 
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -11,6 +13,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.baptr.darkshaft.Darkshaft;
 
 public abstract class AbstractScreen implements Screen {
@@ -23,6 +27,8 @@ public abstract class AbstractScreen implements Screen {
     protected final OrthographicCamera camera;
     protected final InputMultiplexer input;
     private TextureAtlas atlas;
+    private TextureAtlas uiAtlas;
+    private Skin skin;
 
     public AbstractScreen( Darkshaft game ) {
         this.game = game;
@@ -51,7 +57,24 @@ public abstract class AbstractScreen implements Screen {
         
         return atlas;
     }
-       
+    
+    public TextureAtlas getUiAtlas()
+    {
+        if( uiAtlas == null) {
+            uiAtlas = new TextureAtlas( Gdx.files.internal( "ui-atlases/uiskin.atlas"));
+        }
+        
+        return uiAtlas;
+    }
+    
+    public Skin getSkin()
+    {
+        if( skin == null){
+            skin = new Skin(Gdx.files.internal( "ui-atlases/uiskin.json"), getUiAtlas());
+        }
+        
+        return skin;
+    }
 
     // Screen implementation
 
@@ -86,6 +109,7 @@ public abstract class AbstractScreen implements Screen {
         // update and draw the stage actors
         stage.act( delta );
         stage.draw();
+        Table.drawDebug(stage);
     }
 
     @Override

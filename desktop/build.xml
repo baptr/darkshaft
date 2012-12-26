@@ -89,5 +89,23 @@
             <arg value="-skipsplash"/>
         </java>
     </target>
+	
+	<target name="splash-run" depends="compile">
+	        <path id="java.classpath">
+	            <fileset dir="${libs.absolute.dir}">
+	                <include name="**/*.jar" />
+	            </fileset>
+	            <fileset dir="${main.libs.absolute.dir}">
+	                <include name="**/*.jar" />
+	            </fileset>
+	            <pathelement location="${assets.absolute.dir}" />
+	        </path>
+	        <java 
+	            fork="true"
+	            classname="${package}.DesktopGame"
+	            classpath="${out.classes.absolute.dir}"
+	            classpathref="java.classpath">
+	        </java>
+	    </target>
 
 </project>
