@@ -90,6 +90,7 @@
             <external-libs>
                 <fileset dir="${main.libs.dir}">
                     <include name="**/*.jar" />
+                    <exclude name="**/*-sources.jar" />
                 </fileset>
             </external-libs>
         </dex-helper>
