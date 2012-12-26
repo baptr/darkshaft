@@ -3,22 +3,28 @@ package com.baptr.darkshaft.gfx;
 public class Tower extends Defense {
 
     public enum TowerType {
-        BASIC(1f,1f,1f),
-        FIRE(1f,0.25f,0.25f),
-        WATER(0.4f,0.5f,1f),
-        SPIRIT(0.25f,1f,0.25f, 0.5f);
+        BASIC(5,1f,1f,1f),
+        FIRE(5,1f,0.25f,0.25f),
+        WATER(5,0.4f,0.5f,1f),
+        SPIRIT(5,0.25f,1f,0.25f, 0.5f);
 
+        private int tileId;
         private float r, g, b, a;
 
-        TowerType(float r, float g, float b, float a) {
+        TowerType(int tileId, float r, float g, float b, float a) {
+            this.tileId = tileId;
             this.r = r;
             this.g = g;
             this.b = b;
             this.a = a;
         }
 
-        TowerType(float r, float g, float b) {
-            this(r, g, b, 1.0f);
+        TowerType(int tileId, float r, float g, float b) {
+            this(tileId, r, g, b, 1.0f);
+        }
+
+        int getTileId() {
+            return tileId;
         }
 
         void setTint(Tower t) {
@@ -29,13 +35,12 @@ public class Tower extends Defense {
     TowerType type;
 
     public Tower(TowerType t, float x, float y) {
-        super("tower.png", x, y);
+        super(t.tileId, x, y);
         this.type = t;
         type.setTint(this);
     }
 
-    public Tower(String imgPath, float x, float y) {
-        super(imgPath, x, y);
+    public Tower(float x, float y) {
+        this(TowerType.BASIC, x, y);
     }
-
 }
