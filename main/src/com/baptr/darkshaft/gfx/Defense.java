@@ -1,19 +1,16 @@
 package com.baptr.darkshaft.gfx;
 
-import com.badlogic.gdx.graphics.g2d.tiled.TileAtlas;
+import com.baptr.darkshaft.util.MapUtils;
 
+/** Defenses are immobile, grid-aligned sprites (walls and towers).
+ * */
 public class Defense extends Entity {
 
-    private static TileAtlas atlas;
-
-    public static void setAtlas(TileAtlas atlas) {
-        if(Defense.atlas != null)
-            throw new RuntimeException("Attempt to redefine Defense.atlas");
-        Defense.atlas = atlas;
-    }
-
-    public Defense(int tileId, float x, float y) {
-        super(atlas.getRegion(tileId), x, y);
+    /** Construct a defense with the given sprite and map col, row
+     */
+    public Defense(int tileId, int col, int row) {
+        super(MapUtils.getTileRegion(tileId), MapUtils.getWorldX(col, row),
+            MapUtils.getWorldY(col, row));
     }
 
 }

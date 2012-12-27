@@ -34,13 +34,13 @@ public class Tower extends Defense {
 
     TowerType type;
 
-    public Tower(TowerType t, float x, float y) {
+    public Tower(TowerType t, int x, int y) {
         super(t.tileId, x, y);
         this.type = t;
         type.setTint(this);
     }
 
-    public Tower(float x, float y) {
+    public Tower(int x, int y) {
         this(TowerType.BASIC, x, y);
     }
 }

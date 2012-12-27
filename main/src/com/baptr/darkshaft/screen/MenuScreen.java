@@ -26,6 +26,14 @@ public class MenuScreen extends AbstractScreen {
                 game.setScreen(new DemoScreen(game));
             }
         });
+
+        TextButton testButton = new TextButton("Test Screen", getSkin());
+        testButton.addListener(new ClickListener() {
+            public void clicked (InputEvent event, float x, float y) {
+                game.setScreen(new TowerScreen(game));
+            }
+        });
+
         TextButton exitButton = new TextButton("Exit", getSkin());
         exitButton.addListener(new ClickListener() {
             public void clicked (InputEvent event, float x, float y) {
@@ -34,6 +42,8 @@ public class MenuScreen extends AbstractScreen {
         });
         
         table.add(startButton).minWidth(100f);
+        table.row().pad(10f);
+        table.add(testButton).minWidth(100f);
         table.row().pad(10f);
         table.add(exitButton).minWidth(100f);
     }

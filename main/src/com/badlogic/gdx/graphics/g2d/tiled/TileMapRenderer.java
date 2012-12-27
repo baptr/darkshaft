@@ -185,17 +185,14 @@ public class TileMapRenderer implements Disposable {
 	 * map from a TiledMap */
 	private void init (int[][][] map, TileAtlas atlas, int tileWidth, int tileHeight, float unitsPerTileX, float unitsPerTileY,
 		IntArray blendedTiles, int tilesPerBlockX, int tilesPerBlockY, ShaderProgram shader, boolean isometric) {
+                Gdx.app.log( "TileMapRenderer", "tileWidth: " + tileWidth + " tileHeight: " + tileHeight + " unitsPerTileX: " + unitsPerTileX +
+                        " unitsPerTileY: " + unitsPerTileY + " tilesPerBlockX: " + tilesPerBlockX + " tilesPerBlockY: " + tilesPerBlockY );
 		this.atlas = atlas;
 		this.tileWidth = tileWidth;
 		this.tileHeight = tileHeight;
 		this.unitsPerTileX = unitsPerTileX;
 		this.unitsPerTileY = unitsPerTileY;
 
-                if(isometric) {
-                    this.isIsometric = true;
-                    this.unitsPerTileX = unitsPerTileX / 2;
-                    this.unitsPerTileY = unitsPerTileY / 2;
-                }
 
 		this.blendedTiles = blendedTiles;
 		this.tilesPerBlockX = tilesPerBlockX;
@@ -203,6 +200,12 @@ public class TileMapRenderer implements Disposable {
 
 		unitsPerBlockX = unitsPerTileX * tilesPerBlockX;
 		unitsPerBlockY = unitsPerTileY * tilesPerBlockY;
+
+                if(isometric) {
+                    this.isIsometric = true;
+                    unitsPerBlockX /= 2;
+                    unitsPerBlockY /= 2;
+                }
 
 		isSimpleTileAtlas = atlas instanceof SimpleTileAtlas;
 
@@ -225,6 +228,10 @@ public class TileMapRenderer implements Disposable {
 		}
 		mapHeightUnits = (int)(maxHeight * unitsPerTileY);
 		mapWidthUnits = (int)(maxWidth * unitsPerTileX);
+                if(isIsometric) {
+                    mapHeightUnits /= 2;
+                    mapWidthUnits /= 2;
+                }
 
 		if (shader == null)
 			cache = new SpriteCache(maxCacheSize, false);
@@ -284,8 +291,8 @@ public class TileMapRenderer implements Disposable {
 						if (reg != null) {
 							float x, y;
                                                         if(isIsometric) {
-							    x = (col - row) * unitsPerTileX - offsetX;
-							    y = (layer.length - row - col - 1) * unitsPerTileY - offsetY;
+							    x = (col - row) * unitsPerTileX / 2 - offsetX;
+							    y = (- row - col) * unitsPerTileY / 2 - offsetY;
                                                         } else {
                                                             x = col * unitsPerTileX - offsetX;
                                                             y = (layer.length - row - 1) * unitsPerTileY - offsetY;
@@ -296,15 +303,15 @@ public class TileMapRenderer implements Disposable {
 							float originY = height * 0.5f;
 							float scaleX = unitsPerTileX / tileWidth;
 							float scaleY = unitsPerTileY / tileHeight;
-                                                        if(isIsometric) {
-                                                            scaleX *= 2;
-                                                            scaleY *= 2;
-                                                        }
 							float rotation = 0;
 							int sourceX = reg.getRegionX();
 							int sourceY = reg.getRegionY();
 							int sourceWidth = reg.getRegionWidth();
 							int sourceHeight = reg.getRegionHeight();
+                                                        if(isIsometric) {
+                                                            x -= unitsPerTileX / 2;
+                                                            y -= unitsPerTileY / 2;
+                                                        }
 							
 							if (rotate) {
 								if (flipX && flipY) {
@@ -420,18 +427,18 @@ public class TileMapRenderer implements Disposable {
                     lastCol = (int)((x + width + overdrawX) / (unitsPerBlockX));
                     initialCol = (int)((x - overdrawX) / (unitsPerBlockX));
                 } else {
-                    int top = (int)(mapHeightUnits/2 - y - overdrawY);
-                    int bottom = (int)(mapHeightUnits/2 - y + height + overdrawY);
+                    int top = (int)(- y - overdrawY);
+                    int bottom = (int)(- y + height + overdrawY);
                     int left = (int)(x - overdrawX);
                     int right = (int)(x + width + overdrawX);
 
                     // firstRow -> lastRow = top-right -> bottom-left
                     initialRow = getIsoRow(right, top) / tilesPerBlockY;
-                    lastRow = getIsoRow(left, bottom) / tilesPerBlockY;
+                    lastRow = getIsoRow(left, bottom) / tilesPerBlockY + 1;
 
                     // firstCol -> lastCol = top-left -> bottom-right
                     initialCol = getIsoCol(left, top) / tilesPerBlockX;
-                    lastCol = getIsoCol(right, bottom) / tilesPerBlockX;
+                    lastCol = getIsoCol(right, bottom) / tilesPerBlockX + 1;
                 }
 
                 initialRow = (initialRow > 0) ? initialRow : 0; // Clamp initial Row > 0
@@ -517,12 +524,12 @@ public class TileMapRenderer implements Disposable {
 	}
 
         public int getIsoRow(float worldX, float worldY) {
-            int row = (int)((worldY / unitsPerTileY) - (worldX / unitsPerTileX)) / 2;
+            int row = (int)((worldY / unitsPerTileY) - (worldX / unitsPerTileX));
             return row;
         }
 
         public int getIsoCol(float worldX, float worldY) {
-            int col = (int)((worldY / unitsPerTileY) + (worldX / unitsPerTileX)) / 2;
+            int col = (int)((worldY / unitsPerTileY) + (worldX / unitsPerTileX));
             return col;
         }
 
