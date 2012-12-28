@@ -15,6 +15,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.math.Vector3;
 import com.baptr.darkshaft.Darkshaft;
 
 public abstract class AbstractScreen implements Screen {
@@ -30,6 +31,8 @@ public abstract class AbstractScreen implements Screen {
     private TextureAtlas uiAtlas;
     private Skin skin;
 
+    private Vector3 tmpVec;
+
     public AbstractScreen( Darkshaft game ) {
         this.game = game;
         this.assetManager = game.manager;
@@ -42,6 +45,7 @@ public abstract class AbstractScreen implements Screen {
         input.addProcessor(stage);
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, 800, 600);
+        tmpVec = new Vector3();
     }
 
     protected String getName()
@@ -93,6 +97,14 @@ public abstract class AbstractScreen implements Screen {
 
         // resize the stage
         stage.setViewport( width, height, true );
+
+        // re-configure camera, maintaining position
+        tmpVec.set(camera.position);
+
+        camera.setToOrtho(false, width, height);
+
+        camera.position.set(tmpVec);
+        camera.update();
     }
 
     @Override
