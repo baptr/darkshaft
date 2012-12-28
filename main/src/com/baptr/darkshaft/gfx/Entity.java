@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class Entity extends Sprite {
 
+    protected float xOffset = 0;
+    protected float yOffset = 0;
+
     public Entity(TextureRegion region, float x, float y) {
         super(region);
         this.setPosition(x, y);
@@ -20,5 +23,10 @@ public class Entity extends Sprite {
 
     public Entity(String imgPath, float x, float y) {
         this(new Texture(Gdx.files.internal(imgPath)), x, y);
+    }
+
+    @Override
+    public void setPosition(float x, float y) {
+        super.setPosition(x + xOffset, y + yOffset);
     }
 }

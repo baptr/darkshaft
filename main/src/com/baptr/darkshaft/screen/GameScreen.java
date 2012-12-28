@@ -24,6 +24,8 @@ public abstract class GameScreen extends AbstractScreen {
 
     protected Color bgColor = new Color(0f, 0f, 0.5f, 1f);
 
+    protected Avatar frank;
+
     private static final int INITIAL_DEFENSE_CAPACITY = 64;
 
     public GameScreen(Darkshaft game, String mapName) {
@@ -38,10 +40,16 @@ public abstract class GameScreen extends AbstractScreen {
                 TileMapRenderer.class);
         MapUtils.setRenderer(mapRenderer);
         defenses = new Array<Defense>(false, INITIAL_DEFENSE_CAPACITY);
+        frank = new Avatar(getAtlas().findRegion("gamescreen/frank"), 15, -64);
     }
 
     public void addDefense(Defense d) {
         defenses.add(d);
+    }
+
+    /* temporary */
+    public void movePlayer(float x, float y) {
+        frank.setPosition(x, y);
     }
 
     public void render(float delta) {
@@ -59,6 +67,7 @@ public abstract class GameScreen extends AbstractScreen {
         for(Defense d : defenses) {
             d.draw(batch);
         }
+        frank.draw(batch);
         batch.end();
     }
 }

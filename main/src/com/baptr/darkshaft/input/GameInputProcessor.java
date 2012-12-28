@@ -13,6 +13,7 @@ import com.baptr.darkshaft.util.MapUtils;
 public class GameInputProcessor extends AbstractInputProcessor {
 
     boolean dragged;
+    boolean moving;
     Vector3 touch;
     TowerType placeType = TowerType.BASIC;
     GameScreen screen;
@@ -44,6 +45,9 @@ public class GameInputProcessor extends AbstractInputProcessor {
     @Override
     public boolean touchDown(int x, int y, int pointer, int button) {
         dragged = false;
+        if(button == 1) {
+            moving = true;
+        }
         touch.set(x, y, 0);
         camera.unproject(touch);
         return false;
@@ -52,12 +56,18 @@ public class GameInputProcessor extends AbstractInputProcessor {
     @Override
     public boolean touchDragged(int x, int y, int pointer) {
         dragged = true;
+        if(moving) {
+            touch.set(x, y, 0);
+            camera.unproject(touch);
+            screen.movePlayer(touch.x, touch.y);
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean touchUp(int x, int y, int pointer, int button) {
-        if(!dragged) {
+        if(!dragged && button == 0) {
             // clicked
             int mapRow = MapUtils.getMapRow(touch.x, touch.y);
             int mapCol = MapUtils.getMapCol(touch.x, touch.y);
@@ -69,6 +79,8 @@ public class GameInputProcessor extends AbstractInputProcessor {
             }
 
             return true;
+        } else if(button == 1) {
+            moving = false;
         }
         return false;
     }

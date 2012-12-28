@@ -43,7 +43,7 @@
         </javac>
     </target>
 
-    <target name="dist" depends="compile,pack-maps">
+    <target name="dist" depends="compile,pack-maps,pack-textures">
         <jar 
             destfile="${out.absolute.dir}/${projname}.jar"
             basedir="${out.classes.absolute.dir}">
