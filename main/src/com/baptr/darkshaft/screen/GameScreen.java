@@ -1,5 +1,8 @@
 package com.baptr.darkshaft.screen;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.assets.loaders.TileMapRendererLoader.TileMapParameter;
@@ -44,7 +47,10 @@ public abstract class GameScreen extends AbstractScreen {
     }
 
     public void addDefense(Defense d) {
-        defenses.add(d);
+        if(!Arrays.asList(defenses).contains(d)){
+            defenses.add(d);
+            defenses.sort();
+        }
     }
 
     /* temporary */
