@@ -28,7 +28,8 @@ public abstract class GameScreen extends AbstractScreen {
     protected Color bgColor = new Color(0f, 0f, 0.5f, 1f);
 
     protected Avatar frank;
-
+    protected Array<Entity> entities;
+    
     private static final int INITIAL_DEFENSE_CAPACITY = 64;
 
     public GameScreen(Darkshaft game, String mapName) {
@@ -44,18 +45,22 @@ public abstract class GameScreen extends AbstractScreen {
         MapUtils.setRenderer(mapRenderer);
         defenses = new Array<Defense>(false, INITIAL_DEFENSE_CAPACITY);
         frank = new Avatar(getAtlas().findRegion("gamescreen/frank"), 15, -64);
+        entities = new Array<Entity>(false, INITIAL_DEFENSE_CAPACITY + 1);
+        entities.add(frank);
     }
 
     public void addDefense(Defense d) {
         if(!Arrays.asList(defenses).contains(d)){
             defenses.add(d);
-            defenses.sort();
+            entities.add(d);
+            entities.sort();
         }
     }
 
     /* temporary */
     public void movePlayer(float x, float y) {
         frank.setPosition(x, y);
+        entities.sort();
     }
 
     public void render(float delta) {
@@ -70,10 +75,10 @@ public abstract class GameScreen extends AbstractScreen {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        for(Defense d : defenses) {
-            d.draw(batch);
+        
+        for(Entity e : entities) {
+            e.draw(batch);
         }
-        frank.draw(batch);
         batch.end();
     }
 }
