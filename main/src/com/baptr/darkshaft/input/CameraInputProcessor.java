@@ -3,9 +3,9 @@ package com.baptr.darkshaft.input;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+
 import com.baptr.darkshaft.Darkshaft;
 import com.baptr.darkshaft.util.MapUtils;
-import com.badlogic.gdx.math.Vector3;
 
 public class CameraInputProcessor extends AbstractInputProcessor {
 
@@ -13,7 +13,7 @@ public class CameraInputProcessor extends AbstractInputProcessor {
     int dragY;
     final float MIN_ZOOM = .4f;
     final float MAX_ZOOM = 3f;
-    
+
     OrthographicCamera camera;
     
     public CameraInputProcessor(OrthographicCamera camera) {
@@ -29,7 +29,7 @@ public class CameraInputProcessor extends AbstractInputProcessor {
 
     @Override
     public boolean keyTyped(char character) {
-        // TODO Auto-generated method stub
+        // Stub
         return true;
     }
 
@@ -64,12 +64,6 @@ public class CameraInputProcessor extends AbstractInputProcessor {
     public boolean touchDown(int x, int y, int pointer, int button) {
         dragX = x;
         dragY = y;
-        Vector3 touch = new Vector3(x, y, 0);
-        camera.unproject(touch);
-        Gdx.app.log( Darkshaft.LOG, "touchDown: screen (" + x + ", " + y +
-                ") world (" + touch.x + ", " + touch.y + ") map (" +
-                MapUtils.getMapCol(touch.x, touch.y) + ", " +
-                MapUtils.getMapRow(touch.x, touch.y) + ")" );
         return true;
     }
 
@@ -86,7 +80,7 @@ public class CameraInputProcessor extends AbstractInputProcessor {
 
     @Override
     public boolean touchUp(int x, int y, int pointer, int button) {
-        // TODO Auto-generated method stub
+        // stub
         return true;
     }
 
