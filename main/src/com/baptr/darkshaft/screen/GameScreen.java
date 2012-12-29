@@ -28,6 +28,7 @@ public abstract class GameScreen extends AbstractScreen {
     protected Color bgColor = new Color(0f, 0f, 0.5f, 1f);
 
     protected Avatar frank;
+    protected Unit dargorn;
     protected Array<Entity> entities;
     
     private static final int INITIAL_DEFENSE_CAPACITY = 64;
@@ -45,12 +46,14 @@ public abstract class GameScreen extends AbstractScreen {
         MapUtils.setRenderer(mapRenderer);
         defenses = new Array<Defense>(false, INITIAL_DEFENSE_CAPACITY);
         frank = new Avatar(getAtlas().findRegion("gamescreen/frank"), 15, -64);
+        dargorn = new Unit(getAtlas().findRegion("gamescreen/dargorn"), 20, -128);
         entities = new Array<Entity>(false, INITIAL_DEFENSE_CAPACITY + 1);
         entities.add(frank);
+        entities.add(dargorn);
     }
 
     public void addDefense(Defense d) {
-        if(!Arrays.asList(defenses).contains(d)){
+        if(!defenses.contains(d, false)){
             defenses.add(d);
             entities.add(d);
             entities.sort();
