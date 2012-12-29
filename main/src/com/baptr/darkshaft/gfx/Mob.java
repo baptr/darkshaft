@@ -1,9 +1,11 @@
 package com.baptr.darkshaft.gfx;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 public class Mob extends Unit {
 
-    public Mob(String imgPath, float x, float y) {
-        super(imgPath, x, y);
+    public Mob(TextureRegion region, float x, float y) {
+        super(region, x, y);
     }
     
 }
