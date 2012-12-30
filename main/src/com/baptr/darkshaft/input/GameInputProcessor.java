@@ -93,21 +93,18 @@ public class GameInputProcessor extends AbstractInputProcessor {
 
     @Override
     public boolean touchUp(int x, int y, int pointer, int button) {
-        if(!dragged && button == 0 && placeType != TowerType.NONE) {
+        if(!dragged && button == 0) {
             // clicked
-            int mapRow = MapUtils.getMapRow(touch.x, touch.y);
-            int mapCol = MapUtils.getMapCol(touch.x, touch.y);
-            Gdx.app.log( Darkshaft.LOG, "click: screen (" + x + ", " + y +
-                    ") world (" + touch.x + ", " + touch.y + ") map (" +
-                    mapCol + ", " + mapRow + ")" );
-            if(mapRow >= 0 && mapCol >= 0) {
-                screen.addDefense(new Tower(placeType, mapCol, mapRow));
-            }
-
-            return true;
-        } else if(button == 1) {
-            moving = false;
-            if(!dragged) {
+            if(placeType != TowerType.NONE) { // Place a tower
+                int mapRow = MapUtils.getMapRow(touch.x, touch.y);
+                int mapCol = MapUtils.getMapCol(touch.x, touch.y);
+                Gdx.app.log( Darkshaft.LOG, "click: screen (" + x + ", " + y +
+                        ") world (" + touch.x + ", " + touch.y + ") map (" +
+                        mapCol + ", " + mapRow + ")" );
+                if(mapRow >= 0 && mapCol >= 0) {
+                    screen.addDefense(new Tower(placeType, mapCol, mapRow));
+                }
+            } else {
                 Avatar p = screen.getPlayer();
                 PathPlanner pp = screen.getPathPlanner();
                 int sCol = MapUtils.getMapCol(p.getX(), p.getY());
@@ -118,8 +115,11 @@ public class GameInputProcessor extends AbstractInputProcessor {
                 Gdx.app.log(Darkshaft.LOG, "Path: " + path
                         + " after " + pp.getIterations() + " steps");
                 screen.getPathMarker().setPath(path);
-                return true;
             }
+
+            return true;
+        } else if(button == 1) {
+            moving = false;
         }
         return false;
     }
