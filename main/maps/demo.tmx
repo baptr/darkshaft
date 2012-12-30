@@ -7,7 +7,7 @@
   <image source="towers.png" width="64" height="64"/>
  </tileset>
  <tileset firstgid="6" name="widgets" tilewidth="62" tileheight="62">
-  <image source="widgets.png" width="186" height="62"/>
+  <image source="widgets.png" width="248" height="62"/>
  </tileset>
  <layer name="Terrain" width="40" height="40">
   <data encoding="base64" compression="zlib">
@@ -16,7 +16,7 @@
  </layer>
  <layer name="Towers" width="40" height="40">
   <data encoding="base64" compression="zlib">
-   eJzt1DEKgDAQBdGtzN7/xLLggliYQiQTmAepbIYfSYQkSdpBfvz+twQ0zFTfsTpigr5h7UdvrL6xOuLFLhuSG3tD8j13H3XHbiO/ixnsxnwcmvsdE/sKvW9ch/j/NfJ+kiQRnGU1AVQ=
+   eJzt1DEKgDAQRNFUJt7/wjJgQCxUmGi+MA+2svnsSkqZZ30ws6XPR+8Tep+kz0fvk/R56H3i9DXz+xNu34iGO8591beMCnnJFzt0aH/0RvXV2REX/rJDcmPfIfnOvY+6x95GfhdbYTe209Acb0zsE3pf3Yf4/3Xk/UVERBBsrN8Dpg==
   </data>
  </layer>
 </map>
