@@ -60,3 +60,8 @@ There are a couple steps to get everything set up and imported into an eclipse w
 * Click Run > Run Configuration > DesktopGame > Classpath > User Entries > Advanced > Add Folder
 * Add Main > Assets
 * Re-run game
+
+Credits
+-------
+
+Some tile art inspired by David E. Gervais's [Dungeon Odissey tiles](http://pousse.rapiere.free.fr/tome/tome-tiles.htm)
