@@ -17,6 +17,7 @@ import com.baptr.darkshaft.input.GameInputProcessor;
 import com.baptr.darkshaft.util.MapUtils;
 import com.baptr.darkshaft.screen.AbstractScreen;
 import com.baptr.darkshaft.gfx.*;
+import com.baptr.darkshaft.util.PathPlanner;
 
 public abstract class GameScreen extends AbstractScreen {
     protected TileMapRenderer mapRenderer;
@@ -30,6 +31,8 @@ public abstract class GameScreen extends AbstractScreen {
     protected Avatar frank;
     protected Unit dargorn;
     protected Array<Entity> entities;
+
+    protected PathPlanner pathPlanner;
     
     private static final int INITIAL_DEFENSE_CAPACITY = 64;
 
@@ -47,9 +50,14 @@ public abstract class GameScreen extends AbstractScreen {
         defenses = new Array<Defense>(false, INITIAL_DEFENSE_CAPACITY);
         frank = new Avatar(getAtlas().findRegion("gamescreen/frank"), 15, -64);
         dargorn = new Unit(getAtlas().findRegion("gamescreen/dargorn"), 20, -128);
-        entities = new Array<Entity>(false, INITIAL_DEFENSE_CAPACITY + 1);
+        entities = new Array<Entity>(false, INITIAL_DEFENSE_CAPACITY + 2);
         entities.add(frank);
         entities.add(dargorn);
+        pathPlanner = new PathPlanner(mapRenderer.getMap(), defenses);
+    }
+
+    public PathPlanner getPathPlanner() {
+        return pathPlanner;
     }
 
     public void addDefense(Defense d) {
@@ -64,6 +72,9 @@ public abstract class GameScreen extends AbstractScreen {
     public void movePlayer(float x, float y) {
         frank.setPosition(x, y);
         entities.sort();
+    }
+    public Avatar getPlayer() {
+        return frank;
     }
 
     public void render(float delta) {

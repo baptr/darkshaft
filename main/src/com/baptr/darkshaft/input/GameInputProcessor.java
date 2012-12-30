@@ -6,9 +6,11 @@ import com.badlogic.gdx.math.Vector3;
 
 import com.baptr.darkshaft.Darkshaft;
 import com.baptr.darkshaft.gfx.Tower;
+import com.baptr.darkshaft.gfx.Avatar;
 import com.baptr.darkshaft.gfx.Tower.TowerType;
 import com.baptr.darkshaft.screen.GameScreen;
 import com.baptr.darkshaft.util.MapUtils;
+import com.baptr.darkshaft.util.PathPlanner;
 
 public class GameInputProcessor extends AbstractInputProcessor {
 
@@ -81,6 +83,17 @@ public class GameInputProcessor extends AbstractInputProcessor {
             return true;
         } else if(button == 1) {
             moving = false;
+            if(!dragged) {
+                Avatar p = screen.getPlayer();
+                PathPlanner pp = screen.getPathPlanner();
+                int sCol = MapUtils.getMapCol(p.getX(), p.getY());
+                int sRow = MapUtils.getMapRow(p.getX(), p.getY());
+                int gCol = MapUtils.getMapCol(touch.x, touch.y);
+                int gRow = MapUtils.getMapRow(touch.x, touch.y);
+                Gdx.app.log(Darkshaft.LOG, "Path: " +
+                        pp.findPath(sCol, sRow, gCol, gRow));
+                return true;
+            }
         }
         return false;
     }
