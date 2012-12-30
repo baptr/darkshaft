@@ -6,7 +6,8 @@ public class Tower extends Defense {
         BASIC(5,1f,1f,1f),
         FIRE(5,1f,0.25f,0.25f),
         WATER(5,0.4f,0.5f,1f),
-        SPIRIT(5,0.25f,1f,0.25f, 0.5f);
+        SPIRIT(5,0.25f,1f,0.25f, 0.5f),
+        NONE(5,0f,0f,0f);
 
         private int tileId;
         private float r, g, b, a;
@@ -30,6 +31,14 @@ public class Tower extends Defense {
         void setTint(Tower t) {
             t.setColor(r, g, b, a);
         }
+        
+        void setTint(Tower t, boolean isMarker){
+            if(isMarker){
+                t.setColor(r, g, b, a/2f);
+            } else {
+                t.setColor(r, g, b, a);
+            }
+        }
     }
 
     TowerType type;
@@ -39,8 +48,27 @@ public class Tower extends Defense {
         this.type = t;
         type.setTint(this);
     }
+    
+    public Tower(TowerType t, int x, int y, boolean isMarker) {
+        super(t.tileId, x, y);
+        this.type = t;
+        type.setTint(this, isMarker);
+    }
 
     public Tower(int x, int y) {
         this(TowerType.BASIC, x, y);
+    }
+    
+    public Tower(int x, int y, boolean isMarker) {
+        this(TowerType.BASIC, x, y, isMarker);
+    }
+    
+    public void setTowerType(TowerType t, boolean isMarker){
+        this.type = t;
+        type.setTint(this, isMarker);
+    }
+    
+    public TowerType getTowerType(){
+        return type;
     }
 }

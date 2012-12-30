@@ -17,6 +17,7 @@ import com.baptr.darkshaft.input.GameInputProcessor;
 import com.baptr.darkshaft.util.MapUtils;
 import com.baptr.darkshaft.screen.AbstractScreen;
 import com.baptr.darkshaft.gfx.*;
+import com.baptr.darkshaft.gfx.Tower.TowerType;
 import com.baptr.darkshaft.util.PathPlanner;
 
 public abstract class GameScreen extends AbstractScreen {
@@ -25,6 +26,7 @@ public abstract class GameScreen extends AbstractScreen {
 
     protected Pool<Mob> mobPool;
     protected Array<Defense> defenses;
+    protected Tower towerMarker;
 
     protected Color bgColor = new Color(0f, 0f, 0.5f, 1f);
 
@@ -73,6 +75,14 @@ public abstract class GameScreen extends AbstractScreen {
             entities.sort();
         }
     }
+    
+    public void setTowerMarker(Tower t) {
+        this.towerMarker = t;
+    }
+    
+    public void setTowerMarker(TowerType t){
+        towerMarker.setTowerType(t, true);
+    }
 
     /* temporary */
     public void movePlayer(float x, float y) {
@@ -100,6 +110,11 @@ public abstract class GameScreen extends AbstractScreen {
         for(Entity e : entities) {
             e.draw(batch);
         }
+        
+        if(towerMarker != null && towerMarker.getTowerType() != TowerType.NONE ){
+            towerMarker.draw(batch);
+        }
+        
         batch.end();
     }
 }

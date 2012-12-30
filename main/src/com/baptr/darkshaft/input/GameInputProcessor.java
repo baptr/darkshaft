@@ -19,7 +19,8 @@ public class GameInputProcessor extends AbstractInputProcessor {
     boolean dragged;
     boolean moving;
     Vector3 touch;
-    TowerType placeType = TowerType.BASIC;
+    Vector3 move;
+    TowerType placeType = TowerType.NONE;
     GameScreen screen;
     OrthographicCamera camera;
 
@@ -28,22 +29,43 @@ public class GameInputProcessor extends AbstractInputProcessor {
         this.camera = camera;
         this.screen = screen;
         this.touch = new Vector3();
+        this.move = new Vector3();
     }
 
     @Override
     public boolean keyTyped(char character) {
         switch(character) {
             case '1':
-                placeType = TowerType.BASIC; break;
+                placeType = TowerType.BASIC;
+                screen.setTowerMarker(TowerType.BASIC);
+                break;
             case '2':
-                placeType = TowerType.FIRE; break;
+                placeType = TowerType.FIRE; 
+                screen.setTowerMarker(TowerType.FIRE);
+                break;
             case '3':
-                placeType = TowerType.WATER; break;
+                placeType = TowerType.WATER; 
+                screen.setTowerMarker(TowerType.WATER);
+                break;
             case '4':
-                placeType = TowerType.SPIRIT; break;
+                placeType = TowerType.SPIRIT; 
+                screen.setTowerMarker(TowerType.SPIRIT);
+                break;
         }
         
         return true;
+    }
+    
+    @Override
+    public boolean keyDown(int keyCode)
+    {
+        Gdx.app.log("Input Test", "key down: " + keyCode);
+        // Esc
+        if(keyCode == 131){
+            screen.setTowerMarker(TowerType.NONE);
+            placeType = TowerType.NONE;
+        }
+        return false;
     }
 
     @Override
@@ -71,7 +93,7 @@ public class GameInputProcessor extends AbstractInputProcessor {
 
     @Override
     public boolean touchUp(int x, int y, int pointer, int button) {
-        if(!dragged && button == 0) {
+        if(!dragged && button == 0 && placeType != TowerType.NONE) {
             // clicked
             int mapRow = MapUtils.getMapRow(touch.x, touch.y);
             int mapCol = MapUtils.getMapCol(touch.x, touch.y);
@@ -98,6 +120,19 @@ public class GameInputProcessor extends AbstractInputProcessor {
                 screen.getPathMarker().setPath(path);
                 return true;
             }
+        }
+        return false;
+    }
+    
+    @Override
+    public boolean mouseMoved(int x, int y) {
+        move.set(x, y, 0);
+        camera.unproject(move);
+        int mapRow = MapUtils.getMapRow(move.x, move.y);
+        int mapCol = MapUtils.getMapCol(move.x, move.y);
+        //Gdx.app.log( Darkshaft.LOG, "move: screen (" + x + ", " + y + ") world (" + touch.x + ", " + touch.y + ") map (" + mapCol + ", " + mapRow + ")" );
+        if(mapRow >= 0 && mapCol >= 0){
+            screen.setTowerMarker(new Tower(placeType, mapCol, mapRow, true));
         }
         return false;
     }
