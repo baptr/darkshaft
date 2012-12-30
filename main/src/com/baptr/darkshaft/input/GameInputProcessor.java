@@ -18,15 +18,19 @@ public class GameInputProcessor extends AbstractInputProcessor {
 
     boolean dragged;
     boolean moving;
+    Vector3 down;
     Vector3 touch;
     Vector3 move;
     GameScreen screen;
     OrthographicCamera camera;
 
+    public static final int DRAG_THRESHOLD = 20;
+
     public GameInputProcessor(OrthographicCamera camera, GameScreen screen) {
         super();
         this.camera = camera;
         this.screen = screen;
+        this.down = new Vector3();
         this.touch = new Vector3();
         this.move = new Vector3();
     }
@@ -68,6 +72,7 @@ public class GameInputProcessor extends AbstractInputProcessor {
         if(button == 1) {
             moving = true;
         }
+        down.set(x, y, 0);
         touch.set(x, y, 0);
         camera.unproject(touch);
         return false;
@@ -75,8 +80,11 @@ public class GameInputProcessor extends AbstractInputProcessor {
 
     @Override
     public boolean touchDragged(int x, int y, int pointer) {
-        dragged = true;
-        if(moving) {
+        if(!dragged && (Math.abs(x - down.x) +
+                Math.abs(y-down.y)) >= DRAG_THRESHOLD) {
+            dragged = true;
+        }
+        if(dragged && moving) {
             touch.set(x, y, 0);
             camera.unproject(touch);
             screen.movePlayer(touch.x, touch.y);
@@ -107,7 +115,8 @@ public class GameInputProcessor extends AbstractInputProcessor {
                 int gCol = MapUtils.getMapCol(touch.x, touch.y);
                 int gRow = MapUtils.getMapRow(touch.x, touch.y);
                 Array<Node> path = pp.findPath(sCol, sRow, gCol, gRow);
-                Gdx.app.log(Darkshaft.LOG, "Path: " + path
+                Gdx.app.log(Darkshaft.LOG, "Path length: " +
+                        ((path == null) ? "NULL" : ""+path.size)
                         + " after " + pp.getIterations() + " steps");
                 screen.getPathMarker().setPath(path);
             }
