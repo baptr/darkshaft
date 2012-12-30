@@ -18,6 +18,12 @@ public class Defense extends Entity {
         this.row = row;
     }
 
+    public void setMapPosition(int col, int row) {
+        this.col = col;
+        this.row = row;
+        this.setPosition(MapUtils.getWorldX(col, row), MapUtils.getWorldY(col,row));
+    }
+
     public int getCol() {
         return col;
     }

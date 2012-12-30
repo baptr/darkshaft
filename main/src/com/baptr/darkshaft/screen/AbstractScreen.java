@@ -107,19 +107,22 @@ public abstract class AbstractScreen implements Screen {
         camera.update();
     }
 
-    @Override
-    public void render(
-        float delta )
-    {
+    public void tick(float delta) {
         // Continue loading any queued assets
         assetManager.update();
+
+        stage.act( delta );
+    }
+
+    @Override
+    public void render( float delta ) {
+        this.tick(delta);
 
         // the following code clears the screen with the given RGB color (black)
         Gdx.gl.glClearColor( 0f, 0f, 0f, 1f );
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
 
         // update and draw the stage actors
-        stage.act( delta );
         stage.draw();
         Table.drawDebug(stage);
     }

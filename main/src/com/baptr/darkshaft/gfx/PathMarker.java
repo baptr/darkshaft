@@ -26,6 +26,10 @@ public class PathMarker extends Sprite {
     }
 
     public void setPath(Array<Node> path) {
+        if(path == null) {
+            pathLength = 0;
+            return;
+        }
         pathLength = path.size;
         worldX.clear();
         worldY.clear();

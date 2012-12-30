@@ -58,6 +58,8 @@ public abstract class GameScreen extends AbstractScreen {
         entities.add(dargorn);
         pathPlanner = new PathPlanner(mapRenderer.getMap(), defenses);
         pathMarker = new PathMarker(getAtlas().findRegion("gamescreen/marker"));
+        GameUI ui = new GameUI(this, stage);
+        towerMarker = new Tower(TowerType.NONE,0,0,true);
     }
 
     public PathPlanner getPathPlanner() {
@@ -84,6 +86,14 @@ public abstract class GameScreen extends AbstractScreen {
         towerMarker.setTowerType(t, true);
     }
 
+    public void setTowerMarkerPos(int col, int row) {
+        towerMarker.setMapPosition(col, row);
+    }
+
+    public TowerType getTowerMarkerType() {
+        return towerMarker.getTowerType();
+    }
+
     /* temporary */
     public void movePlayer(float x, float y) {
         frank.setPosition(x, y);
@@ -94,7 +104,7 @@ public abstract class GameScreen extends AbstractScreen {
     }
 
     public void render(float delta) {
-        super.render(delta);
+        super.tick(delta);
 
         Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -116,5 +126,7 @@ public abstract class GameScreen extends AbstractScreen {
         }
         
         batch.end();
+
+        stage.draw();
     }
 }
