@@ -3,6 +3,7 @@ package com.baptr.darkshaft.input;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 
 import com.baptr.darkshaft.Darkshaft;
 import com.baptr.darkshaft.gfx.Tower;
@@ -11,6 +12,7 @@ import com.baptr.darkshaft.gfx.Tower.TowerType;
 import com.baptr.darkshaft.screen.GameScreen;
 import com.baptr.darkshaft.util.MapUtils;
 import com.baptr.darkshaft.util.PathPlanner;
+import com.baptr.darkshaft.util.PathPlanner.Node;
 
 public class GameInputProcessor extends AbstractInputProcessor {
 
@@ -90,8 +92,10 @@ public class GameInputProcessor extends AbstractInputProcessor {
                 int sRow = MapUtils.getMapRow(p.getX(), p.getY());
                 int gCol = MapUtils.getMapCol(touch.x, touch.y);
                 int gRow = MapUtils.getMapRow(touch.x, touch.y);
-                Gdx.app.log(Darkshaft.LOG, "Path: " +
-                        pp.findPath(sCol, sRow, gCol, gRow));
+                Array<Node> path = pp.findPath(sCol, sRow, gCol, gRow);
+                Gdx.app.log(Darkshaft.LOG, "Path: " + path
+                        + " after " + pp.getIterations() + " steps");
+                screen.getPathMarker().setPath(path);
                 return true;
             }
         }

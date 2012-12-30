@@ -25,7 +25,10 @@ public class PathPlanner {
     private Array<Node> path; // result
     private Array<Node> neighbors;
 
-    private static long MAX_TILE_COST = 32L;
+    private int iterations;
+
+    private static long MAX_TILE_COST = 64L;
+    private static long TOWER_COST = MAX_TILE_COST - 1; // XXX big tunable
     private static int MAX_NEIGHBORS = 6;
 
     public PathPlanner(TiledMap terrain, Array<Defense> defenses) {
@@ -56,6 +59,8 @@ public class PathPlanner {
         knownCost.clear();
         estCost.clear();
         path.clear();
+
+        iterations = 0;
     }
 
     public Array<Node> findPath(int startCol, int startRow, int endCol, int endRow) {
@@ -76,6 +81,7 @@ public class PathPlanner {
         estCost.put(startNode, 0L + estimateCost(startNode));
 
         while(toVisit.size > 0) {
+            iterations++;
             // pick the element of toVisit with the lowest estCost, pop from toVisit
             long guess = Long.MAX_VALUE;
             Node current = null;
@@ -114,13 +120,20 @@ public class PathPlanner {
     /** Weighted distance between two adjacent nodes.
      * */
     private long getCost(Node from, Node to) {
+        for(Defense d : defenses) {
+            if(to.col == d.getCol() && to.row == d.getRow()) {
+                return TOWER_COST;
+            }
+        }
         return 1;
     }
     
     /** Estimate the cost from specified node to the goal
      * */
     private long estimateCost(Node src) {
-        return 1;
+        // Manhattan distance
+        // XXX Doesn't estimate the +row,+col and -row,-col cases properly
+        return Math.abs(goal.row - src.row) + Math.abs(goal.col - src.col);
     }
 
     /** Return neighbors of the specified node that haven't yet been visited
@@ -160,8 +173,15 @@ public class PathPlanner {
         return path;
     }
 
-    private class Node { // XXX probably should just be a packed long
-        int col, row;
+    /** Returns the number of iterations necessary to find the last path.
+     * For debugging
+     * */
+    public int getIterations() {
+        return iterations;
+    }
+
+    public class Node { // XXX probably should just be a packed long
+        public int col, row;
         public Node(int col, int row) {
             this.set(col, row);
         }

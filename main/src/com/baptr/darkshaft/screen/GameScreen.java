@@ -33,6 +33,7 @@ public abstract class GameScreen extends AbstractScreen {
     protected Array<Entity> entities;
 
     protected PathPlanner pathPlanner;
+    protected PathMarker pathMarker;
     
     private static final int INITIAL_DEFENSE_CAPACITY = 64;
 
@@ -54,10 +55,15 @@ public abstract class GameScreen extends AbstractScreen {
         entities.add(frank);
         entities.add(dargorn);
         pathPlanner = new PathPlanner(mapRenderer.getMap(), defenses);
+        pathMarker = new PathMarker(getAtlas().findRegion("gamescreen/marker"));
     }
 
     public PathPlanner getPathPlanner() {
         return pathPlanner;
+    }
+
+    public PathMarker getPathMarker() {
+        return pathMarker;
     }
 
     public void addDefense(Defense d) {
@@ -90,6 +96,7 @@ public abstract class GameScreen extends AbstractScreen {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         
+        pathMarker.draw(batch);
         for(Entity e : entities) {
             e.draw(batch);
         }
