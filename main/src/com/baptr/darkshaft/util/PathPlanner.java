@@ -64,8 +64,16 @@ public class PathPlanner {
     }
 
     public Array<Node> findPath(int startCol, int startRow, int endCol, int endRow) {
+        return findPath(startCol, startRow, endCol, endRow, null);
+    }
+    
+    public Array<Node> findPath(int startCol, int startRow, int endCol, int endRow, Unit p) {
         setGoal(endCol, endRow);
-        return findPath(startCol, startRow);
+        Array<Node> path = findPath(startCol, startRow);
+        if(p != null){
+            p.setPath(path);
+        }
+        return path;
     }
 
     /** Find a path from the specified startCol, startRow tile to the goal tile

@@ -50,6 +50,9 @@ public class GameInputProcessor extends AbstractInputProcessor {
             case '4':
                 screen.setTowerMarker(TowerType.SPIRIT);
                 break;
+            case '`':
+                screen.setTowerMarker(TowerType.NONE);
+                break;
         }
         
         return true;
@@ -114,7 +117,7 @@ public class GameInputProcessor extends AbstractInputProcessor {
                 int sRow = MapUtils.getMapRow(p.getX(), p.getY());
                 int gCol = MapUtils.getMapCol(touch.x, touch.y);
                 int gRow = MapUtils.getMapRow(touch.x, touch.y);
-                Array<Node> path = pp.findPath(sCol, sRow, gCol, gRow);
+                Array<Node> path = pp.findPath(sCol, sRow, gCol, gRow, p);
                 Gdx.app.log(Darkshaft.LOG, "Path length: " +
                         ((path == null) ? "NULL" : ""+path.size)
                         + " after " + pp.getIterations() + " steps");

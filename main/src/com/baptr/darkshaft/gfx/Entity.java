@@ -73,5 +73,10 @@ public class Entity extends Sprite implements Comparable<Entity>{
         return true;
     }
     
+    public void update(float delta)
+    {
+        
+    }
+    
     
 }

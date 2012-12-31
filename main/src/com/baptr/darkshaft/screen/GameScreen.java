@@ -117,6 +117,7 @@ public abstract class GameScreen extends AbstractScreen {
         batch.begin();
         
         pathMarker.draw(batch);
+        frank.update(delta);
         for(Entity e : entities) {
             e.draw(batch);
         }
