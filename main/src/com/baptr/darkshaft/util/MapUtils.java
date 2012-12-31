@@ -45,4 +45,38 @@ public class MapUtils {
     public static TextureRegion getTileRegion(int tileId) {
         return renderer.getAtlas().getRegion(tileId);
     }
+
+    public static boolean isTilePassable(int col, int row) {
+        return isTilePassable(renderer.getMap().layers.get(0).tiles[row][col]);
+    }
+
+    public static boolean isTilePassable(int tileId) {
+        // TODO memoize
+        String passable = renderer.getMap().getTileProperty(tileId, "passable");
+        try {
+            return 1 == Integer.parseInt(passable);
+        } catch(NumberFormatException e) {}
+        return true;
+    }
+
+    public static int getTileWeight(int layer, int col, int row) {
+        return getTileWeight(renderer.getMap().layers.get(layer).tiles[row][col]);
+    }
+
+    public static int getTileWeight(int col, int row) {
+        int weight = 0;
+        for(int layer = 0; layer < renderer.getMap().layers.size(); layer++) {
+            weight += getTileWeight(layer, col, row);
+        }
+        return weight;
+    }
+
+    public static int getTileWeight(int tileId) {
+        // TODO memoize
+        String weight = renderer.getMap().getTileProperty(tileId, "weight");
+        try {
+            return Integer.parseInt(weight);
+        } catch(NumberFormatException e) {}
+        return 1;
+    }
 }

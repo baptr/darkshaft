@@ -125,7 +125,7 @@ public class PathPlanner {
                 return TOWER_COST;
             }
         }
-        return 1;
+        return MapUtils.getTileWeight(to.col, to.row);
     }
     
     /** Estimate the cost from specified node to the goal
@@ -148,13 +148,13 @@ public class PathPlanner {
         for(int dy = -1; dy <= 1; dy++) {
             for(int dx = -1; dx <= 1; dx++) {
                 if(dx == -dy) continue;
-                Node testNode = new Node(0,0);
-                testNode.set(n.col + dx, n.row + dy);
-                if(testNode.col > terrain.width) continue;
+                Node testNode = new Node(n.col + dx, n.row + dy);
+                if(testNode.col >= terrain.width) continue;
                 if(testNode.col < 0) continue;
-                if(testNode.row > terrain.width) continue;
+                if(testNode.row >= terrain.width) continue;
                 if(testNode.row < 0) continue;
                 if(visited.containsKey(testNode)) continue;
+                if(!MapUtils.isTilePassable(testNode.col, testNode.row)) continue;
                 neighbors.add(testNode);
             }
         }
@@ -206,5 +206,4 @@ public class PathPlanner {
             return "(" + col + ", " + row + ")";
         }
     }
-
 }
