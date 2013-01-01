@@ -12,14 +12,21 @@ import com.baptr.darkshaft.util.PathPlanner.Node;
 public class Unit extends Entity {
 
     Array<Node> currentPath;
-    float speed = 150;
+    float speed = 100;
+    Vector2 v;
+    Vector2 dest;
+    Facing facing;
     
     public Unit(float x, float y, TextureAtlas atlas, String ... animations) {
         super(x, y, atlas, animations);
+        v = new Vector2();
+        dest = new Vector2();
     }
 
     public Unit(TextureRegion region, float x, float y) {
         super(region, x, y);
+        v = new Vector2();
+        dest = new Vector2();
     }
     
     public void setPath(Array<Node> path){
@@ -40,7 +47,9 @@ public class Unit extends Entity {
             float dx = nodeX - spriteX; 
             float dy = nodeY - spriteY;
 
-            Vector2 v = new Vector2(dx, dy);
+            dest.set(nodeX, nodeY);
+
+            v.set(dx, dy);
             float distance = v.len();
             v.nor().mul(speed*delta);
             
@@ -55,5 +64,9 @@ public class Unit extends Entity {
              //       dx + "," + dy + ") v(" + v.x + "," + v.y + ") move (" + moveToX + "," + moveToY + ")");
         }
          
+    }
+
+    enum Facing {
+        UP, DOWN, NORTH, SOUTH, EAST, WEST;
     }
 }
