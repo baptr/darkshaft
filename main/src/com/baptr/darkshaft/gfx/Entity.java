@@ -18,16 +18,21 @@ public class Entity extends Sprite implements Comparable<Entity>{
     public Entity(Texture texture, float x, float y) {
         super(texture);
         this.setPosition(x, y);
-        
-    }
-
-    public Entity(String imgPath, float x, float y) {
-        this(new Texture(Gdx.files.internal(imgPath)), x, y);
     }
 
     @Override
     public void setPosition(float x, float y) {
         super.setPosition(x + xOffset, y + yOffset);
+    }
+
+    @Override
+    public float getX() {
+        return super.getX() - xOffset;
+    }
+
+    @Override
+    public float getY() {
+        return super.getY() - yOffset;
     }
 
     @Override
@@ -72,11 +77,8 @@ public class Entity extends Sprite implements Comparable<Entity>{
             return false;
         return true;
     }
-    
-    public void update(float delta)
-    {
+
+    public void update(float delta) {
         
     }
-    
-    
 }

@@ -22,35 +22,27 @@ public class Unit extends Entity {
     }
     
     @Override
-    public void update(float delta)
-    {
+    public void update(float delta) {
         if(currentPath != null && currentPath.size > 0 && currentPath.get(0) != null){
-            
+
             Node n = currentPath.get(0);
-            float nodeX = MapUtils.getWorldX(n.col, n.row);
-            float nodeY = MapUtils.getWorldY(n.col, n.row);
+            // TODO: Refactor getWorldX/Y to return the center of the tile
+            float nodeX = MapUtils.getWorldX(n.col, n.row) + 32;
+            float nodeY = MapUtils.getWorldY(n.col, n.row) + 16;
             float spriteX = this.getX();
             float spriteY = this.getY();
             float dx = nodeX - spriteX; 
             float dy = nodeY - spriteY;
-            
+
             Vector2 v = new Vector2(dx, dy);
-            v = v.nor();
+            float distance = v.len();
+            v.nor().mul(speed*delta);
             
-            float moveToX = spriteX + (v.x * speed * delta);
-            if((moveToX > nodeX && nodeX > spriteX) ||
-                    moveToX < nodeX && nodeX < spriteX){
-                moveToX = nodeX;
-            }
-            float moveToY = spriteY + (v.y * speed * delta);
-            if((moveToY > nodeY && nodeY > spriteY) ||
-                    moveToY < nodeY && nodeY < spriteY){
-                moveToY = nodeY;
-            }
-            this.setX(moveToX);
-            this.setY(moveToY);
+            float moveToX = spriteX + v.x;
+            float moveToY = spriteY + v.y;
+            this.setPosition(moveToX, moveToY);
             
-            if(this.getX() == nodeX && this.getY() == nodeY){
+            if(distance <= 2.0f) {
                 currentPath.removeIndex(0);
             }
             //Gdx.app.log( Darkshaft.LOG, "unit update: node(" + n.row + "," + n.col + ")[" + nodeX + "," + nodeY + "] sprite(" + spriteX + "," + spriteY +"), d(" + 

@@ -60,7 +60,7 @@ public class DemoScreen extends GameScreen {
         stateTime += delta;
         currentFrame = downWalk.getKeyFrame(stateTime, true);
         batch.begin();
-        this.batch.draw(currentFrame, 50, 50);
+        this.batch.draw(currentFrame, 50, -250);
         batch.end();
         // END TEMPORARY
     }
