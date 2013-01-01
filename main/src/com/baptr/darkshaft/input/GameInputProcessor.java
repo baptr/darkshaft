@@ -86,6 +86,9 @@ public class GameInputProcessor extends AbstractInputProcessor {
         if(!dragged && (Math.abs(x - down.x) +
                 Math.abs(y-down.y)) >= DRAG_THRESHOLD) {
             dragged = true;
+        } else if(!dragged) {
+            // Keep camera from moving under DRAG_THRESHOLD
+            return true;
         }
         if(dragged && moving) {
             touch.set(x, y, 0);

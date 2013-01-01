@@ -177,6 +177,7 @@ public class PathPlanner {
         while((n = parent.get(n)) != null) {
             path.add(n);
         }
+        path.pop();
         path.reverse();
         return path;
     }
