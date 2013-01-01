@@ -27,6 +27,7 @@ public class Entity extends Sprite implements Comparable<Entity>{
         for(String region : regionNames) {
             Array<AtlasRegion> tr = atlas.findRegions(region);
             Animation an = new Animation(frameDuration, tr);
+            an.setPlayMode(Animation.LOOP_PINGPONG);
             if(currentAnimation == null) currentAnimation = an;
             animations.put(region, an);
         }
@@ -49,11 +50,16 @@ public class Entity extends Sprite implements Comparable<Entity>{
         this.setPosition(x, y);
     }
 
+    
+    public void setAnimation(String animPath) { //TODO Enum
+        currentAnimation = animations.get(animPath);
+        animStateTime = 0f;
+    }
+
     public void update(float delta) {
         if(currentAnimation != null) {
             animStateTime += delta;
-            TextureRegion frame = currentAnimation.getKeyFrame(animStateTime,
-                    true); // TODO setPlayMode and don't force looping
+            TextureRegion frame = currentAnimation.getKeyFrame(animStateTime);
             this.setRegion(frame);
         }
     }
