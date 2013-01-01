@@ -1,6 +1,7 @@
 package com.baptr.darkshaft.gfx;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -13,6 +14,10 @@ public class Unit extends Entity {
     Array<Node> currentPath;
     float speed = 150;
     
+    public Unit(float x, float y, TextureAtlas atlas, String ... animations) {
+        super(x, y, atlas, animations);
+    }
+
     public Unit(TextureRegion region, float x, float y) {
         super(region, x, y);
     }
@@ -23,6 +28,7 @@ public class Unit extends Entity {
     
     @Override
     public void update(float delta) {
+        super.update(delta);
         if(currentPath != null && currentPath.size > 0 && currentPath.get(0) != null){
 
             Node n = currentPath.get(0);

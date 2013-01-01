@@ -51,7 +51,7 @@ public abstract class GameScreen extends AbstractScreen {
                 TileMapRenderer.class);
         MapUtils.setRenderer(mapRenderer);
         defenses = new Array<Defense>(false, INITIAL_DEFENSE_CAPACITY);
-        frank = new Avatar(getAtlas().findRegion("gamescreen/frank"), 15, -64);
+        frank = new Avatar(15, -64, getAtlas());
         dargorn = new Unit(getAtlas().findRegion("gamescreen/dargorn"), 20, -128);
         entities = new Array<Entity>(false, INITIAL_DEFENSE_CAPACITY + 2);
         entities.add(frank);
@@ -117,7 +117,10 @@ public abstract class GameScreen extends AbstractScreen {
         batch.begin();
         
         pathMarker.draw(batch);
-        frank.update(delta);
+        for(Entity e : entities) {
+            e.update(delta);
+        }
+        entities.sort();
         for(Entity e : entities) {
             e.draw(batch);
         }

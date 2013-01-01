@@ -1,14 +1,43 @@
 package com.baptr.darkshaft.gfx;
 
+import java.util.Map;
+import java.util.HashMap;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.utils.Array;
 
 public class Entity extends Sprite implements Comparable<Entity>{
 
     protected float xOffset = 0;
     protected float yOffset = 0;
+
+    protected Map<String,Animation> animations; // TODO EnumMap would be nice
+    protected Animation currentAnimation;
+    protected float animStateTime = 0f;
+    protected float frameDuration = 0.175f; // TODO way to override
+
+    public Entity(float x, float y, TextureAtlas atlas, String ... regionNames) {
+        animations = new HashMap<String,Animation>();
+        for(String region : regionNames) {
+            Array<AtlasRegion> tr = atlas.findRegions(region);
+            Animation an = new Animation(frameDuration, tr);
+            if(currentAnimation == null) currentAnimation = an;
+            animations.put(region, an);
+        }
+        if(currentAnimation != null) {
+            TextureRegion firstFrame = currentAnimation.getKeyFrame(0f);
+            this.setRegion(firstFrame);
+            this.setSize(getRegionWidth(), getRegionHeight());
+        }
+        this.setPosition(x, y);
+        this.setColor(1,1,1,1);
+    }
 
     public Entity(TextureRegion region, float x, float y) {
         super(region);
@@ -18,6 +47,15 @@ public class Entity extends Sprite implements Comparable<Entity>{
     public Entity(Texture texture, float x, float y) {
         super(texture);
         this.setPosition(x, y);
+    }
+
+    public void update(float delta) {
+        if(currentAnimation != null) {
+            animStateTime += delta;
+            TextureRegion frame = currentAnimation.getKeyFrame(animStateTime,
+                    true); // TODO setPlayMode and don't force looping
+            this.setRegion(frame);
+        }
     }
 
     @Override
@@ -78,7 +116,4 @@ public class Entity extends Sprite implements Comparable<Entity>{
         return true;
     }
 
-    public void update(float delta) {
-        
-    }
 }
