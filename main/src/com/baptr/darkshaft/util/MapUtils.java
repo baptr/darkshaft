@@ -2,6 +2,7 @@ package com.baptr.darkshaft.util;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
+import com.badlogic.gdx.graphics.g2d.tiled.TileSet;
 
 public class MapUtils {
     private static TileMapRenderer renderer;
@@ -83,5 +84,14 @@ public class MapUtils {
             return Integer.parseInt(weight);
         } catch(NumberFormatException e) {}
         return 1;
+    }
+
+    public static int findTileSetGid(String tileSetName) {
+        for(TileSet t : renderer.getMap().tileSets) {
+            if(t.name.equals(tileSetName)) {
+                return t.firstgid;
+            }
+        }
+        return -1;
     }
 }

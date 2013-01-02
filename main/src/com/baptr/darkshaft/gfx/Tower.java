@@ -1,19 +1,21 @@
 package com.baptr.darkshaft.gfx;
 
+import com.baptr.darkshaft.util.MapUtils;
+
 public class Tower extends Defense {
 
     public enum TowerType {
-        BASIC(5,1f,1f,1f),
-        FIRE(5,1f,0.25f,0.25f),
-        WATER(5,0.4f,0.5f,1f),
-        SPIRIT(5,0.25f,1f,0.25f, 0.5f),
-        NONE(5,0f,0f,0f);
+        BASIC(0,1f,1f,1f),
+        FIRE(0,1f,0.25f,0.25f),
+        WATER(0,0.4f,0.5f,1f),
+        SPIRIT(0,0.25f,1f,0.25f, 0.5f),
+        NONE(0,0f,0f,0f);
 
         private int tileId;
         private float r, g, b, a;
 
-        TowerType(int tileId, float r, float g, float b, float a) {
-            this.tileId = tileId;
+        TowerType(int tileOffset, float r, float g, float b, float a) {
+            this.tileId = MapUtils.findTileSetGid(TILE_SET_NAME)+tileOffset;
             this.r = r;
             this.g = g;
             this.b = b;
@@ -42,6 +44,8 @@ public class Tower extends Defense {
     }
 
     TowerType type;
+
+    static final String TILE_SET_NAME = "towers";
 
     public Tower(TowerType t, int x, int y) {
         super(t.tileId, x, y);
