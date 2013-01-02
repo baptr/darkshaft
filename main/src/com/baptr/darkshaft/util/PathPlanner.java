@@ -82,6 +82,11 @@ public class PathPlanner {
     public Array<Node> findPath(int startCol, int startRow) { // XXX Need mob for terrain proficiency
         reInit();
 
+        // Shortcut if the goal node is itself unpassable
+        if(!MapUtils.isTilePassable(goal.col, goal.row)) {
+            return null;
+        }
+
         Node startNode = new Node(startCol, startRow);
         toVisit.put(startNode, 0);
 

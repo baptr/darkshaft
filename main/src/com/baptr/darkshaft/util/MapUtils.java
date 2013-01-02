@@ -8,6 +8,7 @@ public class MapUtils {
 
     private static int unitsPerTileX, unitsPerTileY;
     private static int baseX, baseY;
+    private static int mapWidth, mapHeight; // in tiles
 
     public static void setRenderer(TileMapRenderer r) {
         MapUtils.renderer = r;
@@ -16,6 +17,8 @@ public class MapUtils {
         MapUtils.unitsPerTileY = r.getMap().tileHeight / 2;
         MapUtils.baseX = r.getMapWidthUnits() / 2;
         MapUtils.baseY = r.getMapHeightUnits() / 2;
+        MapUtils.mapWidth = r.getMap().width;
+        MapUtils.mapHeight = r.getMap().height;
     }
 
     /** Calculate the map row index for a given world point
@@ -47,6 +50,8 @@ public class MapUtils {
     }
 
     public static boolean isTilePassable(int col, int row) {
+        if(col < 0 || col >= mapWidth || row < 0 || row >= mapHeight)
+                return false;
         return isTilePassable(renderer.getMap().layers.get(0).tiles[row][col]);
     }
 
