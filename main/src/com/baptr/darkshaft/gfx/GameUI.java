@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.graphics.Color;
 
 import com.baptr.darkshaft.Darkshaft;
 import com.baptr.darkshaft.screen.GameScreen;
@@ -20,6 +21,7 @@ import com.baptr.darkshaft.gfx.Tower.TowerType;
 public class GameUI {
     Table buttons;
     final GameScreen gameScreen;
+
     public GameUI(GameScreen screen, Stage stage) {
         this.gameScreen = screen;
         Skin skin = screen.getSkin();
@@ -35,10 +37,17 @@ public class GameUI {
 
         buttons.pack();
         buttons.addListener(new ClickListener() {
+            Label lastHit;
+            final Color HIT_COLOR = Color.BLUE;
             public void clicked(InputEvent e, float x, float y) {
                 Actor hit = buttons.hit(x, y, true);
                 if(hit instanceof Label) {
-                    String label = ((Label)hit).getText().toString();
+                    if(lastHit != null) {
+                        lastHit.setColor(1,1,1,1);
+                    }
+                    lastHit = (Label)hit;
+                    lastHit.setColor(HIT_COLOR);
+                    String label = lastHit.getText().toString();
                     if(label.equals("Move"))
                         gameScreen.setTowerMarker(TowerType.NONE);
                     if(label.equals("Basic"))
