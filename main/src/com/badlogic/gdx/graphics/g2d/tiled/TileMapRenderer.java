@@ -186,7 +186,8 @@ public class TileMapRenderer implements Disposable {
 	private void init (int[][][] map, TileAtlas atlas, int tileWidth, int tileHeight, float unitsPerTileX, float unitsPerTileY,
 		IntArray blendedTiles, int tilesPerBlockX, int tilesPerBlockY, ShaderProgram shader, boolean isometric) {
                 Gdx.app.log( "TileMapRenderer", "tileWidth: " + tileWidth + " tileHeight: " + tileHeight + " unitsPerTileX: " + unitsPerTileX +
-                        " unitsPerTileY: " + unitsPerTileY + " tilesPerBlockX: " + tilesPerBlockX + " tilesPerBlockY: " + tilesPerBlockY );
+                        " unitsPerTileY: " + unitsPerTileY + " tilesPerBlockX: " + tilesPerBlockX + " tilesPerBlockY: " + tilesPerBlockY +
+                        " mapLayers: " + map.length + " mapHeight: " + map[0].length + " mapWidth: " + map[0][0].length);
 		this.atlas = atlas;
 		this.tileWidth = tileWidth;
 		this.tileHeight = tileHeight;
