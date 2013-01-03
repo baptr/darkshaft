@@ -11,12 +11,14 @@ import com.badlogic.gdx.utils.Array;
 
 import com.baptr.darkshaft.Darkshaft;
 import com.baptr.darkshaft.util.MapUtils;
+import com.baptr.darkshaft.util.NetworkClient;
 import com.baptr.darkshaft.gfx.*;
 import com.baptr.darkshaft.gfx.Tower.TowerType;
 
 public class DemoScreen extends GameScreen {
 
     Entity testEntity;
+    NetworkClient client;
     
     public DemoScreen(Darkshaft game) {
         super(game, "demo.tmx");
@@ -29,6 +31,9 @@ public class DemoScreen extends GameScreen {
         camera.update();
         
         testEntity = new Entity(100, -250, getAtlas(), "gamescreen/dargorn");
+
+        client = new NetworkClient();
+        client.connect("localhost", "DemoScreen Player");
     }
 
     @Override

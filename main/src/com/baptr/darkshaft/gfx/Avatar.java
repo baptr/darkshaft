@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.baptr.darkshaft.gfx.*;
 
 public class Avatar extends Unit {
+
+    private String owner = "Local Player";
     
     public Avatar(float x, float y, TextureAtlas atlas) {
         super(x, y, atlas, "Characters/Frank/Down", "Characters/Frank/East");
