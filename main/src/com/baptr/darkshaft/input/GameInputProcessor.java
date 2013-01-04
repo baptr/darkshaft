@@ -17,7 +17,6 @@ import com.baptr.darkshaft.util.PathPlanner.Node;
 public class GameInputProcessor extends AbstractInputProcessor {
 
     boolean dragged;
-    boolean moving;
     Vector3 down;
     Vector3 touch;
     Vector3 move;
@@ -72,9 +71,6 @@ public class GameInputProcessor extends AbstractInputProcessor {
     @Override
     public boolean touchDown(int x, int y, int pointer, int button) {
         dragged = false;
-        if(button == 1) {
-            moving = true;
-        }
         down.set(x, y, 0);
         touch.set(x, y, 0);
         camera.unproject(touch);
@@ -88,12 +84,6 @@ public class GameInputProcessor extends AbstractInputProcessor {
             dragged = true;
         } else if(!dragged) {
             // Keep camera from moving under DRAG_THRESHOLD
-            return true;
-        }
-        if(dragged && moving) {
-            touch.set(x, y, 0);
-            camera.unproject(touch);
-            screen.movePlayer(touch.x, touch.y);
             return true;
         }
         return false;
@@ -128,8 +118,6 @@ public class GameInputProcessor extends AbstractInputProcessor {
             }
 
             return true;
-        } else if(button == 1) {
-            moving = false;
         }
         return false;
     }
