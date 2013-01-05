@@ -35,6 +35,7 @@ public class ConnectScreen extends AbstractScreen {
                         playScreen = new DemoScreen(game, false);
                     playScreen.initConnection(serverField.getText(),
                             portField.getText());
+                    serverField.getOnscreenKeyboard().show(false);
                     game.setScreen(playScreen);
                 } catch(java.net.UnknownHostException ue) {
                     new Dialog("Unknown Host", getSkin())
