@@ -69,12 +69,8 @@ public class NetworkClient {
         }));
     }
 
-    public void connect(String host, String playerName) {
-        try {
-            client.connect(Network.CONNECT_TIMEOUT, host, Network.port);
-        } catch(IOException ex) {
-            ex.printStackTrace();
-        }
+    public void connect(String host, String playerName) throws IOException {
+        client.connect(Network.CONNECT_TIMEOUT, host, Network.port);
 
         Login login = new Login();
         login.name = playerName;

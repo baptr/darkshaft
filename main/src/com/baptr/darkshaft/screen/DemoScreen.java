@@ -24,34 +24,27 @@ public class DemoScreen extends GameScreen {
     NetworkClient client;
     IntMap<Avatar> remoteAvatars;
 
-    public DemoScreen(Darkshaft game, String server, String port) {
-        super(game, "demo.tmx");
-        
-        camera.translate(-400, -400, 0);
-        camera.update();
-
-        initConnection(server, "Client Player");
-    }
-    
-    public DemoScreen(Darkshaft game) {
+    public DemoScreen(Darkshaft game, boolean selfServe) {
         super(game, "demo.tmx");
 
         camera.translate(-400, -400, 0);
         camera.update();
 
-        try {
-            server = new NetworkServer();
-        } catch(IOException ex) {
-            ex.printStackTrace();
-        }
-
-        initConnection("localhost", "Local Player");
-    }
-
-    private void initConnection(String host, String name) {
         remoteAvatars = new IntMap<Avatar>();
-        
         client = new NetworkClient(this);
+
+        if(selfServe) {
+            try {
+                server = new NetworkServer();
+                initConnection("localhost", "Local Player");
+            } catch(IOException ex) {
+                ex.printStackTrace();
+            }
+
+        }
+    }
+
+    void initConnection(String host, String name) throws IOException{
         client.connect(host, name);
     }
 

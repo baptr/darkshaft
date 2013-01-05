@@ -41,7 +41,6 @@ public abstract class AbstractScreen implements Screen {
         this.batch = new SpriteBatch();
         this.stage = new Stage(0, 0, true);
         input = new InputMultiplexer();
-        Gdx.input.setInputProcessor(input);
         input.addProcessor(stage);
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, 800, 600);
@@ -83,9 +82,9 @@ public abstract class AbstractScreen implements Screen {
     // Screen implementation
 
     @Override
-    public void show()
-    {
+    public void show() {
         Gdx.app.log( Darkshaft.LOG, "Showing screen: " + getName() );
+        Gdx.input.setInputProcessor(input);
     }
 
     @Override
