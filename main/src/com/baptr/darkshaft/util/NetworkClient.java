@@ -13,6 +13,7 @@ import com.baptr.darkshaft.Darkshaft;
 import com.baptr.darkshaft.util.Network;
 import com.baptr.darkshaft.util.Network.*;
 import com.baptr.darkshaft.gfx.Avatar;
+import com.baptr.darkshaft.gfx.Tower;
 import com.baptr.darkshaft.screen.DemoScreen;
 
 public class NetworkClient {
@@ -66,6 +67,10 @@ public class NetworkClient {
                         screen.removeRemoteAvatar(p.id);
                 }
                 if(o instanceof TowerPlaced) {
+                    TowerPlaced t = (TowerPlaced)o;
+                    if(t.player.id != myId)
+                        screen.addRemoteTower(t.player.id, t.type,
+                                t.col, t.row);
                 }
             }
         }));
@@ -88,5 +93,14 @@ public class NetworkClient {
         lastPosition.x = x;
         lastPosition.y = y;
         client.sendTCP(lastPosition);
+    }
+
+    public void sendPlaceTower(Tower t) {
+        if(!client.isConnected()) return;
+        PlaceTower msg = new PlaceTower();
+        msg.type = t.getTowerType();
+        msg.row = t.getRow();
+        msg.col = t.getCol();
+        client.sendTCP(msg);
     }
 }

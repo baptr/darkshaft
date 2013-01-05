@@ -19,6 +19,7 @@ public class Network {
         kryo.register(RemovePlayer.class);
         kryo.register(PlaceTower.class);
         kryo.register(TowerPlaced.class);
+        kryo.register(TowerType.class);
         kryo.register(Player.class);
     }
 

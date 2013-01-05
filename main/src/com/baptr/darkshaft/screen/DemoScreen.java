@@ -63,6 +63,23 @@ public class DemoScreen extends GameScreen {
         remoteAvatars.remove(id);
     }
 
+    public void addRemoteTower(int playerId, TowerType type, int col, int row) {
+        Tower t = new Tower(type, col, row);
+        defenses.add(t);
+        entities.add(t);
+        entities.sort();
+    }
+
+    @Override
+    public void addDefense(Defense d) {
+        if(!defenses.contains(d, false)) {
+            client.sendPlaceTower((Tower)d);
+            defenses.add(d);
+            entities.add(d);
+            entities.sort();
+        }
+    }
+
     @Override
     public void show() {
         super.show();
