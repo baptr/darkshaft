@@ -23,28 +23,36 @@ public class DemoScreen extends GameScreen {
     NetworkServer server;
     NetworkClient client;
     IntMap<Avatar> remoteAvatars;
-    
-    public DemoScreen(Darkshaft game, boolean asServer) {
-        super(game, "demo.tmx");
 
-        for(int i = 0; i < 4; i++) {
-            this.addDefense(new Tower(TowerType.values()[i], 0, 0+i));
-        }
+    public DemoScreen(Darkshaft game, String server, String port) {
+        super(game, "demo.tmx");
+        
+        camera.translate(-400, -400, 0);
+        camera.update();
+
+        initConnection(server, "Client Player");
+    }
+    
+    public DemoScreen(Darkshaft game) {
+        super(game, "demo.tmx");
 
         camera.translate(-400, -400, 0);
         camera.update();
 
+        try {
+            server = new NetworkServer();
+        } catch(IOException ex) {
+            ex.printStackTrace();
+        }
+
+        initConnection("localhost", "Local Player");
+    }
+
+    private void initConnection(String host, String name) {
         remoteAvatars = new IntMap<Avatar>();
         
-        if(asServer) {
-            try {
-                server = new NetworkServer();
-            } catch(IOException ex) {
-                ex.printStackTrace();
-            }
-        }
         client = new NetworkClient(this);
-        client.connect("localhost", "DemoScreen Player");
+        client.connect(host, name);
     }
 
     public void addRemoteAvatar(String name, int id) {

@@ -24,14 +24,14 @@ public class MenuScreen extends AbstractScreen {
         TextButton startButton = new TextButton("Start Game", getSkin());
         startButton.addListener(new ClickListener() {
             public void clicked (InputEvent event, float x, float y) {
-                game.setScreen(new DemoScreen(game, true));
+                game.setScreen(new DemoScreen(game));
             }
         });
 
         TextButton connectButton = new TextButton("Connect To Game", getSkin());
         connectButton.addListener(new ClickListener() {
             public void clicked (InputEvent event, float x, float y) {
-                game.setScreen(new DemoScreen(game, false));
+                game.setScreen(new ConnectScreen(game));
             }
         });
 
