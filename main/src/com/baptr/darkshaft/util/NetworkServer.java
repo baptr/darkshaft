@@ -6,6 +6,7 @@ import java.util.HashSet;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.minlog.Log;
 
 import com.baptr.darkshaft.util.Network;
 import com.baptr.darkshaft.util.Network.*;
@@ -16,6 +17,7 @@ public class NetworkServer {
     HashSet<Player> players = new HashSet<Player>();
 
     public NetworkServer() throws IOException {
+        //Log.set(Log.LEVEL_DEBUG);
         server = new Server() {
             protected Connection newConnection() {
                 return new PlayerConnection();
@@ -30,7 +32,22 @@ public class NetworkServer {
                 Player player = connection.player;
                 if(obj instanceof Login) {
                     if(player != null) return; // Already logged in
+                    c.setKeepAliveTCP(4000);
+                    c.setTimeout(10000);
                     player = new Player(((Login)obj).name);
+                    connection.player = player;
+
+                    YourId idMsg = new YourId();
+                    idMsg.id = player.id;
+                    server.sendToTCP(connection.getID(), idMsg);
+
+                    // Tell the new player about other players
+                    for(Player p : players) {
+                        NewPlayer msg = new NewPlayer();
+                        msg.player = p;
+                        server.sendToTCP(connection.getID(), msg);
+                    }
+
                     players.add(player);
 
                     NewPlayer msg = new NewPlayer();

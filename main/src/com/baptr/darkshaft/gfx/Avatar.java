@@ -15,6 +15,14 @@ public class Avatar extends Unit {
         yOffset = -2;
     }
 
+    public void setOwner(String name) {
+        owner = name;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
     @Override
     public void update(float delta) {
         super.update(delta);

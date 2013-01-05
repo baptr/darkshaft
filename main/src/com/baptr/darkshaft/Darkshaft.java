@@ -1,7 +1,5 @@
 package com.baptr.darkshaft;
 
-import java.io.IOException;
-
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -23,13 +21,10 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.baptr.darkshaft.screen.*;
 import com.baptr.darkshaft.gfx.*;
 
-import com.baptr.darkshaft.util.NetworkServer;
-
 public class Darkshaft extends Game {
     
     public static final String LOG = Darkshaft.class.getSimpleName();
     FPSLogger fpsLogger;
-    NetworkServer server;
 
     private boolean showSplash = true;
 
@@ -51,20 +46,14 @@ public class Darkshaft extends Game {
         //Terrain.init(this, manager); 
 
         Gdx.app.log(Darkshaft.LOG, "Version 0.0 starting");
+        //Gdx.graphics.setVSync(false);
 
         manager.finishLoading();
 
-        try {
-            server = new NetworkServer();
-        } catch(IOException ex) {
-            ex.printStackTrace();
-        }
-        
         if(showSplash) {
             setScreen(GetSplashScreen());
         } else {
-            //setScreen(new TowerScreen(this));
-            setScreen(new DemoScreen(this));
+            setScreen(new DemoScreen(this, true));
         }
 
     }
@@ -72,7 +61,7 @@ public class Darkshaft extends Game {
     @Override
     public void render() {
     	super.render();
-    	fpsLogger.log();
+    	//fpsLogger.log();
     }
 
     @Override

@@ -12,6 +12,7 @@ public class Network {
     public static void register(EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();
         kryo.register(Login.class);
+        kryo.register(YourId.class);
         kryo.register(NewPlayer.class);
         kryo.register(UpdateAvatar.class);
         kryo.register(MoveAvatar.class);
@@ -24,6 +25,11 @@ public class Network {
     public static class Login {
         public String name;
     }
+
+    public static class YourId {
+        public int id;
+    }
+
     public static class NewPlayer {
         public Player player;
     }
