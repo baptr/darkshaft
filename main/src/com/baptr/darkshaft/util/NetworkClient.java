@@ -45,8 +45,10 @@ public class NetworkClient {
                     Player p = ((NewPlayer)o).player;
                     System.out.printf("Player %s connected (id %d)\n",
                             p.name, p.id);
-                    if(p.id != myId)
+                    if(p.id != myId) {
                         screen.addRemoteAvatar(p.name, p.id);
+                        screen.updateRemoteAvatar(p.id, p.x, p.y);
+                    }
                 }
                 if(o instanceof UpdateAvatar) {
                     Player p = ((UpdateAvatar)o).player;

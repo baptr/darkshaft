@@ -26,11 +26,13 @@ public class ConnectScreen extends AbstractScreen {
 
         TextButton connectButton = new TextButton("Connect", getSkin());
         connectButton.addListener(new ClickListener() {
+            private DemoScreen playScreen;
             public void clicked(InputEvent e, float x, float y) {
                 try {
                     InetAddress addr = InetAddress.getByName(
                             serverField.getText());
-                    DemoScreen playScreen = new DemoScreen(game, false);
+                    if(playScreen == null)
+                        playScreen = new DemoScreen(game, false);
                     playScreen.initConnection(serverField.getText(),
                             portField.getText());
                     game.setScreen(playScreen);
