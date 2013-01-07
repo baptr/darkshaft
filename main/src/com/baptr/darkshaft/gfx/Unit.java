@@ -66,6 +66,10 @@ public class Unit extends Entity {
          
     }
 
+    public boolean isMoving() {
+        return (currentPath != null && currentPath.size > 0);
+    }
+
     enum Facing {
         UP, DOWN, NORTH, SOUTH, EAST, WEST;
     }

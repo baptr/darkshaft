@@ -106,7 +106,7 @@ public abstract class AbstractScreen implements Screen {
         camera.update();
     }
 
-    public void tick(float delta) {
+    public void update(float delta) {
         // Continue loading any queued assets
         assetManager.update();
 
@@ -115,7 +115,7 @@ public abstract class AbstractScreen implements Screen {
 
     @Override
     public void render( float delta ) {
-        this.tick(delta);
+        this.update(delta);
 
         // the following code clears the screen with the given RGB color (black)
         Gdx.gl.glClearColor( 0f, 0f, 0f, 1f );
