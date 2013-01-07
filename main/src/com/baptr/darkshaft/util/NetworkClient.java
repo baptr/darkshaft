@@ -47,8 +47,7 @@ public class NetworkClient {
                     System.out.printf("Player %s connected (id %d)\n",
                             p.name, p.id);
                     if(p.id != myId) {
-                        screen.addRemoteAvatar(p.name, p.id);
-                        screen.updateRemoteAvatar(p.id, p.x, p.y);
+                        screen.addRemoteAvatar(p.name, p.id, p.x, p.y);
                     }
                 }
                 if(o instanceof UpdateAvatar) {
@@ -71,6 +70,17 @@ public class NetworkClient {
                     if(t.player.id != myId)
                         screen.addRemoteTower(t.player.id, t.type,
                                 t.col, t.row);
+                }
+                if(o instanceof Sync) {
+                    Sync s = (Sync)o;
+                    for(Player p : s.players) {
+                        if(p.id != myId)
+                            screen.addRemoteAvatar(p.name, p.id, p.x, p.y);
+                    }
+                    for(TowerPlaced t : s.towers) {
+                        screen.addRemoteTower(t.player.id, t.type,
+                                t.col, t.row);
+                    }
                 }
             }
         }));

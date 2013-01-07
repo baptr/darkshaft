@@ -21,6 +21,9 @@ public class Network {
         kryo.register(TowerPlaced.class);
         kryo.register(TowerType.class);
         kryo.register(Player.class);
+        kryo.register(Sync.class);
+        kryo.register(Player[].class);
+        kryo.register(TowerPlaced[].class);
     }
 
     public static class Login {
@@ -35,6 +38,7 @@ public class Network {
         public Player player;
     }
 
+    // TODO Send paths instead of positions
     public static class UpdateAvatar {
         public Player player;
     }
@@ -73,6 +77,14 @@ public class Network {
             this.name = name;
             this.id = maxId++;
         }
+    }
+
+    public static class Sync {
+        // world step idx
+        public long step;
+        public Player[] players;
+        // TODO Network.Tower class?
+        public TowerPlaced[] towers;
     }
 
 }

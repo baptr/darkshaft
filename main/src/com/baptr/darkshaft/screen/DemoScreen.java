@@ -48,9 +48,10 @@ public class DemoScreen extends GameScreen {
         client.connect(host, name);
     }
 
-    public void addRemoteAvatar(String name, int id) {
+    public void addRemoteAvatar(String name, int id, float x, float y) {
         Avatar av = new Avatar(0f, 0f, getAtlas());
         av.setOwner(name);
+        av.setPosition(x, y);
         remoteAvatars.put(id, av);
     }
 

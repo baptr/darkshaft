@@ -15,6 +15,9 @@ import com.baptr.darkshaft.gfx.Avatar;
 public class NetworkServer {
     Server server;
     HashSet<Player> players = new HashSet<Player>();
+    // need a list of towers, and mobs to send for sync
+    // Do we get from game, or keep here?
+    HashSet<TowerPlaced> towers = new HashSet<TowerPlaced>();
 
     public NetworkServer() throws IOException {
         //Log.set(Log.LEVEL_DEBUG);
@@ -41,12 +44,8 @@ public class NetworkServer {
                     idMsg.id = player.id;
                     server.sendToTCP(connection.getID(), idMsg);
 
-                    // Tell the new player about other players
-                    for(Player p : players) {
-                        NewPlayer msg = new NewPlayer();
-                        msg.player = p;
-                        server.sendToTCP(connection.getID(), msg);
-                    }
+                    // Tell the new player the game state
+                    syncTo(connection);
 
                     players.add(player);
 
@@ -77,6 +76,7 @@ public class NetworkServer {
                     update.row = msg.row;
                     update.col = msg.col;
                     server.sendToAllTCP(update);
+                    towers.add(update);
                 }
             }
 
@@ -94,6 +94,16 @@ public class NetworkServer {
 
         server.bind(Network.port);
         server.start();
+    }
+
+    /** Send a Sync message containing full game state to a given connection.
+     */
+    void syncTo(PlayerConnection conn) {
+        Sync msg = new Sync();
+        msg.players = players.toArray(new Player[players.size()]);
+        msg.towers = towers.toArray(new TowerPlaced[towers.size()]);
+        msg.step = 0;
+        server.sendToTCP(conn.getID(), msg);
     }
 
     public class PlayerConnection extends Connection {
