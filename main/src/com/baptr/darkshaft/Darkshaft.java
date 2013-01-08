@@ -45,7 +45,7 @@ public class Darkshaft extends Game {
         manager = new AssetManager();
         //Terrain.init(this, manager); 
 
-        Gdx.app.log(Darkshaft.LOG, "Version 0.0 starting");
+        Gdx.app.log(Darkshaft.LOG, "Version 0.1 starting");
         //Gdx.graphics.setVSync(false);
 
         manager.finishLoading();
