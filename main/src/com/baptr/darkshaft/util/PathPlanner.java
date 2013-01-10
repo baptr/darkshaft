@@ -7,10 +7,12 @@ import com.badlogic.gdx.utils.ObjectIntMap;
 import com.badlogic.gdx.utils.ObjectMap;
 
 import com.baptr.darkshaft.Darkshaft;
+import com.baptr.darkshaft.util.WeightMap;
 import com.baptr.darkshaft.gfx.*;
 
 public class PathPlanner {
     private TiledMap terrain; // XXX Terrain class?
+    private WeightMap weights;
     private Array<Defense> defenses;
 
     private Node goal;
@@ -34,6 +36,7 @@ public class PathPlanner {
     public PathPlanner(TiledMap terrain, Array<Defense> defenses) {
         this.terrain = terrain;
         this.defenses = defenses;
+        this.weights = new WeightMap(terrain);
 
         this.goal = new Node(0, 0);
 
@@ -83,7 +86,7 @@ public class PathPlanner {
         reInit();
 
         // Shortcut if the goal node is itself unpassable
-        if(!MapUtils.isTilePassable(goal.col, goal.row)) {
+        if(!weights.isPassable(goal.col, goal.row)) {
             return null;
         }
 
@@ -138,7 +141,7 @@ public class PathPlanner {
                 return TOWER_COST;
             }
         }
-        return MapUtils.getTileWeight(to.col, to.row);
+        return weights.get(to.col, to.row);
     }
     
     /** Estimate the cost from specified node to the goal
@@ -167,7 +170,7 @@ public class PathPlanner {
                 if(testNode.row >= terrain.width) continue;
                 if(testNode.row < 0) continue;
                 if(visited.containsKey(testNode)) continue;
-                if(!MapUtils.isTilePassable(testNode.col, testNode.row)) continue;
+                if(!weights.isPassable(testNode.col, testNode.row)) continue;
                 neighbors.add(testNode);
             }
         }
