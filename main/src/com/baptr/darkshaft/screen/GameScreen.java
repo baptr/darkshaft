@@ -75,6 +75,7 @@ public abstract class GameScreen extends AbstractScreen {
             defenses.add(d);
             entities.add(d);
             entities.sort();
+            pathPlanner.addDefense(d);
         }
     }
     

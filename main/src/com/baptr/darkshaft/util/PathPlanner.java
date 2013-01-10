@@ -13,7 +13,6 @@ import com.baptr.darkshaft.gfx.*;
 public class PathPlanner {
     private TiledMap terrain; // XXX Terrain class?
     private WeightMap weights;
-    private Array<Defense> defenses;
 
     private Node goal;
 
@@ -30,13 +29,12 @@ public class PathPlanner {
     private int iterations;
 
     private static long MAX_TILE_COST = 64L;
-    private static long TOWER_COST = MAX_TILE_COST - 1; // XXX big tunable
+    protected static long TOWER_COST = MAX_TILE_COST - 1; // XXX big tunable
     private static int MAX_NEIGHBORS = 6;
 
     public PathPlanner(TiledMap terrain, Array<Defense> defenses) {
         this.terrain = terrain;
-        this.defenses = defenses;
-        this.weights = new WeightMap(terrain);
+        this.weights = new WeightMap(terrain, defenses);
 
         this.goal = new Node(0, 0);
 
@@ -136,11 +134,6 @@ public class PathPlanner {
     /** Weighted distance between two adjacent nodes.
      * */
     private long getCost(Node from, Node to) {
-        for(Defense d : defenses) {
-            if(to.col == d.getCol() && to.row == d.getRow()) {
-                return TOWER_COST;
-            }
-        }
         return weights.get(to.col, to.row);
     }
     
@@ -175,6 +168,10 @@ public class PathPlanner {
             }
         }
         return neighbors;
+    }
+
+    public void addDefense(Defense d) {
+        weights.addDefense(d);
     }
 
     /** Once a valid path has been found, this recreates it from "parent" data.

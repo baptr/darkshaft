@@ -2,9 +2,15 @@ package com.baptr.darkshaft.util;
 
 import com.badlogic.gdx.graphics.g2d.tiled.TiledMap;
 import com.badlogic.gdx.graphics.g2d.tiled.TiledLayer;
+import com.badlogic.gdx.utils.Array;
 
 import com.baptr.darkshaft.util.MapUtils;
+import com.baptr.darkshaft.gfx.Defense;
 
+/** Cache of pre-calculated tile weights. Accounts for {@link Defense} and
+ *  {@link TerrainAffinity}.
+ *  @author baptr
+ */
 public class WeightMap {
     public static final int IMPASSABLE = Integer.MAX_VALUE;
 
@@ -15,11 +21,17 @@ public class WeightMap {
     private TiledMap map;
 
     public WeightMap(TiledMap terrain) {
+        this(terrain, null);
+    }
+
+    public WeightMap(TiledMap terrain, Array<Defense> defenses) {
         weights = new int[terrain.height][terrain.width];
         height = terrain.height;
         width = terrain.width;
         map = terrain;
         bakeMap();
+        if(defenses != null)
+            addDefenses(defenses);
     }
 
     private void bakeMap() {
@@ -68,4 +80,16 @@ public class WeightMap {
         return weights[row][col];
     }
 
+    public void addDefense(Defense d) {
+        int row = d.getRow();
+        int col = d.getCol();
+        if(isPassable(col, row))
+            weights[row][col] += PathPlanner.TOWER_COST;
+    }
+
+    public void addDefenses(Array<Defense> defenses) {
+        for(Defense d : defenses) {
+            addDefense(d);
+        }
+    }
 }

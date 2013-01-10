@@ -69,6 +69,7 @@ public class DemoScreen extends GameScreen {
         defenses.add(t);
         entities.add(t);
         entities.sort();
+        pathPlanner.addDefense(t);
     }
 
     @Override
@@ -78,6 +79,7 @@ public class DemoScreen extends GameScreen {
             defenses.add(d);
             entities.add(d);
             entities.sort();
+            pathPlanner.addDefense(d);
         }
     }
 
