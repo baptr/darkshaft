@@ -1,11 +1,16 @@
 package com.baptr.darkshaft.util;
 
+import java.util.Map;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
 import com.badlogic.gdx.graphics.g2d.tiled.TileSet;
 
+import com.baptr.darkshaft.entity.Entity.*;
+
 public class MapUtils {
     private static TileMapRenderer renderer;
+    private static Map<Integer, TileType> tileTypes;
 
     private static int unitsPerTileX, unitsPerTileY;
     private static int baseX, baseY;

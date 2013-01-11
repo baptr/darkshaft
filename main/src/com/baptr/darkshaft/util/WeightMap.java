@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.tiled.TiledLayer;
 import com.badlogic.gdx.utils.Array;
 
 import com.baptr.darkshaft.util.MapUtils;
+import com.baptr.darkshaft.entity.TerrainAffinity;
 import com.baptr.darkshaft.gfx.Defense;
 
 /** Cache of pre-calculated tile weights. Accounts for {@link Defense} and
@@ -29,16 +30,17 @@ public class WeightMap {
         height = terrain.height;
         width = terrain.width;
         map = terrain;
+        TerrainAffinity.load("terrain_affinity.cfg"); // TODO config file
         bakeMap();
         if(defenses != null)
             addDefenses(defenses);
     }
 
+    // TODO create unique combinations of passability matricies for quick
+    //      mob affinity differentiation
     private void bakeMap() {
         // Loop through each layer of the terrain, accumulating each tile weight
         
-        // TODO create unique combinations of passability matricies for quick
-        //      mob affinity differentiation
         for(TiledLayer layer : map.layers) {
             int[][] tiles = layer.tiles;
 
