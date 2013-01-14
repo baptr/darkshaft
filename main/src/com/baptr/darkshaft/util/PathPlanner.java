@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.baptr.darkshaft.Darkshaft;
 import com.baptr.darkshaft.util.WeightMap;
 import com.baptr.darkshaft.gfx.*;
+import com.baptr.darkshaft.entity.Entity.*;
 
 public class PathPlanner {
     private TiledMap terrain; // XXX Terrain class?
@@ -64,13 +65,15 @@ public class PathPlanner {
         iterations = 0;
     }
 
+/*
     public Array<Node> findPath(int startCol, int startRow, int endCol, int endRow) {
         return findPath(startCol, startRow, endCol, endRow, null);
     }
+    */
     
     public Array<Node> findPath(int startCol, int startRow, int endCol, int endRow, Unit p) {
         setGoal(endCol, endRow);
-        Array<Node> path = findPath(startCol, startRow);
+        Array<Node> path = findPath(startCol, startRow, p.unitType);
         if(p != null){
             p.setPath(path);
         }
@@ -80,11 +83,11 @@ public class PathPlanner {
     /** Find a path from the specified startCol, startRow tile to the goal tile
      * specified in the constructor. Returns null if no path exists.
      */
-    public Array<Node> findPath(int startCol, int startRow) { // XXX Need mob for terrain proficiency
+    public Array<Node> findPath(int startCol, int startRow, UnitType type) {
         reInit();
 
         // Shortcut if the goal node is itself unpassable
-        if(!weights.isPassable(goal.col, goal.row)) {
+        if(!weights.isPassable(type, goal.col, goal.row)) {
             return null;
         }
 
@@ -115,8 +118,11 @@ public class PathPlanner {
             visited.put(current, 0);
             long myCost = knownCost.get(current);
             for(Node neighbor : unvisitedNeighbors(current)) {
-                long neighborCost = myCost + getCost(current, neighbor); // XXX Should involve mob
-                if(! toVisit.containsKey(neighbor) || neighborCost < knownCost.get(neighbor)) {
+                if(!weights.isPassable(type, neighbor.col, neighbor.row))
+                        continue;
+                long neighborCost = myCost + getCost(current, neighbor, type);
+                if(! toVisit.containsKey(neighbor) ||
+                        neighborCost < knownCost.get(neighbor)) {
                     parent.put(neighbor, current);
                     knownCost.put(neighbor, neighborCost);
                     estCost.put(neighbor, neighborCost + estimateCost(neighbor));
@@ -133,8 +139,8 @@ public class PathPlanner {
 
     /** Weighted distance between two adjacent nodes.
      * */
-    private long getCost(Node from, Node to) {
-        return weights.get(to.col, to.row);
+    private long getCost(Node from, Node to, UnitType type) {
+        return weights.get(type, to.col, to.row);
     }
     
     /** Estimate the cost from specified node to the goal
@@ -163,7 +169,6 @@ public class PathPlanner {
                 if(testNode.row >= terrain.width) continue;
                 if(testNode.row < 0) continue;
                 if(visited.containsKey(testNode)) continue;
-                if(!weights.isPassable(testNode.col, testNode.row)) continue;
                 neighbors.add(testNode);
             }
         }

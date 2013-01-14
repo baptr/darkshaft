@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.baptr.darkshaft.Darkshaft;
 import com.baptr.darkshaft.util.MapUtils;
 import com.baptr.darkshaft.util.PathPlanner.Node;
+import com.baptr.darkshaft.entity.Entity.*;
 
 public class Unit extends Entity {
 
@@ -16,6 +17,7 @@ public class Unit extends Entity {
     Vector2 v;
     Vector2 dest;
     Facing facing;
+    public UnitType unitType = UnitType.BASIC;;
     
     public Unit(float x, float y, TextureAtlas atlas, String ... animations) {
         super(x, y, atlas, animations);

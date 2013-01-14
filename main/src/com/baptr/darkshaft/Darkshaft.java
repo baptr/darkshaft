@@ -1,5 +1,6 @@
 package com.baptr.darkshaft;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -46,6 +47,8 @@ public class Darkshaft extends Game {
     	fpsLogger =  new FPSLogger();
         manager = new AssetManager();
         //Terrain.init(this, manager); 
+        
+        Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
         Gdx.app.log(Darkshaft.LOG, "Version 0.1 starting");
         if(CHECK_FPS) Gdx.graphics.setVSync(false);

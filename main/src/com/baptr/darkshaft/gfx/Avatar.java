@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import com.baptr.darkshaft.gfx.*;
+import com.baptr.darkshaft.entity.Entity.UnitType;
 
 public class Avatar extends Unit {
 
@@ -14,6 +15,7 @@ public class Avatar extends Unit {
                 "Characters/Frank/South");
         xOffset = -getRegionWidth()/2;
         yOffset = -2;
+        this.unitType = UnitType.PLAYER;
     }
 
     public void setOwner(String name) {
