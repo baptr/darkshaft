@@ -12,11 +12,6 @@
     <property name="TileType" value="BASIC"/>
    </properties>
   </tile>
-  <tile id="2">
-   <properties>
-    <property name="passable" value="0"/>
-   </properties>
-  </tile>
   <tile id="3">
    <properties>
     <property name="TileType" value="WATER"/>
@@ -66,6 +61,7 @@
    <properties>
     <property name="TileType" value="MOUNTAIN"/>
     <property name="passable" value="0"/>
+    <property name="weight" value="32"/>
    </properties>
   </tile>
  </tileset>

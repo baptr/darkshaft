@@ -38,6 +38,7 @@
             includeantruntime="false"
             debug="on"
             verbose="${verbose}">
+            <compilerarg value="-Xlint:unchecked"/>
             <src path="${main.src.dir}" />
             <src path="${assets.dir}" />
         </javac>

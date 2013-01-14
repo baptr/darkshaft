@@ -1,5 +1,11 @@
 package com.baptr.darkshaft.entity;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+
+import com.baptr.darkshaft.Darkshaft;
 import com.baptr.darkshaft.entity.Entity.UnitType;
 import com.baptr.darkshaft.entity.Entity.TileType;
 
@@ -23,25 +29,50 @@ public class TerrainAffinity extends EnumMap<TileType,Float>{
         }
     }
 
+    public int getWeight(TileType type, int baseWeight) {
+        int weight = (int)(baseWeight * get(type));
+        if(weight == 0) {
+            return 1;
+        } else {
+            return weight;
+        }
+    }
+
     public static void load(String file) {
-        // TODO config file
-        TerrainAffinity basic = new TerrainAffinity();
-        affinityMap.put(UnitType.BASIC, basic);
-
-        TerrainAffinity player = new TerrainAffinity();
-        player.put(TileType.TOWER, 0.0f);
-        affinityMap.put(UnitType.PLAYER, player);
-
-        TerrainAffinity water = new TerrainAffinity();
-        water.put(TileType.WATER, 0.0f);
-        affinityMap.put(UnitType.WATER, water);
-
-        TerrainAffinity flyer = new TerrainAffinity();
-        flyer.put(TileType.WATER, 0.0f);
-        flyer.put(TileType.MOUNTAIN, 0.5f);
-        flyer.put(TileType.FOREST, 0.25f);
-        flyer.put(TileType.TOWER, 0.0f);
-        affinityMap.put(UnitType.FLYER, flyer);
+        JsonReader reader = new JsonReader();
+        Object o = reader.parse(Gdx.files.internal(file));
+        try {
+            @SuppressWarnings("unchecked") // Crash if malformed
+            ObjectMap<String,ObjectMap> cfg = (ObjectMap<String,ObjectMap>)o;
+            for(String unitName : cfg.keys()) {
+                TerrainAffinity affinity = new TerrainAffinity();
+                try {
+                    UnitType unitType = UnitType.valueOf(unitName);
+                    @SuppressWarnings("unchecked") // Crash if malformed
+                    ObjectMap<String,Float> typeCfg = cfg.get(unitName);
+                    for(String tileName : typeCfg.keys()) {
+                        try {
+                            TileType tileType = TileType.valueOf(tileName);
+                            float multiplier = typeCfg.get(tileName);
+                            affinity.put(tileType, multiplier);
+                        } catch(IllegalArgumentException e) {
+                            Gdx.app.error(Darkshaft.LOG,
+                                    "Unrecognized TileType " +
+                                    "in TerrainAffinity config file " + file +
+                                    ": " + tileName);
+                        }
+                    }
+                    affinityMap.put(unitType, affinity);
+                } catch(IllegalArgumentException e) {
+                    Gdx.app.error(Darkshaft.LOG, "Unrecognized UnitType in " +
+                            "TerrainAffinity config file " + file + ": " +
+                            unitName);
+                }
+            }
+        } catch(ClassCastException e) {
+            throw new GdxRuntimeException(
+                    "Malformed TerrainAffinity config in " + file);
+        }
     }
 
     public static TerrainAffinity forUnitType(UnitType type) {
