@@ -2,6 +2,7 @@ package com.baptr.darkshaft.screen;
 
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
@@ -27,6 +28,7 @@ public abstract class AbstractScreen implements Screen {
     protected final AssetManager assetManager;
     protected final OrthographicCamera camera;
     protected final InputMultiplexer input;
+    protected final Preferences preferences;
     private TextureAtlas atlas;
     private TextureAtlas uiAtlas;
     private Skin skin;
@@ -44,6 +46,7 @@ public abstract class AbstractScreen implements Screen {
         input.addProcessor(stage);
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, 800, 600);
+        preferences = Gdx.app.getPreferences(Darkshaft.LOG);
         tmpVec = new Vector3();
     }
 
@@ -123,7 +126,7 @@ public abstract class AbstractScreen implements Screen {
 
         // update and draw the stage actors
         stage.draw();
-        Table.drawDebug(stage);
+        //Table.drawDebug(stage);
     }
 
     @Override
@@ -136,6 +139,7 @@ public abstract class AbstractScreen implements Screen {
     public void pause()
     {
         Gdx.app.log( Darkshaft.LOG, "Pausing screen: " + getName() );
+        preferences.flush();
     }
 
     @Override
