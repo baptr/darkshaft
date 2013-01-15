@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.baptr.darkshaft.Darkshaft;
 import com.baptr.darkshaft.util.MapUtils;
 import com.baptr.darkshaft.util.PathPlanner.Node;
+import com.baptr.darkshaft.entity.Entity.*;
 
 public class Unit extends Entity {
 
@@ -16,6 +17,7 @@ public class Unit extends Entity {
     Vector2 v;
     Vector2 dest;
     Facing facing;
+    public UnitType unitType = UnitType.BASIC;;
     
     public Unit(float x, float y, TextureAtlas atlas, String ... animations) {
         super(x, y, atlas, animations);
@@ -64,6 +66,10 @@ public class Unit extends Entity {
              //       dx + "," + dy + ") v(" + v.x + "," + v.y + ") move (" + moveToX + "," + moveToY + ")");
         }
          
+    }
+
+    public boolean isMoving() {
+        return (currentPath != null && currentPath.size > 0);
     }
 
     enum Facing {

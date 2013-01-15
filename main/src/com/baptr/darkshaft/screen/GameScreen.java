@@ -36,7 +36,6 @@ public abstract class GameScreen extends AbstractScreen {
     protected Color bgColor = new Color(0f, 0f, 0.5f, 1f);
 
     protected Avatar frank;
-    protected Unit dargorn;
     protected Array<Entity> entities;
 
     protected PathPlanner pathPlanner;
@@ -59,16 +58,14 @@ public abstract class GameScreen extends AbstractScreen {
         
         defenses = new Array<Defense>(false, INITIAL_DEFENSE_CAPACITY);
         frank = new Avatar(15, -64, getAtlas());
-        dargorn = new Unit(getAtlas().findRegion("gamescreen/dargorn"), 20, -128);
         entities = new Array<Entity>(false, INITIAL_DEFENSE_CAPACITY + 2);
         entities.add(frank);
-        entities.add(dargorn);
+        MapUtils.setRenderer(mapRenderer, defenses);
         pathPlanner = new PathPlanner(mapRenderer.getMap(), defenses);
         pathMarker = new PathMarker(getAtlas().findRegion("gamescreen/marker"));
-        MapUtils.setRenderer(mapRenderer, this.getAtlas(), defenses);
         GameUI ui = new GameUI(this, stage);
         towerMarker = new Tower(TowerType.NONE,0,0,true);
-        spawners = MapUtils.setSpawners();
+        spawners = MapUtils.getSpawners(getAtlas());
     }
 
     public PathPlanner getPathPlanner() {
@@ -84,6 +81,7 @@ public abstract class GameScreen extends AbstractScreen {
             defenses.add(d);
             entities.add(d);
             entities.sort();
+            pathPlanner.addDefense(d);
         }
     }
     
@@ -112,18 +110,30 @@ public abstract class GameScreen extends AbstractScreen {
         return frank;
     }
 
-    public void render(float delta) {
-        super.tick(delta);
+    @Override
+    public void update(float delta) {
+        super.update(delta);
+        camera.update();
         for(int i = 0; i < spawners.length; i++){
             Array<Mob> mobs = spawners[i].check(delta);
             if(mobs != null && mobs.size > 0){
                 entities.addAll(mobs);
             }
         }
+        if(!frank.isMoving()) {
+            pathMarker.setPath(null);
+        }
+        for(Entity e : entities) {
+            e.update(delta);
+        }
+        entities.sort();
+    }
+
+    public void render(float delta) {
+        this.update(delta);
+
         Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        camera.update();
 
         mapRenderer.render(camera);
 
@@ -132,14 +142,12 @@ public abstract class GameScreen extends AbstractScreen {
         
         pathMarker.draw(batch);
         for(Entity e : entities) {
-            e.update(delta);
-        }
-        entities.sort();
-        for(Entity e : entities) {
             e.draw(batch);
         }
-        
-        if(towerMarker != null && towerMarker.getTowerType() != TowerType.NONE ){
+
+        if(towerMarker != null &&
+                towerMarker.getTowerType() != TowerType.NONE ){
+            //TODO move/skip on android (no mouse moves)
             towerMarker.draw(batch);
         }
         

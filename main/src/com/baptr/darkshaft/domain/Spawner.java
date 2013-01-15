@@ -44,7 +44,8 @@ public class Spawner {
         this.goalRow = Integer.MIN_VALUE;
         tick = 0;
         this.atlas = atlas;
-        this.planner = planner;
+        this.planner = new PathPlanner(MapUtils.getMap(),
+                MapUtils.getDefenses());
     }
     
     public void addWave(int number, float spawnRate, String wave){
@@ -184,8 +185,6 @@ public class Spawner {
                             MapUtils.getWorldX(col, row),
                             MapUtils.getWorldY(col, row));
                     mobs.add(m);
-                    PathPlanner planner = new PathPlanner(MapUtils.getMap(),
-                            MapUtils.getDefenses());
 
                     Array<Node> path = planner.findPath(col, row,
                             goalCol, goalRow, m);

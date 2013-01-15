@@ -1,5 +1,8 @@
 package com.baptr.darkshaft.util;
 
+import java.util.Map;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
@@ -8,20 +11,24 @@ import com.badlogic.gdx.graphics.g2d.tiled.TiledMap;
 import com.badlogic.gdx.graphics.g2d.tiled.TiledObject;
 import com.badlogic.gdx.graphics.g2d.tiled.TiledObjectGroup;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IntMap;
+
+import com.baptr.darkshaft.Darkshaft;
+import com.baptr.darkshaft.entity.Entity.*;
 import com.baptr.darkshaft.domain.Spawner;
 import com.baptr.darkshaft.gfx.Defense;
 
 public class MapUtils {
     private static TileMapRenderer renderer;
+    private static IntMap<TileType> tileTypes;
     private static TiledMap map;
-    private static TextureAtlas atlas;
     private static Array<Defense> defenses;
 
     private static int unitsPerTileX, unitsPerTileY;
     private static int baseX, baseY;
     private static int mapWidth, mapHeight; // in tiles
 
-    public static void setRenderer(TileMapRenderer r, TextureAtlas atlas, Array<Defense> defenses) {
+    public static void setRenderer(TileMapRenderer r, Array<Defense> defenses) {
         MapUtils.renderer = r;
         assert "isometric".equals(r.getMap().orientation);
         MapUtils.unitsPerTileX = r.getMap().tileWidth / 2;
@@ -30,9 +37,9 @@ public class MapUtils {
         MapUtils.baseY = r.getMapHeightUnits() / 2;
         MapUtils.mapWidth = r.getMap().width;
         MapUtils.mapHeight = r.getMap().height;
-        MapUtils.atlas = atlas;
         MapUtils.map = r.getMap();
         MapUtils.defenses = defenses;
+        tileTypes = new IntMap<TileType>(); 
     }
     /**
      * Return all the defenses on this map
@@ -79,12 +86,12 @@ public class MapUtils {
     public static boolean isTilePassable(int col, int row) {
         if(col < 0 || col >= mapWidth || row < 0 || row >= mapHeight)
                 return false;
-        return isTilePassable(renderer.getMap().layers.get(0).tiles[row][col]);
+        return isTilePassable(map.layers.get(0).tiles[row][col]);
     }
 
     public static boolean isTilePassable(int tileId) {
         // TODO memoize
-        String passable = renderer.getMap().getTileProperty(tileId, "passable");
+        String passable = map.getTileProperty(tileId, "passable");
         try {
             return 1 == Integer.parseInt(passable);
         } catch(NumberFormatException e) {}
@@ -92,12 +99,12 @@ public class MapUtils {
     }
 
     public static int getTileWeight(int layer, int col, int row) {
-        return getTileWeight(renderer.getMap().layers.get(layer).tiles[row][col]);
+        return getTileWeight(map.layers.get(layer).tiles[row][col]);
     }
 
     public static int getTileWeight(int col, int row) {
         int weight = 0;
-        for(int layer = 0; layer < renderer.getMap().layers.size(); layer++) {
+        for(int layer = 0; layer < map.layers.size(); layer++) {
             weight += getTileWeight(layer, col, row);
         }
         return weight;
@@ -105,7 +112,7 @@ public class MapUtils {
 
     public static int getTileWeight(int tileId) {
         // TODO memoize
-        String weight = renderer.getMap().getTileProperty(tileId, "weight");
+        String weight = map.getTileProperty(tileId, "weight");
         try {
             return Integer.parseInt(weight);
         } catch(NumberFormatException e) {}
@@ -113,7 +120,7 @@ public class MapUtils {
     }
 
     public static int findTileSetGid(String tileSetName) {
-        for(TileSet t : renderer.getMap().tileSets) {
+        for(TileSet t : map.tileSets) {
             if(t.name.equals(tileSetName)) {
                 return t.firstgid;
             }
@@ -121,7 +128,7 @@ public class MapUtils {
         return -1;
     }
     
-    private static int getNumberOfSpawners(){
+    private static int getNumberOfSpawners() {
         int numSpawners = 0;
         // Iterate over all the object groups in the map
         for(TiledObjectGroup group : map.objectGroups){
@@ -136,8 +143,7 @@ public class MapUtils {
         return numSpawners;
     }
     
-    public static Spawner[] setSpawners()
-    {   
+    public static Spawner[] getSpawners(TextureAtlas atlas) {   
         int numSpawners = getNumberOfSpawners();
         Spawner[] spawners = new Spawner[numSpawners];
         for(int i = 0; i < numSpawners; i++){
@@ -183,5 +189,27 @@ public class MapUtils {
             spawn.sortWaves();
         }
         return spawners;
+    }
+
+    /** Find the {@link TileType} for a given tile ID. Will return
+     * TileType.BASIC if not specified in the map. */
+    public static TileType getTileType(int id) {
+        TileType ret = tileTypes.get(id);
+        if(ret == null) {
+            String strType = map.getTileProperty(id, "TileType");
+            try {
+                ret = TileType.valueOf(strType);
+            } catch(IllegalArgumentException e) {
+                Gdx.app.debug(Darkshaft.LOG,
+                        "TileType not recognized for tile #" + id);
+                ret = TileType.BASIC;
+            } catch(NullPointerException e) {
+                Gdx.app.debug(Darkshaft.LOG,
+                        "TileType not defined for tile #" + id);
+                ret = TileType.BASIC;
+            }
+            tileTypes.put(id, ret);
+        }
+        return ret;
     }
 }

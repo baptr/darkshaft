@@ -22,6 +22,8 @@ public class GameUI {
     Table buttons;
     final GameScreen gameScreen;
 
+    static final Color HIT_COLOR = Color.BLUE;
+
     public GameUI(GameScreen screen, Stage stage) {
         this.gameScreen = screen;
         Skin skin = screen.getSkin();
@@ -29,16 +31,17 @@ public class GameUI {
         buttons.setFillParent(false);
         buttons.pad(1.0f);
 
-        buttons.add("Move").space(3.0f);
+        final Label moveButton = (Label)buttons.add("Move").space(3.0f).getWidget();
         buttons.add("Basic").space(3.0f);
         buttons.add("Fire").space(3.0f);
         buttons.add("Water").space(3.0f);
         buttons.add("Spirit").space(3.0f);
 
+        moveButton.setColor(HIT_COLOR);
+
         buttons.pack();
         buttons.addListener(new ClickListener() {
-            Label lastHit;
-            final Color HIT_COLOR = Color.BLUE;
+            Label lastHit = moveButton;
             public void clicked(InputEvent e, float x, float y) {
                 Actor hit = buttons.hit(x, y, true);
                 if(hit instanceof Label) {
@@ -46,7 +49,7 @@ public class GameUI {
                         lastHit.setColor(1,1,1,1);
                     }
                     lastHit = (Label)hit;
-                    lastHit.setColor(HIT_COLOR);
+                    lastHit.setColor(GameUI.HIT_COLOR);
                     String label = lastHit.getText().toString();
                     if(label.equals("Move"))
                         gameScreen.setTowerMarker(TowerType.NONE);

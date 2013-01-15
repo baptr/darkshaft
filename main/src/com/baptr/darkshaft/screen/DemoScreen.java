@@ -1,37 +1,90 @@
 package com.baptr.darkshaft.screen;
 
+import java.io.IOException;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IntMap;
 
 //import com.baptr.darkshaft.core.TileMapRenderer;
 
 import com.baptr.darkshaft.Darkshaft;
 import com.baptr.darkshaft.util.MapUtils;
 import com.baptr.darkshaft.domain.Spawner;
+import com.baptr.darkshaft.util.NetworkClient;
+import com.baptr.darkshaft.util.NetworkServer;
 import com.baptr.darkshaft.gfx.*;
 import com.baptr.darkshaft.gfx.Tower.TowerType;
 
 public class DemoScreen extends GameScreen {
 
-    Entity testEntity;
-    
-    public DemoScreen(Darkshaft game) {
-        super(game, "demo.tmx");
+    NetworkServer server;
+    NetworkClient client;
+    IntMap<Avatar> remoteAvatars;
 
-        for(int i = 0; i < 4; i++) {
-            this.addDefense(new Tower(TowerType.values()[i], 0, 0+i));
-        }
+    public DemoScreen(Darkshaft game, boolean selfServe) {
+        super(game, "demo.tmx");
 
         camera.translate(-400, -400, 0);
         camera.update();
         
-        testEntity = new Entity(100, -250, getAtlas(), "gamescreen/dargorn");
         for(Spawner spawn : this.spawners){
             spawn.setWave(0);
+        }
+
+        remoteAvatars = new IntMap<Avatar>();
+        client = new NetworkClient(this);
+
+        if(selfServe) {
+            try {
+                server = new NetworkServer();
+                initConnection("localhost", "Local Player");
+            } catch(IOException ex) {
+                ex.printStackTrace();
+            }
+
+        }
+    }
+
+    void initConnection(String host, String name) throws IOException{
+        client.connect(host, name);
+    }
+
+    public void addRemoteAvatar(String name, int id, float x, float y) {
+        Avatar av = new Avatar(0f, 0f, getAtlas());
+        av.setOwner(name);
+        av.setPosition(x, y);
+        remoteAvatars.put(id, av);
+    }
+
+    public void updateRemoteAvatar(int id, float x, float y) {
+        Avatar av = remoteAvatars.get(id);
+        av.setPosition(x, y);
+    }
+
+    public void removeRemoteAvatar(int id) {
+        remoteAvatars.remove(id);
+    }
+
+    public void addRemoteTower(int playerId, TowerType type, int col, int row) {
+        Tower t = new Tower(type, col, row);
+        defenses.add(t);
+        entities.add(t);
+        entities.sort();
+        pathPlanner.addDefense(t);
+    }
+
+    @Override
+    public void addDefense(Defense d) {
+        if(!defenses.contains(d, false)) {
+            client.sendPlaceTower((Tower)d);
+            defenses.add(d);
+            entities.add(d);
+            entities.sort();
+            pathPlanner.addDefense(d);
         }
     }
 
@@ -45,9 +98,11 @@ public class DemoScreen extends GameScreen {
         super.render( delta );	
 
         batch.begin();
-        testEntity.update(delta);
-        testEntity.draw(batch);
+        for(Avatar av : remoteAvatars.values()) {
+            if(av != null) av.draw(batch);
+        }
         batch.end();
+        client.sendPlayerUpdate(frank);
     }
 
     @Override
