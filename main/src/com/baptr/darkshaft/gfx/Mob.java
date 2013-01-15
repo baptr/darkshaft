@@ -1,5 +1,7 @@
 package com.baptr.darkshaft.gfx;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -34,6 +36,8 @@ public class Mob extends Unit {
         super(atlas.findRegion(mobType.regionName), x, y);
         this.atlas= atlas;
         type = mobType;       
-        this.speed = mobType.speed;
+        // Mobs will have random speeds because they clump up when they spawn... eventually they will try and not clump up and we can remove this
+        Random r = new Random();
+        this.speed = mobType.speed * r.nextFloat();
     }
 }
