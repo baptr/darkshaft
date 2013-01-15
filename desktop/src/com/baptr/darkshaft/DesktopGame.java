@@ -1,6 +1,7 @@
 package com.baptr.darkshaft;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.utils.Array;
 import com.baptr.darkshaft.Darkshaft;
 
 public class DesktopGame {

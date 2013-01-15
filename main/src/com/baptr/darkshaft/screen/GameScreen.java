@@ -2,11 +2,15 @@ package com.baptr.darkshaft.screen;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.assets.loaders.TileMapRendererLoader.TileMapParameter;
 import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
+import com.badlogic.gdx.graphics.g2d.tiled.TiledMap;
+import com.badlogic.gdx.graphics.g2d.tiled.TiledObject;
+import com.badlogic.gdx.graphics.g2d.tiled.TiledObjectGroup;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.graphics.Color;
@@ -16,6 +20,7 @@ import com.baptr.darkshaft.input.CameraInputProcessor;
 import com.baptr.darkshaft.input.GameInputProcessor;
 import com.baptr.darkshaft.util.MapUtils;
 import com.baptr.darkshaft.screen.AbstractScreen;
+import com.baptr.darkshaft.domain.Spawner;
 import com.baptr.darkshaft.gfx.*;
 import com.baptr.darkshaft.gfx.Tower.TowerType;
 import com.baptr.darkshaft.util.PathPlanner;
@@ -37,6 +42,8 @@ public abstract class GameScreen extends AbstractScreen {
     protected PathPlanner pathPlanner;
     protected PathMarker pathMarker;
     
+    protected Spawner[] spawners;
+    
     private static final int INITIAL_DEFENSE_CAPACITY = 64;
 
     public GameScreen(Darkshaft game, String mapName) {
@@ -49,7 +56,7 @@ public abstract class GameScreen extends AbstractScreen {
         assetManager.finishLoading();
         mapRenderer = assetManager.get("maps/" + mapName,
                 TileMapRenderer.class);
-        MapUtils.setRenderer(mapRenderer);
+        
         defenses = new Array<Defense>(false, INITIAL_DEFENSE_CAPACITY);
         frank = new Avatar(15, -64, getAtlas());
         dargorn = new Unit(getAtlas().findRegion("gamescreen/dargorn"), 20, -128);
@@ -58,8 +65,10 @@ public abstract class GameScreen extends AbstractScreen {
         entities.add(dargorn);
         pathPlanner = new PathPlanner(mapRenderer.getMap(), defenses);
         pathMarker = new PathMarker(getAtlas().findRegion("gamescreen/marker"));
+        MapUtils.setRenderer(mapRenderer, this.getAtlas(), defenses);
         GameUI ui = new GameUI(this, stage);
         towerMarker = new Tower(TowerType.NONE,0,0,true);
+        spawners = MapUtils.setSpawners();
     }
 
     public PathPlanner getPathPlanner() {
@@ -105,7 +114,9 @@ public abstract class GameScreen extends AbstractScreen {
 
     public void render(float delta) {
         super.tick(delta);
-
+        for(int i = 0; i < spawners.length; i++){
+            entities.addAll(spawners[i].check(delta));
+        }
         Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

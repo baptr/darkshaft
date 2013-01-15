@@ -1,17 +1,27 @@
 package com.baptr.darkshaft.util;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
 import com.badlogic.gdx.graphics.g2d.tiled.TileSet;
+import com.badlogic.gdx.graphics.g2d.tiled.TiledMap;
+import com.badlogic.gdx.graphics.g2d.tiled.TiledObject;
+import com.badlogic.gdx.graphics.g2d.tiled.TiledObjectGroup;
+import com.badlogic.gdx.utils.Array;
+import com.baptr.darkshaft.domain.Spawner;
+import com.baptr.darkshaft.gfx.Defense;
 
 public class MapUtils {
     private static TileMapRenderer renderer;
+    private static TiledMap map;
+    private static TextureAtlas atlas;
+    private static Array<Defense> defenses;
 
     private static int unitsPerTileX, unitsPerTileY;
     private static int baseX, baseY;
     private static int mapWidth, mapHeight; // in tiles
 
-    public static void setRenderer(TileMapRenderer r) {
+    public static void setRenderer(TileMapRenderer r, TextureAtlas atlas, Array<Defense> defenses) {
         MapUtils.renderer = r;
         assert "isometric".equals(r.getMap().orientation);
         MapUtils.unitsPerTileX = r.getMap().tileWidth / 2;
@@ -20,6 +30,22 @@ public class MapUtils {
         MapUtils.baseY = r.getMapHeightUnits() / 2;
         MapUtils.mapWidth = r.getMap().width;
         MapUtils.mapHeight = r.getMap().height;
+        MapUtils.atlas = atlas;
+        MapUtils.map = r.getMap();
+        MapUtils.defenses = defenses;
+    }
+    /**
+     * Return all the defenses on this map
+     */
+    public static Array<Defense> getDefenses(){
+        return MapUtils.defenses;
+    }
+    
+    /**
+     * Get the map for this renderer
+     */
+    public static TiledMap getMap(){
+        return MapUtils.map;
     }
 
     /** Calculate the map row index for a given world point
@@ -93,5 +119,63 @@ public class MapUtils {
             }
         }
         return -1;
+    }
+    
+    private static int getNumberOfSpawners(){
+        int numSpawners = 0;
+        // Iterate over all the object groups in the map
+        for(TiledObjectGroup group : map.objectGroups){
+            // Iterate over all the objects on this object layer
+            for(TiledObject object : group.objects){
+                // If we find a spawn we add its spawn rate and spawn types to our current wave
+                if("Spawn".equals(object.type)){
+                    numSpawners++;
+                }
+            }
+        }
+        return numSpawners;
+    }
+    
+    public static Spawner[] setSpawners()
+    {   
+        int numSpawners = getNumberOfSpawners();
+        Spawner[] spawners = new Spawner[numSpawners];
+        for(int i = 0; i < numSpawners; i++){
+            spawners[i] = new Spawner(i, atlas);
+        }
+        // Iterate over all the object groups in the map
+        for(TiledObjectGroup group : map.objectGroups){
+            // Iterate over all the objects on this object layer
+            for(TiledObject object : group.objects){
+                // If we find a spawn we add its spawn rate and spawn types to our current wave
+                if("Spawn".equals(object.type)){
+                    int waveNum = 0;
+                    float spawnRate = 0;
+                    // Get this spawner's number
+                    int spawnNum = Integer.parseInt(object.name.replace("Spawn", ""));
+                    spawners[spawnNum].setLocation(object.x, object.y);
+                    // Iterate over all the properties for this object
+                    for(String key : object.properties.keySet()){
+                        String[] property = key.split("_");
+                        property[0] = property[0].replace("Wave", "");
+                        waveNum = Integer.parseInt(property[0]);
+                        // Get this spawner's rate of spawn in seconds
+                        if(("Wave" + waveNum + "_SpawnRate").equals(key)){
+                            spawnRate = Float.parseFloat(object.properties.get(key));
+                        }
+                        
+                        // Get this spawner's spawning types
+                        if(("Wave" + waveNum + "_SpawnTypes").equals(key)){
+                            spawners[spawnNum].addWave(waveNum, spawnRate, object.properties.get(key));
+                        }
+                    }
+                } else if ("End".equals(object.type)){
+                    int endNum = Integer.parseInt(object.name.replace("End", ""));
+                    spawners[endNum].setEnd(object.x, object.y);
+                }
+                
+            }
+        }
+        return spawners;
     }
 }
