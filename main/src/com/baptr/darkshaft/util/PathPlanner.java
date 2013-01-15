@@ -7,11 +7,13 @@ import com.badlogic.gdx.utils.ObjectIntMap;
 import com.badlogic.gdx.utils.ObjectMap;
 
 import com.baptr.darkshaft.Darkshaft;
+import com.baptr.darkshaft.util.WeightMap;
 import com.baptr.darkshaft.gfx.*;
+import com.baptr.darkshaft.entity.Entity.*;
 
 public class PathPlanner {
     private TiledMap terrain; // XXX Terrain class?
-    private Array<Defense> defenses;
+    private WeightMap weights;
 
     private Node goal;
 
@@ -28,12 +30,12 @@ public class PathPlanner {
     private int iterations;
 
     private static long MAX_TILE_COST = 64L;
-    private static long TOWER_COST = MAX_TILE_COST - 1; // XXX big tunable
+    protected static long TOWER_COST = MAX_TILE_COST - 1; // XXX big tunable
     private static int MAX_NEIGHBORS = 6;
 
     public PathPlanner(TiledMap terrain, Array<Defense> defenses) {
         this.terrain = terrain;
-        this.defenses = defenses;
+        this.weights = new WeightMap(terrain, defenses);
 
         this.goal = new Node(0, 0);
 
@@ -63,13 +65,15 @@ public class PathPlanner {
         iterations = 0;
     }
 
+/*
     public Array<Node> findPath(int startCol, int startRow, int endCol, int endRow) {
         return findPath(startCol, startRow, endCol, endRow, null);
     }
+    */
     
     public Array<Node> findPath(int startCol, int startRow, int endCol, int endRow, Unit p) {
         setGoal(endCol, endRow);
-        Array<Node> path = findPath(startCol, startRow);
+        Array<Node> path = findPath(startCol, startRow, p.unitType);
         if(p != null){
             p.setPath(path);
         }
@@ -79,11 +83,11 @@ public class PathPlanner {
     /** Find a path from the specified startCol, startRow tile to the goal tile
      * specified in the constructor. Returns null if no path exists.
      */
-    public Array<Node> findPath(int startCol, int startRow) { // XXX Need mob for terrain proficiency
+    public Array<Node> findPath(int startCol, int startRow, UnitType type) {
         reInit();
 
         // Shortcut if the goal node is itself unpassable
-        if(!MapUtils.isTilePassable(goal.col, goal.row)) {
+        if(!weights.isPassable(type, goal.col, goal.row)) {
             return null;
         }
 
@@ -114,8 +118,11 @@ public class PathPlanner {
             visited.put(current, 0);
             long myCost = knownCost.get(current);
             for(Node neighbor : unvisitedNeighbors(current)) {
-                long neighborCost = myCost + getCost(current, neighbor); // XXX Should involve mob
-                if(! toVisit.containsKey(neighbor) || neighborCost < knownCost.get(neighbor)) {
+                if(!weights.isPassable(type, neighbor.col, neighbor.row))
+                        continue;
+                long neighborCost = myCost + getCost(current, neighbor, type);
+                if(! toVisit.containsKey(neighbor) ||
+                        neighborCost < knownCost.get(neighbor)) {
                     parent.put(neighbor, current);
                     knownCost.put(neighbor, neighborCost);
                     estCost.put(neighbor, neighborCost + estimateCost(neighbor));
@@ -132,13 +139,8 @@ public class PathPlanner {
 
     /** Weighted distance between two adjacent nodes.
      * */
-    private long getCost(Node from, Node to) {
-        for(Defense d : defenses) {
-            if(to.col == d.getCol() && to.row == d.getRow()) {
-                return TOWER_COST;
-            }
-        }
-        return MapUtils.getTileWeight(to.col, to.row);
+    private long getCost(Node from, Node to, UnitType type) {
+        return weights.get(type, to.col, to.row);
     }
     
     /** Estimate the cost from specified node to the goal
@@ -167,11 +169,14 @@ public class PathPlanner {
                 if(testNode.row >= terrain.width) continue;
                 if(testNode.row < 0) continue;
                 if(visited.containsKey(testNode)) continue;
-                if(!MapUtils.isTilePassable(testNode.col, testNode.row)) continue;
                 neighbors.add(testNode);
             }
         }
         return neighbors;
+    }
+
+    public void addDefense(Defense d) {
+        weights.addDefense(d);
     }
 
     /** Once a valid path has been found, this recreates it from "parent" data.

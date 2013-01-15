@@ -1,5 +1,6 @@
 package com.baptr.darkshaft;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -22,9 +23,11 @@ import com.baptr.darkshaft.screen.*;
 import com.baptr.darkshaft.gfx.*;
 
 public class Darkshaft extends Game {
-    
+
     public static final String LOG = Darkshaft.class.getSimpleName();
+
     FPSLogger fpsLogger;
+    private static final boolean CHECK_FPS = false;
 
     private boolean showSplash = true;
 
@@ -44,16 +47,18 @@ public class Darkshaft extends Game {
     	fpsLogger =  new FPSLogger();
         manager = new AssetManager();
         //Terrain.init(this, manager); 
+        
+        Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
-        Gdx.app.log(Darkshaft.LOG, "Version 0.0 starting");
+        Gdx.app.log(Darkshaft.LOG, "Version 0.1 starting");
+        if(CHECK_FPS) Gdx.graphics.setVSync(false);
 
         manager.finishLoading();
-        
+
         if(showSplash) {
             setScreen(GetSplashScreen());
         } else {
-            //setScreen(new TowerScreen(this));
-            setScreen(new DemoScreen(this));
+            setScreen(new DemoScreen(this, true));
         }
 
     }
@@ -61,7 +66,7 @@ public class Darkshaft extends Game {
     @Override
     public void render() {
     	super.render();
-    	fpsLogger.log();
+    	if(CHECK_FPS) fpsLogger.log();
     }
 
     @Override

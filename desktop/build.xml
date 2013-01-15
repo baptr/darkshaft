@@ -38,6 +38,7 @@
             includeantruntime="false"
             debug="on"
             verbose="${verbose}">
+            <compilerarg value="-Xlint:unchecked"/>
             <src path="${main.src.dir}" />
             <src path="${assets.dir}" />
         </javac>
@@ -71,7 +72,7 @@
         <java jar="${out.absolute.dir}/${projname}.jar" fork="true"/>
     </target>
 
-    <target name="run" depends="compile">
+    <target name="run" depends="compile,pack-maps,pack-textures">
         <path id="java.classpath">
             <fileset dir="${libs.absolute.dir}">
                 <include name="**/*.jar" />
@@ -90,7 +91,7 @@
         </java>
     </target>
 	
-    <target name="splash-run" depends="compile">
+    <target name="splash-run" depends="compile,pack-maps,pack-textures">
         <path id="java.classpath">
             <fileset dir="${libs.absolute.dir}">
                 <include name="**/*.jar" />

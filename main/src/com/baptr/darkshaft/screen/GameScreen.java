@@ -75,6 +75,7 @@ public abstract class GameScreen extends AbstractScreen {
             defenses.add(d);
             entities.add(d);
             entities.sort();
+            pathPlanner.addDefense(d);
         }
     }
     
@@ -104,7 +105,7 @@ public abstract class GameScreen extends AbstractScreen {
     }
 
     public void render(float delta) {
-        super.tick(delta);
+        update(delta);
 
         Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -124,8 +125,13 @@ public abstract class GameScreen extends AbstractScreen {
         for(Entity e : entities) {
             e.draw(batch);
         }
+
+        if(!frank.isMoving()) {
+            pathMarker.setPath(null);
+        }
         
         if(towerMarker != null && towerMarker.getTowerType() != TowerType.NONE ){
+            //TODO move/skip on android (no mouse moves)
             towerMarker.draw(batch);
         }
         

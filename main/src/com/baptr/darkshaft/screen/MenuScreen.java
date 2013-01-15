@@ -9,7 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
 import com.baptr.darkshaft.Darkshaft;
+import com.baptr.darkshaft.util.NetworkClient;
 
 public class MenuScreen extends AbstractScreen {
 
@@ -20,10 +22,16 @@ public class MenuScreen extends AbstractScreen {
         stage.addActor(table);
         
         TextButton startButton = new TextButton("Start Game", getSkin());
-
         startButton.addListener(new ClickListener() {
             public void clicked (InputEvent event, float x, float y) {
-                game.setScreen(new DemoScreen(game));
+                game.setScreen(new DemoScreen(game, true));
+            }
+        });
+
+        TextButton connectButton = new TextButton("Connect To Game", getSkin());
+        connectButton.addListener(new ClickListener() {
+            public void clicked (InputEvent event, float x, float y) {
+                game.setScreen(new ConnectScreen(game));
             }
         });
 
@@ -34,7 +42,8 @@ public class MenuScreen extends AbstractScreen {
             }
         });
         
-        table.add(startButton).minWidth(100f);
+        table.add(startButton).minWidth(100f).row();
+        table.add(connectButton).minWidth(100f);
         table.row().pad(10f);
         table.add(exitButton).minWidth(100f);
     }

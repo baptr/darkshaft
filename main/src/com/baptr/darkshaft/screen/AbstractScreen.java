@@ -2,6 +2,7 @@ package com.baptr.darkshaft.screen;
 
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
@@ -27,6 +28,7 @@ public abstract class AbstractScreen implements Screen {
     protected final AssetManager assetManager;
     protected final OrthographicCamera camera;
     protected final InputMultiplexer input;
+    protected final Preferences preferences;
     private TextureAtlas atlas;
     private TextureAtlas uiAtlas;
     private Skin skin;
@@ -41,10 +43,10 @@ public abstract class AbstractScreen implements Screen {
         this.batch = new SpriteBatch();
         this.stage = new Stage(0, 0, true);
         input = new InputMultiplexer();
-        Gdx.input.setInputProcessor(input);
         input.addProcessor(stage);
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, 800, 600);
+        preferences = Gdx.app.getPreferences(Darkshaft.LOG);
         tmpVec = new Vector3();
     }
 
@@ -83,9 +85,9 @@ public abstract class AbstractScreen implements Screen {
     // Screen implementation
 
     @Override
-    public void show()
-    {
+    public void show() {
         Gdx.app.log( Darkshaft.LOG, "Showing screen: " + getName() );
+        Gdx.input.setInputProcessor(input);
     }
 
     @Override
@@ -107,7 +109,7 @@ public abstract class AbstractScreen implements Screen {
         camera.update();
     }
 
-    public void tick(float delta) {
+    public void update(float delta) {
         // Continue loading any queued assets
         assetManager.update();
 
@@ -116,7 +118,7 @@ public abstract class AbstractScreen implements Screen {
 
     @Override
     public void render( float delta ) {
-        this.tick(delta);
+        this.update(delta);
 
         // the following code clears the screen with the given RGB color (black)
         Gdx.gl.glClearColor( 0f, 0f, 0f, 1f );
@@ -137,6 +139,7 @@ public abstract class AbstractScreen implements Screen {
     public void pause()
     {
         Gdx.app.log( Darkshaft.LOG, "Pausing screen: " + getName() );
+        preferences.flush();
     }
 
     @Override
