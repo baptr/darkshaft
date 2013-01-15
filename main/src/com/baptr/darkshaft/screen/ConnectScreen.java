@@ -31,6 +31,7 @@ public class ConnectScreen extends AbstractScreen {
         final TextField nameField = new TextField("name", getSkin());
 
         loadServerList(serverList, serverField);
+        loadName(nameField);
 
         serverList.addListener(new ChangeListener() {
             @Override
@@ -52,6 +53,7 @@ public class ConnectScreen extends AbstractScreen {
                             nameField.getText());
                     serverField.getOnscreenKeyboard().show(false);
                     saveServerList(serverList, serverField);
+                    saveName(nameField);
                     game.setScreen(playScreen);
                 } catch(java.net.UnknownHostException ue) {
                     new Dialog("Unknown Host", getSkin())
@@ -70,10 +72,24 @@ public class ConnectScreen extends AbstractScreen {
             }
         });
 
-        table.add(nameField).minWidth(50f).row();
-        table.add(serverList).minWidth(200f).row();
-        table.add(serverField).minWidth(150f);
-        table.add(connectButton);
+        table.add("Name: ").left();
+        table.add(nameField).minWidth(50f).spaceBottom(10).row();
+        table.add("Recent Servers").colspan(2).left().row();
+        table.add(serverList).colspan(2).fillX().spaceBottom(10).row();
+        table.add("Server: ").minWidth(75f).left();
+        table.add(serverField).minWidth(200f).row();
+        table.add(connectButton).colspan(2).right();
+    }
+
+    private void loadName(TextField nameField) {
+        String name = preferences.getString("player_name");
+        if(!name.isEmpty()) {
+            nameField.setText(name);
+        }
+    }
+
+    private void saveName(TextField nameField) {
+        preferences.putString("player_name", nameField.getText());
     }
 
     private void loadServerList(List serverList, TextField serverField) {

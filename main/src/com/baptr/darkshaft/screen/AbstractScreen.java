@@ -126,7 +126,7 @@ public abstract class AbstractScreen implements Screen {
 
         // update and draw the stage actors
         stage.draw();
-        //Table.drawDebug(stage);
+        Table.drawDebug(stage);
     }
 
     @Override

@@ -42,7 +42,7 @@ public class MenuScreen extends AbstractScreen {
             }
         });
         
-        table.add(startButton).minWidth(100f);
+        table.add(startButton).minWidth(100f).row();
         table.add(connectButton).minWidth(100f);
         table.row().pad(10f);
         table.add(exitButton).minWidth(100f);
