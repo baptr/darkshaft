@@ -176,6 +176,10 @@ public class MapUtils {
                 
             }
         }
+        
+        for(Spawner spawn : spawners){
+            spawn.sortWaves();
+        }
         return spawners;
     }
 }

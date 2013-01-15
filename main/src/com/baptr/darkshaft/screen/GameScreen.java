@@ -115,7 +115,10 @@ public abstract class GameScreen extends AbstractScreen {
     public void render(float delta) {
         super.tick(delta);
         for(int i = 0; i < spawners.length; i++){
-            entities.addAll(spawners[i].check(delta));
+            Array<Mob> mobs = spawners[i].check(delta);
+            if(mobs != null && mobs.size > 0){
+                entities.addAll(mobs);
+            }
         }
         Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

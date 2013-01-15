@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.tiled.TiledObject;
 import com.badlogic.gdx.graphics.g2d.tiled.TiledObjectGroup;
 import com.badlogic.gdx.utils.Array;
 import com.baptr.darkshaft.Darkshaft;
+import com.baptr.darkshaft.gfx.Entity;
 import com.baptr.darkshaft.gfx.Mob;
 import com.baptr.darkshaft.gfx.Unit;
 import com.baptr.darkshaft.gfx.Mob.MobType;
@@ -47,13 +48,21 @@ public class Spawner {
     }
     
     public void addWave(int number, float spawnRate, String wave){
-        this.waveNumber = 0;
         this.waves.add(ParseWave(number, spawnRate, wave));
+    }
+    
+    public void setWave(int wave){
+        if(wave < waves.size){
+            this.currentSpawnRate = waves.get(wave).getSpawnRate();
+            spawnTimer = 0;
+            tick = 0;
+            waveNumber = wave;
+        }
     }
     
     public Array<Mob> check(float delta){
         spawnTimer += delta;
-        if(delta > currentSpawnRate){
+        if(spawnTimer > currentSpawnRate || tick == 0){
             if(tick != 0){
                 spawnTimer -= currentSpawnRate;
             }
@@ -70,7 +79,7 @@ public class Spawner {
     // mob "A" B times to the current wave
     private Wave ParseWave(int number, float spawnRate, String waveString){
         
-        Wave wave = new Wave(number);
+        Wave wave = new Wave(number, spawnRate);
         int tick = 0;
         Array<String> tokens = tokenizeWave(waveString);
         for(; tick < tokens.size; tick++){
@@ -143,7 +152,7 @@ public class Spawner {
                 }
                 
                 if(!group){
-                    tokens.add(token);
+                    tokens.addAll(token.split(","));
                     token = "";
                 } else if (c == ')'){
                     i--;
@@ -205,22 +214,66 @@ public class Spawner {
         this.y = y;
     }
     
-    private class Wave{
+    public void sortWaves(){
+        this.waves.sort();
+    }
+    
+    private class Wave implements Comparable<Wave>{
         int number;
         HashMap<Integer, Array<Integer>> mobs;
+        float spawnRate;
         
-        public Wave(int number){
+        public Wave(int number, float spawnRate){
             this.number = number;
             this.mobs = new HashMap<Integer, Array<Integer>>();
-        }
-        
-        public Wave(int number, HashMap<Integer, Array<Integer>> mobs){
-            this.number = number;
-            this.mobs = mobs;
+            this.spawnRate = spawnRate;
         }
         
         public void addTick(Integer tick, Array<Integer> mobs){
             this.mobs.put(tick, mobs);
+        }
+        
+        public float getSpawnRate(){
+            return spawnRate;
+        }
+        
+        @Override
+        public int compareTo(Wave o) {
+            if(this.number < o.number){
+                return -1;
+            }
+            
+            if(this.number > o.number){
+                return 1;
+            }
+            return 0;
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + Float.floatToIntBits(number);
+            result = prime * result + Float.floatToIntBits(number);
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            Wave other = (Wave) obj;
+            if (Float.floatToIntBits(number) != Float
+                    .floatToIntBits(other.number))
+                return false;
+            if (Float.floatToIntBits(number) != Float
+                    .floatToIntBits(other.number))
+                return false;
+            return true;
         }
     }
 }

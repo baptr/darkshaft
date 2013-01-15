@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 
 import com.baptr.darkshaft.Darkshaft;
 import com.baptr.darkshaft.util.MapUtils;
+import com.baptr.darkshaft.domain.Spawner;
 import com.baptr.darkshaft.gfx.*;
 import com.baptr.darkshaft.gfx.Tower.TowerType;
 
@@ -29,6 +30,9 @@ public class DemoScreen extends GameScreen {
         camera.update();
         
         testEntity = new Entity(100, -250, getAtlas(), "gamescreen/dargorn");
+        for(Spawner spawn : this.spawners){
+            spawn.setWave(0);
+        }
     }
 
     @Override
