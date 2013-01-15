@@ -153,7 +153,8 @@ public class MapUtils {
                     float spawnRate = 0;
                     // Get this spawner's number
                     int spawnNum = Integer.parseInt(object.name.replace("Spawn", ""));
-                    spawners[spawnNum].setLocation(object.x, object.y);
+                    spawners[spawnNum].setLocation(object.x/object.width,
+                            object.y/object.height);
                     // Iterate over all the properties for this object
                     for(String key : object.properties.keySet()){
                         String[] property = key.split("_");
@@ -171,7 +172,8 @@ public class MapUtils {
                     }
                 } else if ("End".equals(object.type)){
                     int endNum = Integer.parseInt(object.name.replace("End", ""));
-                    spawners[endNum].setEnd(object.x, object.y);
+                    spawners[endNum].setEnd(object.x/object.width,
+                            object.y/object.height);
                 }
                 
             }

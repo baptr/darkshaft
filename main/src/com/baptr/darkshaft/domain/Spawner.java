@@ -21,10 +21,10 @@ import com.baptr.darkshaft.util.PathPlanner.Node;
 public class Spawner {
     int id;
     int waveNumber;
-    float endX;
-    float endY;
-    float x;
-    float y;
+    int goalCol;
+    int goalRow;
+    int col;
+    int row;
     float currentSpawnRate;
     float spawnTimer;
     Array<Wave> waves;
@@ -38,10 +38,10 @@ public class Spawner {
         waveNumber = -1;
         currentSpawnRate = 0;
         spawnTimer = 0;
-        this.x = Integer.MIN_VALUE;
-        this.y = Integer.MIN_VALUE;
-        this.endX = Integer.MIN_VALUE;
-        this.endY = Integer.MIN_VALUE;
+        this.col = Integer.MIN_VALUE;
+        this.row = Integer.MIN_VALUE;
+        this.goalCol = Integer.MIN_VALUE;
+        this.goalRow = Integer.MIN_VALUE;
         tick = 0;
         this.atlas = atlas;
         this.planner = planner;
@@ -115,7 +115,8 @@ public class Spawner {
                     i++;
                     tokens.add(token);
                     token = "";
-                } else if (i + 1 < cleaned.length() && cleaned.charAt(i + 1) == 'x'){
+                } else if (i + 1 < cleaned.length() &&
+                        cleaned.charAt(i + 1) == 'x'){
                     String multiplier = "";
                     i += 2;
                     c = cleaned.charAt(i);
@@ -169,7 +170,7 @@ public class Spawner {
     }
     
     private Array<Mob> spawnNext(){
-        if(this.endX == Integer.MIN_VALUE || this.endY == Integer.MIN_VALUE){
+        if(this.goalCol == Integer.MIN_VALUE || this.goalRow == Integer.MIN_VALUE){
             return null;
         }
         Array<Mob> mobs = new Array<Mob>();
@@ -179,22 +180,15 @@ public class Spawner {
                 int mobType = wave.mobs.get(tick).get(i);
                 if(mobType > 0){
                     mobType--;
-                    Mob m = new Mob(atlas, MobType.values()[mobType], this.x, this.y);
+                    Mob m = new Mob(atlas, MobType.values()[mobType],
+                            MapUtils.getWorldX(col, row),
+                            MapUtils.getWorldY(col, row));
                     mobs.add(m);
-                    PathPlanner planner = new PathPlanner(MapUtils.getMap(), MapUtils.getDefenses());
-                    /*
-                     *these map coords are a bit off for objects...
-                    int sCol = MapUtils.getMapCol(m.getX(), m.getY());
-                    int sRow = MapUtils.getMapRow(m.getX(), m.getY());
-                    int gCol = MapUtils.getMapCol(endX, endY);
-                    int gRow = MapUtils.getMapRow(endX, endY);
-                    */
+                    PathPlanner planner = new PathPlanner(MapUtils.getMap(),
+                            MapUtils.getDefenses());
 
-                    int sCol = 1;
-                    int sRow = 1;
-                    int gCol = 10;
-                    int gRow = 10;
-                    Array<Node> path = planner.findPath(sCol, sRow, gCol, gRow, m);
+                    Array<Node> path = planner.findPath(col, row,
+                            goalCol, goalRow, m);
                     Gdx.app.log(Darkshaft.LOG, "Path length: " +
                             ((path == null) ? "NULL" : ""+path.size)
                             + " after " + planner.getIterations() + " steps");                              
@@ -204,14 +198,14 @@ public class Spawner {
         return mobs;
     }
     
-    public void setEnd(int x, int y){
-        this.endX = x;
-        this.endY = y;
+    public void setEnd(int col, int row){
+        this.goalCol = col;
+        this.goalRow = row;
     }
     
-    public void setLocation(int x, int y){
-        this.x = x;
-        this.y = y;
+    public void setLocation(int col, int row){
+        this.col = col;
+        this.row = row;
     }
     
     public void sortWaves(){
