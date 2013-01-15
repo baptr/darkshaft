@@ -38,8 +38,7 @@ public class Unit extends Entity {
     @Override
     public void update(float delta) {
         super.update(delta);
-        if(currentPath != null && currentPath.size > 0 && currentPath.get(0) != null){
-
+        if(currentPath != null && currentPath.size > 0){
             Node n = currentPath.get(0);
             // TODO: Refactor getWorldX/Y to return the center of the tile
             float nodeX = MapUtils.getWorldX(n.col, n.row) + 32;
@@ -62,8 +61,6 @@ public class Unit extends Entity {
             if(distance <= 2.0f) {
                 currentPath.removeIndex(0);
             }
-            //Gdx.app.log( Darkshaft.LOG, "unit update: node(" + n.row + "," + n.col + ")[" + nodeX + "," + nodeY + "] sprite(" + spriteX + "," + spriteY +"), d(" + 
-             //       dx + "," + dy + ") v(" + v.x + "," + v.y + ") move (" + moveToX + "," + moveToY + ")");
         }
          
     }
