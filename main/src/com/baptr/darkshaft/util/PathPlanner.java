@@ -1,5 +1,7 @@
 package com.baptr.darkshaft.util;
 
+import java.util.EnumMap;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.tiled.TiledMap;
 import com.badlogic.gdx.utils.Array;
@@ -12,8 +14,10 @@ import com.baptr.darkshaft.gfx.*;
 import com.baptr.darkshaft.entity.Entity.*;
 
 public class PathPlanner {
-    private TiledMap terrain; // XXX Terrain class?
-    private WeightMap weights;
+    private static TiledMap terrain;
+    private static WeightMap weights;
+
+    private UnitType unitType;
 
     private Node goal;
 
@@ -27,16 +31,21 @@ public class PathPlanner {
     private Array<Node> path; // result
     private Array<Node> neighbors;
 
+    private Array<Array<Node>> activePaths;
+
     private int iterations;
 
     private static long MAX_TILE_COST = 64L;
     protected static long TOWER_COST = MAX_TILE_COST - 1; // XXX big tunable
     private static int MAX_NEIGHBORS = 6;
 
-    public PathPlanner(TiledMap terrain, Array<Defense> defenses) {
-        this.terrain = terrain;
-        this.weights = new WeightMap(terrain, defenses);
+    public static void setTerrain(TiledMap terrain, Array<Defense> defenses) {
+        PathPlanner.terrain = terrain;
+        PathPlanner.weights = new WeightMap(terrain, defenses);
+    }
 
+    public PathPlanner(UnitType type) {
+        this.unitType = type;
         this.goal = new Node(0, 0);
 
         this.visited = new ObjectIntMap<Node>();
@@ -46,12 +55,18 @@ public class PathPlanner {
         this.estCost = new ObjectMap<Node,Long>();
         this.path = new Array<Node>();
         this.neighbors = new Array<Node>(MAX_NEIGHBORS);
+        this.activePaths = new Array<Array<Node>>();
 
         assert terrain.width * terrain.height * MAX_TILE_COST < Long.MAX_VALUE;
     }
 
     public void setGoal(int goalCol, int goalRow) {
-        goal.set(goalCol, goalRow);
+        if(goal.col != goalCol || goal.row != goalRow) {
+            goal.set(goalCol, goalRow);
+            // When the goal changes, we need to clear any previously calculated
+            // weights and start fresh
+            reInit();
+        }
     }
 
     private void reInit() {
@@ -65,15 +80,12 @@ public class PathPlanner {
         iterations = 0;
     }
 
-/*
-    public Array<Node> findPath(int startCol, int startRow, int endCol, int endRow) {
-        return findPath(startCol, startRow, endCol, endRow, null);
-    }
-    */
-    
-    public Array<Node> findPath(int startCol, int startRow, int endCol, int endRow, Unit p) {
+    public Array<Node> findPath(int startCol, int startRow,
+            int endCol, int endRow, Unit p) {
+        assert p.unitType.equals(this.unitType);
         setGoal(endCol, endRow);
-        Array<Node> path = findPath(startCol, startRow, p.unitType);
+
+        Array<Node> path = findPath(new Node(startCol, startRow));
         if(p != null){
             p.setPath(path);
         }
@@ -82,24 +94,34 @@ public class PathPlanner {
 
     /** Find a path from the specified startCol, startRow tile to the goal tile
      * specified in the constructor. Returns null if no path exists.
+     * Actually calculated from the goal node towards the start node to allow
+     * re-use of calculated weights from different start positions.
      */
-    public Array<Node> findPath(int startCol, int startRow, UnitType type) {
-        reInit();
-
+    public Array<Node> findPath(Node startNode) {
         // Shortcut if the goal node is itself unpassable
-        if(!weights.isPassable(type, goal.col, goal.row)) {
+        if(!weights.isPassable(unitType, goal.col, goal.row)) {
             return null;
         }
 
-        Node startNode = new Node(startCol, startRow);
-        toVisit.put(startNode, 0);
+        if(parent.containsKey(startNode)) {
+            // We already have a path
+            return recreatePath(startNode);
+        } else if(! visited.containsKey(goal)) {
+            // First run
+            toVisit.put(goal, 0);
 
-        knownCost.put(startNode, 0L);
-        estCost.put(startNode, 0L + estimateCost(startNode));
+            knownCost.put(goal, 0L);
+            estCost.put(goal, 0L + estimateCost(goal, startNode));
+        } else {
+            // running a new start with the same goal. Need to update estCost??
+            for(Node n : estCost.keys()) {
+                estCost.put(n, knownCost.get(n) + estimateCost(n, startNode));
+            }
+        }
 
         while(toVisit.size > 0) {
             iterations++;
-            // pick the element of toVisit with the lowest estCost, pop from toVisit
+            // pop the element of toVisit with the lowest estCost
             long guess = Long.MAX_VALUE;
             Node current = null;
             for(Node test : toVisit.keys()) {
@@ -111,21 +133,22 @@ public class PathPlanner {
             }
             toVisit.remove(current,-1);
 
-            if(goal.equals(current)) { // XXX == if primative long
-                return recreatePath();
+            if(startNode.equals(current)) { // XXX == if primative long
+                return recreatePath(startNode);
             }
 
             visited.put(current, 0);
             long myCost = knownCost.get(current);
             for(Node neighbor : unvisitedNeighbors(current)) {
-                if(!weights.isPassable(type, neighbor.col, neighbor.row))
+                if(!weights.isPassable(unitType, neighbor.col, neighbor.row))
                         continue;
-                long neighborCost = myCost + getCost(current, neighbor, type);
+                long neighborCost = myCost + getCost(current, neighbor);
                 if(! toVisit.containsKey(neighbor) ||
                         neighborCost < knownCost.get(neighbor)) {
                     parent.put(neighbor, current);
                     knownCost.put(neighbor, neighborCost);
-                    estCost.put(neighbor, neighborCost + estimateCost(neighbor));
+                    estCost.put(neighbor, neighborCost +
+                            estimateCost(neighbor, startNode));
                     if(! toVisit.containsKey(neighbor)) {
                         toVisit.put(neighbor,0);
                     }
@@ -139,17 +162,18 @@ public class PathPlanner {
 
     /** Weighted distance between two adjacent nodes.
      * */
-    private long getCost(Node from, Node to, UnitType type) {
-        return weights.get(type, to.col, to.row);
+    private long getCost(Node from, Node to) {
+        return weights.get(unitType, to.col, to.row);
     }
     
-    /** Estimate the cost from specified node to the goal
+    /** Estimate the cost between two specified nodes.
      * */
-    private long estimateCost(Node src) {
+    private long estimateCost(Node src, Node dest) {
         // Manhattan distance
         // XXX Doesn't estimate the +row,+col and -row,-col cases properly
-        return Math.abs(goal.row - src.row) + Math.abs(goal.col - src.col);
+        return Math.abs(dest.row - src.row) + Math.abs(dest.col - src.col);
     }
+
 
     /** Return neighbors of the specified node that haven't yet been visited
      * themselves.
@@ -177,19 +201,63 @@ public class PathPlanner {
 
     public void addDefense(Defense d) {
         weights.addDefense(d);
+        invalidatePaths();
+    }
+
+    /** Force a reclaculation of all outstanding paths.
+     */
+    private void invalidatePaths() {
+        // For each Path, group by current start/end
+        // Then recalculate each group
+        ObjectMap<Node,Array<Array<Node>>> commonGoal =
+                new ObjectMap<Node,Array<Array<Node>>>();
+        ObjectMap<Node,Node> maxStart =
+                new ObjectMap<Node,Node>();
+        long maxDist = 0;
+        for(Array<Node> path : activePaths) {
+            if(path.size == 0) {
+                // TODO pool/iterator
+                activePaths.removeValue(path, true);
+                continue;
+            }
+            Node start = path.first();
+            Node end = path.peek();
+            long dist = estimateCost(start, end);
+            if(dist > maxDist) {
+                maxDist = dist;
+                maxStart.put(end,start);
+            }
+            // each unique goal -> list of starts
+            // XXX starts currently nonunique, otherwise need to store Unit
+            if(commonGoal.containsKey(end)) {
+                commonGoal.get(end).add(path);
+            } else {
+                commonGoal.put(end, new Array<Array<Node>>());
+                commonGoal.get(end).add(path);
+            }
+        }
+        // Loop through commonGoal and perform a new calculation for each
+        // Hopefully reusing most of the planning for each start position
+        // Then replacing the path with the one newly calculated
+        for(Node goal : commonGoal.keys()) {
+            setGoal(goal.col, goal.row);
+            // Calculate from furthest?
+            Node start = maxStart.get(goal);
+            findPath(start);
+            for(Array<Node> oldPath : commonGoal.get(goal)) {
+                oldPath = recreatePath(oldPath.first());
+            }
+        }
     }
 
     /** Once a valid path has been found, this recreates it from "parent" data.
      */
-    private Array<Node> recreatePath() {
-        Node n = goal;
+    private Array<Node> recreatePath(Node start) {
+        Node n = start;
         Array<Node> path = new Array<Node>();
-        path.add(n);
         while((n = parent.get(n)) != null) {
             path.add(n);
         }
-        path.pop();
-        path.reverse();
         return path;
     }
 

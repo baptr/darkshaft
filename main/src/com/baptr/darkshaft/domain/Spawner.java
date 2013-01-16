@@ -2,6 +2,7 @@ package com.baptr.darkshaft.domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.EnumMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -17,6 +18,7 @@ import com.baptr.darkshaft.gfx.Mob.MobType;
 import com.baptr.darkshaft.util.MapUtils;
 import com.baptr.darkshaft.util.PathPlanner;
 import com.baptr.darkshaft.util.PathPlanner.Node;
+import com.baptr.darkshaft.entity.Entity.*;
 
 public class Spawner {
     int id;
@@ -30,7 +32,7 @@ public class Spawner {
     Array<Wave> waves;
     int tick;
     TextureAtlas atlas;
-    PathPlanner planner;
+    EnumMap<UnitType,PathPlanner> planners;
     
     public Spawner(int id, TextureAtlas atlas){
         this.id = id;
@@ -44,8 +46,7 @@ public class Spawner {
         this.goalRow = Integer.MIN_VALUE;
         tick = 0;
         this.atlas = atlas;
-        this.planner = new PathPlanner(MapUtils.getMap(),
-                MapUtils.getDefenses());
+        this.planners = new EnumMap<UnitType,PathPlanner>(UnitType.class);
     }
     
     public void addWave(int number, float spawnRate, String wave){
@@ -171,12 +172,13 @@ public class Spawner {
     }
     
     private Array<Mob> spawnNext(){
-        if(this.goalCol == Integer.MIN_VALUE || this.goalRow == Integer.MIN_VALUE){
+        if(this.goalCol == Integer.MIN_VALUE ||
+                this.goalRow == Integer.MIN_VALUE){
             return null;
         }
         Array<Mob> mobs = new Array<Mob>();
         Wave wave = waves.get(waveNumber);
-        if(wave.mobs.get(tick) != null){
+        if(wave.mobs.get(tick) != null) {
             for(int i = 0; i < wave.mobs.get(tick).size; i++){
                 int mobType = wave.mobs.get(tick).get(i);
                 if(mobType > 0){
@@ -185,6 +187,11 @@ public class Spawner {
                             MapUtils.getWorldX(col, row),
                             MapUtils.getWorldY(col, row));
                     mobs.add(m);
+
+                    if(!planners.containsKey(m.unitType)) {
+                        planners.put(m.unitType, new PathPlanner(m.unitType));
+                    }
+                    PathPlanner planner = planners.get(m.unitType);
 
                     Array<Node> path = planner.findPath(col, row,
                             goalCol, goalRow, m);
@@ -213,7 +220,7 @@ public class Spawner {
     
     private class Wave implements Comparable<Wave>{
         int number;
-        HashMap<Integer, Array<Integer>> mobs;
+        HashMap<Integer, Array<Integer>> mobs; // TODO IntMap
         float spawnRate;
         
         public Wave(int number, float spawnRate){

@@ -24,6 +24,7 @@ import com.baptr.darkshaft.domain.Spawner;
 import com.baptr.darkshaft.gfx.*;
 import com.baptr.darkshaft.gfx.Tower.TowerType;
 import com.baptr.darkshaft.util.PathPlanner;
+import com.baptr.darkshaft.entity.Entity.*;
 
 public abstract class GameScreen extends AbstractScreen {
     protected TileMapRenderer mapRenderer;
@@ -61,7 +62,8 @@ public abstract class GameScreen extends AbstractScreen {
         entities = new Array<Entity>(false, INITIAL_DEFENSE_CAPACITY + 2);
         entities.add(frank);
         MapUtils.setRenderer(mapRenderer, defenses);
-        pathPlanner = new PathPlanner(mapRenderer.getMap(), defenses);
+        PathPlanner.setTerrain(mapRenderer.getMap(), defenses);
+        pathPlanner = new PathPlanner(UnitType.PLAYER);
         pathMarker = new PathMarker(getAtlas().findRegion("gamescreen/marker"));
         GameUI ui = new GameUI(this, stage);
         towerMarker = new Tower(TowerType.NONE,0,0,true);
@@ -114,8 +116,8 @@ public abstract class GameScreen extends AbstractScreen {
     public void update(float delta) {
         super.update(delta);
         camera.update();
-        for(int i = 0; i < spawners.length; i++){
-            Array<Mob> mobs = spawners[i].check(delta);
+        for(Spawner spawn : spawners) {
+            Array<Mob> mobs = spawn.check(delta);
             if(mobs != null && mobs.size > 0){
                 entities.addAll(mobs);
             }
