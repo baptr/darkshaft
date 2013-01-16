@@ -72,13 +72,21 @@ public class ConnectScreen extends AbstractScreen {
             }
         });
 
+        TextButton backButton = new TextButton("Back", getSkin());
+        backButton.addListener(new ClickListener() {
+            public void clicked(InputEvent e, float x, float y) {
+                game.setScreen(new MenuScreen(game));
+            }
+        });
+
         table.add("Name: ").left();
         table.add(nameField).minWidth(50f).spaceBottom(10).row();
         table.add("Recent Servers").colspan(2).left().row();
         table.add(serverList).colspan(2).fillX().spaceBottom(10).row();
         table.add("Server: ").minWidth(75f).left();
         table.add(serverField).minWidth(200f).row();
-        table.add(connectButton).colspan(2).right();
+        table.add(backButton);
+        table.add(connectButton).right();
     }
 
     private void loadName(TextField nameField) {

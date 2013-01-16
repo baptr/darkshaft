@@ -53,8 +53,6 @@ public class NetworkClient {
                 if(o instanceof UpdateAvatar) {
                     Player p = ((UpdateAvatar)o).player;
                     if(p.id != myId) {
-                        Gdx.app.debug(Darkshaft.LOG, "Player " + p.name +
-                                " moved to (" + p.x + "," + p.y + ")");
                         screen.updateRemoteAvatar(p.id, p.x, p.y);
                     }
                 }
