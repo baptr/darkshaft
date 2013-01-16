@@ -217,6 +217,12 @@ public class Spawner {
     public void sortWaves(){
         this.waves.sort();
     }
+
+    public void invalidatePaths() {
+        for(PathPlanner pp : planners.values()) {
+            pp.invalidatePaths();
+        }
+    }
     
     private class Wave implements Comparable<Wave>{
         int number;

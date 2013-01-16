@@ -81,11 +81,8 @@ public class DemoScreen extends GameScreen {
     public void addDefense(Defense d) {
         if(!defenses.contains(d, false)) {
             client.sendPlaceTower((Tower)d);
-            defenses.add(d);
-            entities.add(d);
-            entities.sort();
-            pathPlanner.addDefense(d);
         }
+        super.addDefense(d);
     }
 
     @Override

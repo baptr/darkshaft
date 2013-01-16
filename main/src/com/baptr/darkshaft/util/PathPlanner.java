@@ -88,6 +88,7 @@ public class PathPlanner {
         Array<Node> path = findPath(new Node(startCol, startRow));
         if(p != null){
             p.setPath(path);
+            activePaths.add(path);
         }
         return path;
     }
@@ -131,12 +132,12 @@ public class PathPlanner {
                     current = test;
                 }
             }
-            toVisit.remove(current,-1);
 
             if(startNode.equals(current)) { // XXX == if primative long
                 return recreatePath(startNode);
             }
 
+            toVisit.remove(current,-1);
             visited.put(current, 0);
             long myCost = knownCost.get(current);
             for(Node neighbor : unvisitedNeighbors(current)) {
@@ -206,7 +207,8 @@ public class PathPlanner {
 
     /** Force a reclaculation of all outstanding paths.
      */
-    private void invalidatePaths() {
+    public void invalidatePaths() {
+        reInit();
         // For each Path, group by current start/end
         // Then recalculate each group
         ObjectMap<Node,Array<Array<Node>>> commonGoal =
@@ -244,8 +246,15 @@ public class PathPlanner {
             // Calculate from furthest?
             Node start = maxStart.get(goal);
             findPath(start);
+            // Need to be able to split paths for mobs that spawned together
+            // but later separated
             for(Array<Node> oldPath : commonGoal.get(goal)) {
-                oldPath = recreatePath(oldPath.first());
+                Node oldStart = oldPath.first();
+                Array<Node> newPath = findPath(oldStart);
+                if(newPath != null) {
+                    oldPath.clear();
+                    oldPath.addAll(newPath);
+                }
             }
         }
     }

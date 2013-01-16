@@ -84,6 +84,10 @@ public abstract class GameScreen extends AbstractScreen {
             entities.add(d);
             entities.sort();
             pathPlanner.addDefense(d);
+            // invalidate spawner paths
+            for(Spawner spawn : spawners) {
+                spawn.invalidatePaths();
+            }
         }
     }
     
