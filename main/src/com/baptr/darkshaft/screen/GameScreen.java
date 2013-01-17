@@ -19,6 +19,7 @@ import com.baptr.darkshaft.Darkshaft;
 import com.baptr.darkshaft.input.CameraInputProcessor;
 import com.baptr.darkshaft.input.GameInputProcessor;
 import com.baptr.darkshaft.util.MapUtils;
+import com.baptr.darkshaft.util.TargetHelper;
 import com.baptr.darkshaft.screen.AbstractScreen;
 import com.baptr.darkshaft.domain.Spawner;
 import com.baptr.darkshaft.gfx.*;
@@ -122,15 +123,15 @@ public abstract class GameScreen extends AbstractScreen {
         camera.update();
         for(Spawner spawn : spawners) {
             Array<Mob> mobs = spawn.check(delta);
-            if(mobs != null && mobs.size > 0){
-                entities.addAll(mobs);
-            }
         }
         if(!frank.isMoving()) {
             pathMarker.setPath(null);
         }
         for(Entity e : entities) {
             e.update(delta);
+        }
+        for(Mob m : TargetHelper.getMobs()){
+            m.update(delta);
         }
         entities.sort();
     }
@@ -149,6 +150,11 @@ public abstract class GameScreen extends AbstractScreen {
         pathMarker.draw(batch);
         for(Entity e : entities) {
             e.draw(batch);
+        }
+        
+        for(Mob m : TargetHelper.getMobs())
+        {
+            m.draw(batch);
         }
 
         if(towerMarker != null &&

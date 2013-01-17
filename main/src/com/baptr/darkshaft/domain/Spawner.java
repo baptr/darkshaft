@@ -18,6 +18,7 @@ import com.baptr.darkshaft.gfx.Mob.MobType;
 import com.baptr.darkshaft.util.MapUtils;
 import com.baptr.darkshaft.util.PathPlanner;
 import com.baptr.darkshaft.util.PathPlanner.Node;
+import com.baptr.darkshaft.util.TargetHelper;
 import com.baptr.darkshaft.entity.Entity.*;
 
 public class Spawner {
@@ -201,6 +202,11 @@ public class Spawner {
                 }
             }
         }
+        
+        if(mobs.size > 0){
+            TargetHelper.addTargets(mobs);
+        }
+        
         return mobs;
     }
     
