@@ -11,17 +11,20 @@ import com.baptr.darkshaft.util.TargetHelper;
 public class Tower extends Defense {
 
     public enum TowerType {
-        BASIC(0, 1f, 1f, 1f, 80f, 10f, 0f, 1f),
-        FIRE(0, 1f, 0.25f, 0.25f, 40f, 2f, 10f, 5f),
-        WATER(0, 0.4f, 0.5f, 1f, 50f, 15f, 1f, 8f),
-        SPIRIT(0, 0.25f, 1f, 0.25f, 0.5f, 60f, 10f, 2f, 5f),
-        NONE(0, 0f, 0f, 0f, 0f, 0f, 0f, 0f);
+        //tileId, color(r,g,b[,a]),        range,  dmg, dur, cooldown
+        BASIC (0, 1f, 1f, 1f,              80f,    10f, 0f,  1f),
+        FIRE  (0, 1f, 0.25f, 0.25f,        40f,    2f,  10f, 5f),
+        WATER (0, 0.4f, 0.5f, 1f,          50f,    15f, 1f,  8f),
+        SPIRIT(0, 0.25f, 1f, 0.25f, 0.5f,  60f,    10f, 2f,  5f),
+        NONE  (0, 0f, 0f, 0f,              0f,     0f,  0f,  0f);
 
         private int tileId;
         private int maxTargets = 1;
-        private float r, g, b, a, range, damagePerSecond, attackLength, attackCooldown;
+        private float r, g, b, a;
+        private float range, damagePerSecond, attackLength, attackCooldown;
 
-        TowerType(int tileOffset, float r, float g, float b, float a, float range, float damage, float attackLength, float attackCooldown) {
+        TowerType(int tileOffset, float r, float g, float b, float a,
+                float range, float damage, float attackLength, float attackCooldown) {
             this.tileId = MapUtils.findTileSetGid(TILE_SET_NAME)+tileOffset;
             this.r = r;
             this.g = g;
@@ -33,7 +36,8 @@ public class Tower extends Defense {
             this.attackCooldown = attackCooldown;
         }
 
-        TowerType(int tileId, float r, float g, float b, float range, float damage, float attackLength, float attackCooldown) {
+        TowerType(int tileId, float r, float g, float b,
+                float range, float damage, float attackLength, float attackCooldown) {
             this(tileId, r, g, b, 1.0f, range, damage, attackLength, attackCooldown);
         }
 

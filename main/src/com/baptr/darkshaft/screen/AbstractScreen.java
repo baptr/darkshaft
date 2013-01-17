@@ -22,7 +22,6 @@ import com.baptr.darkshaft.Darkshaft;
 public abstract class AbstractScreen implements Screen {
 
     protected final Darkshaft game;
-    protected final BitmapFont font;
     protected final SpriteBatch batch;
     protected final Stage stage;
     protected final AssetManager assetManager;
@@ -38,8 +37,6 @@ public abstract class AbstractScreen implements Screen {
     public AbstractScreen( Darkshaft game ) {
         this.game = game;
         this.assetManager = game.manager;
-        this.font = new BitmapFont(Gdx.files.internal("arial-15.fnt"),
-                Gdx.files.internal("arial-15.png"), false, true);
         this.batch = new SpriteBatch();
         this.stage = new Stage(0, 0, true);
         input = new InputMultiplexer();
@@ -156,6 +153,5 @@ public abstract class AbstractScreen implements Screen {
         // dispose the collaborators
         stage.dispose();
         batch.dispose();
-        font.dispose();
     }
 }
