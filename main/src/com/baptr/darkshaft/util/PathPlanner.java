@@ -1,6 +1,7 @@
 package com.baptr.darkshaft.util;
 
 import java.util.EnumMap;
+import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.tiled.TiledMap;
@@ -60,7 +61,7 @@ public class PathPlanner {
         assert terrain.width * terrain.height * MAX_TILE_COST < Long.MAX_VALUE;
     }
 
-    public void setGoal(int goalCol, int goalRow) {
+    public synchronized void setGoal(int goalCol, int goalRow) {
         if(goal.col != goalCol || goal.row != goalRow) {
             goal.set(goalCol, goalRow);
             // When the goal changes, we need to clear any previously calculated
@@ -80,13 +81,14 @@ public class PathPlanner {
         iterations = 0;
     }
 
-    public Array<Node> findPath(int startCol, int startRow,
+    public synchronized Array<Node> findPath(int startCol, int startRow,
             int endCol, int endRow, Unit p) {
         assert p.unitType.equals(this.unitType);
         setGoal(endCol, endRow);
 
         Array<Node> path = findPath(new Node(startCol, startRow));
         if(p != null){
+            path.removeIndex(0);
             p.setPath(path);
             activePaths.add(path);
         }
@@ -98,9 +100,13 @@ public class PathPlanner {
      * Actually calculated from the goal node towards the start node to allow
      * re-use of calculated weights from different start positions.
      */
-    public Array<Node> findPath(Node startNode) {
+    public synchronized Array<Node> findPath(Node startNode) {
+        if(startNode == null) {
+            System.out.println("Attempt to navigate from a null node!");
+            return null;
+        }
         // Shortcut if the goal node is itself unpassable
-        if(!weights.isPassable(unitType, goal.col, goal.row)) {
+        if(!isPassable(goal)) {
             return null;
         }
 
@@ -141,8 +147,7 @@ public class PathPlanner {
             visited.put(current, 0);
             long myCost = knownCost.get(current);
             for(Node neighbor : unvisitedNeighbors(current)) {
-                if(!weights.isPassable(unitType, neighbor.col, neighbor.row))
-                        continue;
+                if(!isPassable(neighbor)) continue;
                 long neighborCost = myCost + getCost(current, neighbor);
                 if(! toVisit.containsKey(neighbor) ||
                         neighborCost < knownCost.get(neighbor)) {
@@ -165,6 +170,10 @@ public class PathPlanner {
      * */
     private long getCost(Node from, Node to) {
         return weights.get(unitType, to.col, to.row);
+    }
+
+    private boolean isPassable(Node node) {
+        return weights.isPassable(unitType, node.col, node.row);
     }
     
     /** Estimate the cost between two specified nodes.
@@ -207,7 +216,7 @@ public class PathPlanner {
 
     /** Force a reclaculation of all outstanding paths.
      */
-    public void invalidatePaths() {
+    public synchronized void invalidatePaths() {
         reInit();
         // For each Path, group by current start/end
         // Then recalculate each group
@@ -216,10 +225,10 @@ public class PathPlanner {
         ObjectMap<Node,Node> maxStart =
                 new ObjectMap<Node,Node>();
         long maxDist = 0;
-        for(Array<Node> path : activePaths) {
+        for(Iterator<Array<Node>> iter = activePaths.iterator(); iter.hasNext();) {
+            Array<Node> path = iter.next();
             if(path.size == 0) {
-                // TODO pool/iterator
-                activePaths.removeValue(path, true);
+                iter.remove();
                 continue;
             }
             Node start = path.first();
@@ -264,6 +273,7 @@ public class PathPlanner {
     private Array<Node> recreatePath(Node start) {
         Node n = start;
         Array<Node> path = new Array<Node>();
+        path.add(n);
         while((n = parent.get(n)) != null) {
             path.add(n);
         }

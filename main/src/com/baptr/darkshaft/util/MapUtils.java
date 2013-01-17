@@ -83,6 +83,12 @@ public class MapUtils {
         return renderer.getAtlas().getRegion(tileId);
     }
 
+    public static boolean isInMap(int col, int row) {
+        if(col < 0 || col >= mapWidth || row < 0 || row >= mapHeight)
+                return false;
+        return true;
+    }
+
     public static boolean isTilePassable(int col, int row) {
         if(col < 0 || col >= mapWidth || row < 0 || row >= mapHeight)
                 return false;
