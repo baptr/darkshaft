@@ -1,14 +1,10 @@
 package com.baptr.darkshaft.util;
 
-import java.util.EnumMap;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.tiled.TiledMap;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectIntMap;
 import com.badlogic.gdx.utils.ObjectMap;
 
-import com.baptr.darkshaft.Darkshaft;
 import com.baptr.darkshaft.util.WeightMap;
 import com.baptr.darkshaft.gfx.*;
 import com.baptr.darkshaft.entity.Entity.*;

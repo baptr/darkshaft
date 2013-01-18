@@ -7,8 +7,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import com.baptr.darkshaft.Darkshaft;
-import com.baptr.darkshaft.util.MapUtils;
-import com.baptr.darkshaft.util.PathPlanner;
 import com.baptr.darkshaft.util.TargetHelper;
 import com.baptr.darkshaft.entity.Entity.*;
 

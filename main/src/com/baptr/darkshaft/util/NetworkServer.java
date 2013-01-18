@@ -6,11 +6,8 @@ import java.util.HashSet;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.esotericsoftware.minlog.Log;
-
 import com.baptr.darkshaft.util.Network;
 import com.baptr.darkshaft.util.Network.*;
-import com.baptr.darkshaft.gfx.Avatar;
 
 public class NetworkServer {
     Server server;

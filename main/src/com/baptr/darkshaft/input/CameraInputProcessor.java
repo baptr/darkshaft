@@ -1,11 +1,6 @@
 package com.baptr.darkshaft.input;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-
-import com.baptr.darkshaft.Darkshaft;
-import com.baptr.darkshaft.util.MapUtils;
 
 public class CameraInputProcessor extends AbstractInputProcessor {
 

@@ -1,19 +1,13 @@
 package com.baptr.darkshaft.domain;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.EnumMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.tiled.TiledMap;
-import com.badlogic.gdx.graphics.g2d.tiled.TiledObject;
-import com.badlogic.gdx.graphics.g2d.tiled.TiledObjectGroup;
 import com.badlogic.gdx.utils.Array;
 import com.baptr.darkshaft.Darkshaft;
-import com.baptr.darkshaft.gfx.Entity;
 import com.baptr.darkshaft.gfx.Mob;
-import com.baptr.darkshaft.gfx.Unit;
 import com.baptr.darkshaft.gfx.Mob.MobType;
 import com.baptr.darkshaft.util.MapUtils;
 import com.baptr.darkshaft.util.PathPlanner;

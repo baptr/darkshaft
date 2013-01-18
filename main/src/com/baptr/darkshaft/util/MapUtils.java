@@ -1,7 +1,5 @@
 package com.baptr.darkshaft.util;
 
-import java.util.Map;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -25,7 +23,6 @@ public class MapUtils {
     private static Array<Defense> defenses;
 
     private static int unitsPerTileX, unitsPerTileY;
-    private static int baseX, baseY;
     private static int mapWidth, mapHeight; // in tiles
 
     public static void setRenderer(TileMapRenderer r, Array<Defense> defenses) {
@@ -33,8 +30,6 @@ public class MapUtils {
         assert "isometric".equals(r.getMap().orientation);
         MapUtils.unitsPerTileX = r.getMap().tileWidth / 2;
         MapUtils.unitsPerTileY = r.getMap().tileHeight / 2;
-        MapUtils.baseX = r.getMapWidthUnits() / 2;
-        MapUtils.baseY = r.getMapHeightUnits() / 2;
         MapUtils.mapWidth = r.getMap().width;
         MapUtils.mapHeight = r.getMap().height;
         MapUtils.map = r.getMap();

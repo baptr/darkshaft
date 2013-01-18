@@ -42,7 +42,7 @@ public class TerrainAffinity extends EnumMap<TileType,Float>{
         JsonReader reader = new JsonReader();
         Object o = reader.parse(Gdx.files.internal(file));
         try {
-            @SuppressWarnings("unchecked") // Crash if malformed
+            @SuppressWarnings({ "unchecked", "rawtypes" }) // Crash if malformed
             ObjectMap<String,ObjectMap> cfg = (ObjectMap<String,ObjectMap>)o;
             for(String unitName : cfg.keys()) {
                 TerrainAffinity affinity = new TerrainAffinity();

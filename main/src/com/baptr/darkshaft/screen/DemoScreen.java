@@ -2,17 +2,11 @@ package com.baptr.darkshaft.screen;
 
 import java.io.IOException;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.IntMap;
 
 //import com.baptr.darkshaft.core.TileMapRenderer;
 
 import com.baptr.darkshaft.Darkshaft;
-import com.baptr.darkshaft.util.MapUtils;
 import com.baptr.darkshaft.domain.Spawner;
 import com.baptr.darkshaft.util.NetworkClient;
 import com.baptr.darkshaft.util.NetworkServer;

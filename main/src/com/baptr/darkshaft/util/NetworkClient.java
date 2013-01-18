@@ -2,14 +2,11 @@ package com.baptr.darkshaft.util;
 
 import java.io.IOException;
 
-import com.badlogic.gdx.Gdx;
-
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Listener.ThreadedListener;
 
-import com.baptr.darkshaft.Darkshaft;
 import com.baptr.darkshaft.util.Network;
 import com.baptr.darkshaft.util.Network.*;
 import com.baptr.darkshaft.gfx.Avatar;

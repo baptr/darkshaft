@@ -1,9 +1,7 @@
 package com.baptr.darkshaft.gfx;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
-import com.baptr.darkshaft.gfx.*;
 import com.baptr.darkshaft.entity.Entity.UnitType;
 
 public class Avatar extends Unit {
