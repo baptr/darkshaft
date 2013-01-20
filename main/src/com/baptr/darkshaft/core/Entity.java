@@ -1,4 +1,4 @@
-package com.baptr.darkshaft.entity;
+package com.baptr.darkshaft.core;
 
 public class Entity {
     public enum UnitType {

@@ -7,9 +7,9 @@ import com.badlogic.gdx.graphics.g2d.tiled.TiledLayer;
 import com.badlogic.gdx.utils.Array;
 
 import com.baptr.darkshaft.util.MapUtils;
-import com.baptr.darkshaft.entity.TerrainAffinity;
+import com.baptr.darkshaft.core.TerrainAffinity;
+import com.baptr.darkshaft.core.Entity.*;
 import com.baptr.darkshaft.gfx.Defense;
-import com.baptr.darkshaft.entity.Entity.*;
 
 /** Cache of pre-calculated tile weights. Accounts for {@link Defense} and
  *  {@link TerrainAffinity}.

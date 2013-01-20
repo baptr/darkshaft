@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import com.baptr.darkshaft.Darkshaft;
 import com.baptr.darkshaft.util.TargetHelper;
-import com.baptr.darkshaft.entity.Entity.*;
+import com.baptr.darkshaft.core.Entity.*;
 
 public class Mob extends Unit {
 

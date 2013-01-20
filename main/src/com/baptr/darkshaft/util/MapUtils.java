@@ -12,8 +12,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 
 import com.baptr.darkshaft.Darkshaft;
-import com.baptr.darkshaft.entity.Entity.*;
-import com.baptr.darkshaft.domain.Spawner;
+import com.baptr.darkshaft.core.Spawner;
+import com.baptr.darkshaft.core.Entity.*;
 import com.baptr.darkshaft.gfx.Defense;
 
 public class MapUtils {
@@ -76,6 +76,12 @@ public class MapUtils {
 
     public static TextureRegion getTileRegion(int tileId) {
         return renderer.getAtlas().getRegion(tileId);
+    }
+
+    public static boolean isInMap(int col, int row) {
+        if(col < 0 || col >= mapWidth || row < 0 || row >= mapHeight)
+                return false;
+        return true;
     }
 
     public static boolean isTilePassable(int col, int row) {

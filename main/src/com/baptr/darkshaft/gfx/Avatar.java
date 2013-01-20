@@ -2,7 +2,7 @@ package com.baptr.darkshaft.gfx;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
-import com.baptr.darkshaft.entity.Entity.UnitType;
+import com.baptr.darkshaft.core.Entity.UnitType;
 
 public class Avatar extends Unit {
 

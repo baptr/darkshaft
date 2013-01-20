@@ -1,4 +1,4 @@
-package com.baptr.darkshaft.domain;
+package com.baptr.darkshaft.core;
 
 import java.util.HashMap;
 import java.util.EnumMap;
@@ -13,7 +13,7 @@ import com.baptr.darkshaft.util.MapUtils;
 import com.baptr.darkshaft.util.PathPlanner;
 import com.baptr.darkshaft.util.PathPlanner.Node;
 import com.baptr.darkshaft.util.TargetHelper;
-import com.baptr.darkshaft.entity.Entity.*;
+import com.baptr.darkshaft.core.Entity.*;
 
 public class Spawner {
     int id;

@@ -2,12 +2,13 @@ package com.baptr.darkshaft.screen;
 
 import java.io.IOException;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.IntMap;
 
 //import com.baptr.darkshaft.core.TileMapRenderer;
 
 import com.baptr.darkshaft.Darkshaft;
-import com.baptr.darkshaft.domain.Spawner;
+import com.baptr.darkshaft.core.Spawner;
 import com.baptr.darkshaft.util.NetworkClient;
 import com.baptr.darkshaft.util.NetworkServer;
 import com.baptr.darkshaft.gfx.*;
@@ -65,10 +66,7 @@ public class DemoScreen extends GameScreen {
 
     public void addRemoteTower(int playerId, TowerType type, int col, int row) {
         Tower t = new Tower(type, col, row);
-        defenses.add(t);
-        entities.add(t);
-        entities.sort();
-        pathPlanner.addDefense(t);
+        super.addDefense(t);
     }
 
     @Override

@@ -97,10 +97,7 @@ public class GameInputProcessor extends AbstractInputProcessor {
             if(placeType != TowerType.NONE) { // Place a tower
                 int mapRow = MapUtils.getMapRow(touch.x, touch.y);
                 int mapCol = MapUtils.getMapCol(touch.x, touch.y);
-                Gdx.app.log( Darkshaft.LOG, "click: screen (" + x + ", " + y +
-                        ") world (" + touch.x + ", " + touch.y + ") map (" +
-                        mapCol + ", " + mapRow + ")" );
-                if(mapRow >= 0 && mapCol >= 0) {
+                if(MapUtils.isInMap(mapCol, mapRow)) {
                     screen.addDefense(new Tower(placeType, mapCol, mapRow));
                 }
             } else {

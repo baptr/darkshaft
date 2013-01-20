@@ -1,4 +1,6 @@
-package com.baptr.darkshaft.entity;
+package com.baptr.darkshaft.core;
+
+import java.util.EnumMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.JsonReader;
@@ -6,10 +8,8 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import com.baptr.darkshaft.Darkshaft;
-import com.baptr.darkshaft.entity.Entity.UnitType;
-import com.baptr.darkshaft.entity.Entity.TileType;
+import com.baptr.darkshaft.core.Entity.*;
 
-import java.util.EnumMap;
 
 /** Represents a unit's speed modifier over a given type of terrain.
  * Each unit type may have modifiers that multiply the weight of a matching

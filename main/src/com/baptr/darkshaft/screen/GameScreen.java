@@ -14,11 +14,11 @@ import com.baptr.darkshaft.input.GameInputProcessor;
 import com.baptr.darkshaft.util.MapUtils;
 import com.baptr.darkshaft.util.TargetHelper;
 import com.baptr.darkshaft.screen.AbstractScreen;
-import com.baptr.darkshaft.domain.Spawner;
+import com.baptr.darkshaft.core.Spawner;
+import com.baptr.darkshaft.core.Entity.*;
 import com.baptr.darkshaft.gfx.*;
 import com.baptr.darkshaft.gfx.Tower.TowerType;
 import com.baptr.darkshaft.util.PathPlanner;
-import com.baptr.darkshaft.entity.Entity.*;
 
 public abstract class GameScreen extends AbstractScreen {
     protected TileMapRenderer mapRenderer;

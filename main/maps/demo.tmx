@@ -78,9 +78,9 @@
  <objectgroup name="Spawns and Ends" width="40" height="40">
   <object name="Spawn0" type="Spawn" x="450" y="0" width="30" height="30">
    <properties>
-    <property name="Wave0_SpawnRate" value="5"/>
-    <property name="Wave0_SpawnTypes" value="1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3"/>
-    <property name="Wave1_SpawnRate" value="3"/>
+    <property name="Wave0_SpawnRate" value="2"/>
+    <property name="Wave0_SpawnTypes" value="1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3"/>
+    <property name="Wave1_SpawnRate" value="1"/>
     <property name="Wave1_SpawnTypes" value="(1,3,2x3),0x2,1,2,1,2"/>
    </properties>
   </object>
