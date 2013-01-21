@@ -36,7 +36,7 @@ public class Darkshaft extends Game {
         
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
-        Gdx.app.log(Darkshaft.LOG, "Version 0.1 starting");
+        Gdx.app.log(Darkshaft.LOG, "Version 0.2 starting");
         if(CHECK_FPS) Gdx.graphics.setVSync(false);
 
         manager.finishLoading();

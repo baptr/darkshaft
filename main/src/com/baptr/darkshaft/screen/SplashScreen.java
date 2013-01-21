@@ -26,7 +26,8 @@ public class SplashScreen extends AbstractScreen {
         super.show();
 
         // retrieve the splash image's region from the atlas
-        AtlasRegion splashRegion = getAtlas().findRegion( "splashscreen/SplashScreen" );
+        AtlasRegion splashRegion = SplashScreen.getAtlas().findRegion(
+                "splashscreen/SplashScreen" );
         Drawable splashDrawable = new TextureRegionDrawable( splashRegion );
 
         // here we create the splash image actor; its size is set when the
