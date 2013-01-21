@@ -13,7 +13,6 @@ import com.baptr.darkshaft.core.Entity.*;
 
 public class Mob extends Unit {
 
-    TextureAtlas atlas;
     MobType type;
     float currentLife;
     String name;
@@ -36,15 +35,11 @@ public class Mob extends Unit {
         }
     }
     
-    public Mob(TextureRegion region, float x, float y) {
-        super(region, x, y);
-    }
-    
-    public Mob(TextureAtlas atlas, MobType mobType, float x, float y){
-        super(atlas.findRegion(mobType.regionName), x, y);
-        this.atlas= atlas;
+    public Mob(MobType mobType, float x, float y){
+        super(x, y, mobType.regionName);
         type = mobType;       
-        // Mobs will have random speeds because they clump up when they spawn... eventually they will try and not clump up and we can remove this
+        // Mobs will have random speeds because they clump up when they spawn...
+        // eventually they will try and not clump up and we can remove this
         Random r = new Random();
         this.speed = mobType.speed * r.nextFloat();
         this.unitType = type.unitType;
@@ -54,15 +49,17 @@ public class Mob extends Unit {
     }
 
     @Override
-    public void update(float delta) {
+    public boolean update(float delta) {
         super.update(delta);
         if(currentPath == null) {
         } else if(currentPath.size == 0) {
             Gdx.app.log(Darkshaft.LOG, name + " reached the goal");
             TargetHelper.removeTarget(this);
+            return true;
         } else if(MapUtils.isDefense(currentPath.first())) {
             Gdx.app.log(Darkshaft.LOG, name + " fighting tower");
         }
+        return false;
     }
     
     // Returns true if this mob was killed
@@ -84,5 +81,9 @@ public class Mob extends Unit {
     
     public String getName(){
         return name;
+    }
+
+    public boolean isAlive() {
+        return currentLife > 0;
     }
 }

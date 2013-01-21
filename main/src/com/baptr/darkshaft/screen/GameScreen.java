@@ -52,16 +52,16 @@ public abstract class GameScreen extends AbstractScreen {
                 TileMapRenderer.class);
         
         defenses = new Array<Defense>(false, INITIAL_DEFENSE_CAPACITY);
-        frank = new Avatar(15, -64, getAtlas());
+        frank = new Avatar(15, -64);
         entities = new Array<Entity>(false, INITIAL_DEFENSE_CAPACITY + 2);
         entities.add(frank);
         MapUtils.setRenderer(mapRenderer, defenses);
         PathPlanner.setTerrain(mapRenderer.getMap(), defenses);
         pathPlanner = new PathPlanner(UnitType.PLAYER);
-        pathMarker = new PathMarker(getAtlas().findRegion("gamescreen/marker"));
+        pathMarker = new PathMarker();
         GameUI ui = new GameUI(this, stage);
         towerMarker = new Tower(TowerType.NONE,0,0,true);
-        spawners = MapUtils.getSpawners(getAtlas());
+        spawners = MapUtils.getSpawners();
     }
 
     public PathPlanner getPathPlanner() {

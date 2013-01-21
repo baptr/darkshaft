@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.Array;
 
+import com.baptr.darkshaft.screen.GameScreen;
 import com.baptr.darkshaft.util.MapUtils;
 import com.baptr.darkshaft.util.PathPlanner.Node;
 
@@ -17,9 +18,10 @@ public class PathMarker extends Sprite {
     private int pathLength;
 
     private static final int INITIAL_PATH_CAPACITY = 32;
+    private static final String GFX = "gamescreen/marker";
 
-    public PathMarker(TextureRegion gfx) {
-        super(gfx);
+    public PathMarker() {
+        super(GameScreen.getAtlas().findRegion(GFX));
         worldX = new FloatArray(true, INITIAL_PATH_CAPACITY);
         worldY = new FloatArray(true, INITIAL_PATH_CAPACITY);
         pathLength = 0;

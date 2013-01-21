@@ -26,10 +26,9 @@ public class Spawner {
     float spawnTimer;
     Array<Wave> waves;
     int tick;
-    TextureAtlas atlas;
     EnumMap<UnitType,PathPlanner> planners;
     
-    public Spawner(int id, TextureAtlas atlas){
+    public Spawner(int id){
         this.id = id;
         waves = new Array<Wave>();
         waveNumber = -1;
@@ -40,7 +39,6 @@ public class Spawner {
         this.goalCol = Integer.MIN_VALUE;
         this.goalRow = Integer.MIN_VALUE;
         tick = 0;
-        this.atlas = atlas;
         this.planners = new EnumMap<UnitType,PathPlanner>(UnitType.class);
     }
     
@@ -180,7 +178,7 @@ public class Spawner {
                 int mobType = wave.mobs.get(tick).get(i);
                 if(mobType > 0){
                     mobType--;
-                    Mob m = new Mob(atlas, MobType.values()[mobType],
+                    Mob m = new Mob(MobType.values()[mobType],
                             MapUtils.getWorldX(col, row),
                             MapUtils.getWorldY(col, row));
                     mobs.add(m);

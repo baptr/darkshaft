@@ -125,7 +125,7 @@ public class GameInputProcessor extends AbstractInputProcessor {
         camera.unproject(move);
         int mapRow = MapUtils.getMapRow(move.x, move.y);
         int mapCol = MapUtils.getMapCol(move.x, move.y);
-        if(mapRow >= 0 && mapCol >= 0){
+        if(MapUtils.isInMap(mapCol, mapRow)) {
             screen.setTowerMarkerPos(mapCol, mapRow);
         }
         return false;

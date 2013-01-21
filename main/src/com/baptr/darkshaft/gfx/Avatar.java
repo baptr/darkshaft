@@ -7,10 +7,12 @@ import com.baptr.darkshaft.core.Entity.UnitType;
 public class Avatar extends Unit {
 
     private String owner = "Local Player";
+
+    private static final String[] GFX = {"Characters/Frank/Down",
+            "Characters/Frank/East", "Characters/Frank/South" };
     
-    public Avatar(float x, float y, TextureAtlas atlas) {
-        super(x, y, atlas, "Characters/Frank/Down", "Characters/Frank/East",
-                "Characters/Frank/South");
+    public Avatar(float x, float y) {
+        super(x, y, GFX);
         xOffset = -getRegionWidth()/2;
         yOffset = -2;
         this.unitType = UnitType.PLAYER;
@@ -25,7 +27,7 @@ public class Avatar extends Unit {
     }
 
     @Override
-    public void update(float delta) {
+    public boolean update(float delta) {
         super.update(delta);
 
         // TODO Facing calculation should be based on row/col, not x/y
@@ -47,6 +49,6 @@ public class Avatar extends Unit {
                 facing = Facing.DOWN;
             }
         }
+        return false;
     }
-
 }

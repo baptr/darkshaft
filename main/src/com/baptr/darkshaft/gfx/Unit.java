@@ -17,24 +17,18 @@ public class Unit extends Entity {
     Facing facing;
     public UnitType unitType = UnitType.BASIC;;
     
-    public Unit(float x, float y, TextureAtlas atlas, String ... animations) {
-        super(x, y, atlas, animations);
+    public Unit(float x, float y, String ... animations) {
+        super(x, y, animations);
         v = new Vector2();
         dest = new Vector2();
     }
 
-    public Unit(TextureRegion region, float x, float y) {
-        super(region, x, y);
-        v = new Vector2();
-        dest = new Vector2();
-    }
-    
     public void setPath(Array<Node> path){
         currentPath = path;
     }
     
     @Override
-    public void update(float delta) {
+    public boolean update(float delta) {
         super.update(delta);
         if(currentPath != null && currentPath.size > 0){
             Node n = currentPath.get(0);
@@ -60,7 +54,7 @@ public class Unit extends Entity {
                 currentPath.removeIndex(0);
             }
         }
-         
+        return false;
     }
 
     public boolean isMoving() {

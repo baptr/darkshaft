@@ -12,16 +12,20 @@ public class Defense extends Entity {
     /** Construct a defense with the given sprite and map col, row
      */
     public Defense(int tileId, int col, int row) {
-        super(MapUtils.getTileRegion(tileId), MapUtils.getWorldX(col, row),
-            MapUtils.getWorldY(col, row));
+        super(MapUtils.getWorldX(col, row), MapUtils.getWorldY(col, row),
+                MapUtils.getTileRegion(tileId));
         this.col = col;
         this.row = row;
+        this.xOffset = -32;
+        this.yOffset = -16;
     }
 
     public void setMapPosition(int col, int row) {
         this.col = col;
         this.row = row;
-        this.setPosition(MapUtils.getWorldX(col, row), MapUtils.getWorldY(col,row));
+        // Offset blows up here
+        this.setPosition(MapUtils.getWorldX(col, row)-xOffset,
+                MapUtils.getWorldY(col,row)-yOffset);
     }
 
     public int getCol() {

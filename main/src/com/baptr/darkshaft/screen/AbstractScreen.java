@@ -24,9 +24,9 @@ public abstract class AbstractScreen implements Screen {
     protected final OrthographicCamera camera;
     protected final InputMultiplexer input;
     protected final Preferences preferences;
-    private TextureAtlas atlas;
-    private TextureAtlas uiAtlas;
-    private Skin skin;
+    private static TextureAtlas atlas;
+    private static TextureAtlas uiAtlas;
+    private static Skin skin;
 
     private Vector3 tmpVec;
 
@@ -43,35 +43,30 @@ public abstract class AbstractScreen implements Screen {
         tmpVec = new Vector3();
     }
 
-    protected String getName()
-    {
+    protected String getName() {
         return getClass().getSimpleName();
     }
     
-    public TextureAtlas getAtlas()
-    {
+    public static TextureAtlas getAtlas() {
         if( atlas == null ) {
-            atlas = new TextureAtlas( Gdx.files.internal( "image-atlases/pages-info.atlas" ) );
+            atlas = new TextureAtlas(
+                    Gdx.files.internal("image-atlases/pages-info.atlas" ) );
         }
-        
         return atlas;
     }
     
-    public TextureAtlas getUiAtlas()
-    {
+    public static TextureAtlas getUiAtlas() {
         if( uiAtlas == null) {
-            uiAtlas = new TextureAtlas( Gdx.files.internal( "ui-atlases/uiskin.atlas"));
+            uiAtlas = new TextureAtlas(Gdx.files.internal("ui-atlases/uiskin.atlas"));
         }
-        
         return uiAtlas;
     }
     
-    public Skin getSkin()
-    {
+    public static Skin getSkin() {
         if( skin == null){
-            skin = new Skin(Gdx.files.internal( "ui-atlases/uiskin.json"), getUiAtlas());
+            skin = new Skin(Gdx.files.internal("ui-atlases/uiskin.json"),
+                    getUiAtlas());
         }
-        
         return skin;
     }
 
@@ -84,11 +79,9 @@ public abstract class AbstractScreen implements Screen {
     }
 
     @Override
-    public void resize(
-        int width,
-        int height )
-    {
-        Gdx.app.log( Darkshaft.LOG, "Resizing screen: " + getName() + " to: " + width + " x " + height );
+    public void resize(int width, int height) {
+        Gdx.app.log( Darkshaft.LOG, "Resizing screen: " + getName() +
+                " to: " + width + " x " + height );
 
         // resize the stage
         stage.setViewport( width, height, true );
@@ -123,27 +116,23 @@ public abstract class AbstractScreen implements Screen {
     }
 
     @Override
-    public void hide()
-    {
+    public void hide() {
         Gdx.app.log( Darkshaft.LOG, "Hiding screen: " + getName() );
     }
 
     @Override
-    public void pause()
-    {
+    public void pause() {
         Gdx.app.log( Darkshaft.LOG, "Pausing screen: " + getName() );
         preferences.flush();
     }
 
     @Override
-    public void resume()
-    {
+    public void resume() {
         Gdx.app.log( Darkshaft.LOG, "Resuming screen: " + getName() );
     }
 
     @Override
-    public void dispose()
-    {
+    public void dispose() {
         Gdx.app.log( Darkshaft.LOG, "Disposing screen: " + getName() );
 
         // dispose the collaborators

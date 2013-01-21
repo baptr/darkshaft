@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.Array;
 
+import com.baptr.darkshaft.screen.GameScreen;
+
 public class Entity extends Sprite implements Comparable<Entity>{
 
     protected float xOffset = 0;
@@ -21,10 +23,17 @@ public class Entity extends Sprite implements Comparable<Entity>{
     protected float animStateTime = 0f;
     protected float frameDuration = 0.175f; // TODO way to override
 
-    public Entity(float x, float y, TextureAtlas atlas, String ... regionNames) {
+    public Entity(float x, float y, String ... regionNames) {
         animations = new HashMap<String,Animation>();
+        TextureAtlas atlas = GameScreen.getAtlas();
         for(String region : regionNames) {
             Array<AtlasRegion> tr = atlas.findRegions(region);
+            if(regionNames.length == 1 && tr.size == 1) {
+                // Just a single frame, don't bother with animation
+                this.setRegion(tr.get(0));
+                this.setSize(getRegionWidth(), getRegionHeight());
+                break;
+            }
             Animation an = new Animation(frameDuration, tr);
             an.setPlayMode(Animation.LOOP_PINGPONG);
             if(currentAnimation == null) currentAnimation = an;
@@ -39,28 +48,23 @@ public class Entity extends Sprite implements Comparable<Entity>{
         this.setColor(1,1,1,1);
     }
 
-    public Entity(TextureRegion region, float x, float y) {
+    public Entity(float x, float y, TextureRegion region) {
         super(region);
         this.setPosition(x, y);
     }
 
-    public Entity(Texture texture, float x, float y) {
-        super(texture);
-        this.setPosition(x, y);
-    }
-
-    
     public void setAnimation(String animPath) { //TODO Enum
         currentAnimation = animations.get(animPath);
         animStateTime = 0f;
     }
 
-    public void update(float delta) {
+    public boolean update(float delta) {
         if(currentAnimation != null) {
             animStateTime += delta;
             TextureRegion frame = currentAnimation.getKeyFrame(animStateTime);
             this.setRegion(frame);
         }
+        return false;
     }
 
     @Override

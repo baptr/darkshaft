@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import com.baptr.darkshaft.Darkshaft;
 import com.baptr.darkshaft.util.MapUtils;
 import com.baptr.darkshaft.util.TargetHelper;
@@ -45,7 +48,7 @@ public class Tower extends Defense {
             return tileId;
         }
 
-        void setTint(Tower t) {
+        void setTint(Entity t) {
             t.setColor(r, g, b, a);
         }
         
@@ -59,33 +62,24 @@ public class Tower extends Defense {
     }
 
     TowerType type;
-    ArrayList<Mob> targets = new ArrayList<Mob>();
+    Array<Mob> targets = new Array<Mob>(false, 8);
+    Array<Bullet> bullets = new Array<Bullet>(false, 8);
     float attackDuration;
     float cooldownDuration;
     boolean isCooldown;
 
     static final String TILE_SET_NAME = "towers";
 
-    public Tower(TowerType t, int x, int y) {
-        super(t.tileId, x, y);
-        this.type = t;
-        type.setTint(this);
-    }
-    
     public Tower(TowerType t, int x, int y, boolean isMarker) {
         super(t.tileId, x, y);
         this.type = t;
         type.setTint(this, isMarker);
     }
 
-    public Tower(int x, int y) {
-        this(TowerType.BASIC, x, y);
+    public Tower(TowerType t, int x, int y) {
+        this(t, x, y, false);
     }
-    
-    public Tower(int x, int y, boolean isMarker) {
-        this(TowerType.BASIC, x, y, isMarker);
-    }
-    
+
     public void setTowerType(TowerType t, boolean isMarker){
         this.type = t;
         type.setTint(this, isMarker);
@@ -96,7 +90,7 @@ public class Tower extends Defense {
     }
     
     @Override
-    public void update(float delta){
+    public boolean update(float delta){
         super.update(delta);
         detectCreeps();
         
@@ -115,9 +109,21 @@ public class Tower extends Defense {
             }
         }
         
-        if(!isCooldown && this.targets.size() > 0){
+        if(!isCooldown && this.targets.size > 0){
             shoot(delta);
         }
+
+        for(Bullet b : bullets) {
+            if(b.update(delta)) {
+                bullets.removeValue(b, true);
+            }
+        }
+        for(Mob m : targets) {
+            if(!m.isAlive()) {
+                targets.removeValue(m,true);
+            }
+        }
+        return false;
     }
     
     public void detectCreeps() {
@@ -128,14 +134,14 @@ public class Tower extends Defense {
                 mobVec = new Vector2(m.getX(), m.getY());
                 towerVec = new Vector2(this.getX(), this.getY());
                 distance = towerVec.dst(mobVec);
-                if (distance <= range && this.targets.size() < this.type.maxTargets) {
+                if (distance <= range && this.targets.size < this.type.maxTargets) {
                     Gdx.app.log( Darkshaft.LOG, m.getName() + " was detected");
                     targets.add(m);
                 }
-                if (distance > range && targets.contains(m)) {
+                if (distance > range && targets.contains(m, true)) {
                     Gdx.app.log( Darkshaft.LOG, m.getName() +
                             " was removed as a target");
-                    targets.remove(m);
+                    targets.removeValue(m, true);
                 }
         }
     }
@@ -165,16 +171,20 @@ public class Tower extends Defense {
         }
         
         
-        for(int i = 0; i < targets.size(); i++) {
-            Mob m = targets.get(i);
-            if(m.shoot(damage)){
-                targets.remove(m);
-                i--;
-            }
+        for(Mob m : targets) {
+            bullets.add(new Bullet(m, this, 100.0f, damage));
         }
         
         if(isCooldown) {
             cooldownDuration += cooldownDelta;
+        }
+    }
+
+    @Override
+    public void draw(SpriteBatch batch) {
+        super.draw(batch);
+        for(Bullet b : bullets) {
+            b.draw(batch);
         }
     }
 }

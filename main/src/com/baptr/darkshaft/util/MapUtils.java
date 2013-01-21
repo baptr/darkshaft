@@ -162,11 +162,11 @@ public class MapUtils {
         return numSpawners;
     }
     
-    public static Spawner[] getSpawners(TextureAtlas atlas) {   
+    public static Spawner[] getSpawners() {   
         int numSpawners = getNumberOfSpawners();
         Spawner[] spawners = new Spawner[numSpawners];
         for(int i = 0; i < numSpawners; i++){
-            spawners[i] = new Spawner(i, atlas);
+            spawners[i] = new Spawner(i);
         }
         // Iterate over all the object groups in the map
         for(TiledObjectGroup group : map.objectGroups){
