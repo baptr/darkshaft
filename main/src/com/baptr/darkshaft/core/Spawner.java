@@ -54,6 +54,8 @@ public class Spawner {
             spawnTimer = 0;
             tick = 0;
             waveNumber = wave;
+        } else {
+            Gdx.app.log(Darkshaft.LOG, "No waves remain! WINNER");
         }
     }
     
@@ -195,6 +197,8 @@ public class Spawner {
                             + " after " + planner.getIterations() + " steps");                              
                 }
             }
+        } else if(TargetHelper.getNumMobs() == 0) {
+            setWave(waveNumber+1);
         }
         
         if(mobs.size > 0){

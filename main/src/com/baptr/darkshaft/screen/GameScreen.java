@@ -123,9 +123,7 @@ public abstract class GameScreen extends AbstractScreen {
         for(Entity e : entities) {
             e.update(delta);
         }
-        for(Mob m : TargetHelper.getMobs()){
-            m.update(delta);
-        }
+        TargetHelper.updateMobs(delta);
         entities.sort();
     }
 
@@ -141,12 +139,11 @@ public abstract class GameScreen extends AbstractScreen {
         batch.begin();
         
         pathMarker.draw(batch);
+        // TODO need to interleave entities and mobs for drawing
         for(Entity e : entities) {
             e.draw(batch);
         }
-        
-        for(Mob m : TargetHelper.getMobs())
-        {
+        for(Mob m : TargetHelper.getMobs()) {
             m.draw(batch);
         }
 

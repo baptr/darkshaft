@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import com.baptr.darkshaft.Darkshaft;
 import com.baptr.darkshaft.util.TargetHelper;
+import com.baptr.darkshaft.util.MapUtils;
 import com.baptr.darkshaft.core.Entity.*;
 
 public class Mob extends Unit {
@@ -50,6 +51,18 @@ public class Mob extends Unit {
         xOffset = -32;
         yOffset = -16;
         this.currentLife = mobType.baseLife;
+    }
+
+    @Override
+    public void update(float delta) {
+        super.update(delta);
+        if(currentPath == null) {
+        } else if(currentPath.size == 0) {
+            Gdx.app.log(Darkshaft.LOG, name + " reached the goal");
+            TargetHelper.removeTarget(this);
+        } else if(MapUtils.isDefense(currentPath.first())) {
+            Gdx.app.log(Darkshaft.LOG, name + " fighting tower");
+        }
     }
     
     // Returns true if this mob was killed

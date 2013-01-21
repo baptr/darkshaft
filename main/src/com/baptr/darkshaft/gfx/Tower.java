@@ -108,7 +108,8 @@ public class Tower extends Defense {
             // time for any attacks that might happen
             if(cooldownDuration >= this.type.attackCooldown){
                 delta = cooldownDuration - this.type.attackCooldown;
-                Gdx.app.log( Darkshaft.LOG, "Moving out of cooldown. New delta = " + delta);
+                //Gdx.app.log( Darkshaft.LOG, "Done with cooldown. New delta = " +
+                        //delta);
                 cooldownDuration = 0;
                 isCooldown = false;
             }
@@ -124,7 +125,6 @@ public class Tower extends Defense {
         float range = this.type.range;
         float distance;
         for (Mob m : TargetHelper.getMobs()) {
-
                 mobVec = new Vector2(m.getX(), m.getY());
                 towerVec = new Vector2(this.getX(), this.getY());
                 distance = towerVec.dst(mobVec);
@@ -133,7 +133,8 @@ public class Tower extends Defense {
                     targets.add(m);
                 }
                 if (distance > range && targets.contains(m)) {
-                    Gdx.app.log( Darkshaft.LOG, m.getName() + " was removed as a target");
+                    Gdx.app.log( Darkshaft.LOG, m.getName() +
+                            " was removed as a target");
                     targets.remove(m);
                 }
         }
@@ -144,7 +145,7 @@ public class Tower extends Defense {
         // damage for the remaining amount
         float cooldownDelta = 0;
         float attackDelta = delta;
-        if(this.type.attackLength > 0){
+        if(this.type.attackLength > 0) {
             attackDuration += delta;
             if(attackDuration > this.type.attackLength){
                 attackDelta = attackDuration - this.type.attackLength;
@@ -157,15 +158,14 @@ public class Tower extends Defense {
         }
         
         float damage = 0;
-        if(this.type.attackLength > 0){
+        if(this.type.attackLength > 0) {
             damage = this.type.damagePerSecond * attackDelta;
         } else {
             damage = this.type.damagePerSecond;
         }
         
         
-        for(int i = 0; i < targets.size(); i++)
-        {
+        for(int i = 0; i < targets.size(); i++) {
             Mob m = targets.get(i);
             if(m.shoot(damage)){
                 targets.remove(m);
@@ -173,7 +173,7 @@ public class Tower extends Defense {
             }
         }
         
-        if(isCooldown){
+        if(isCooldown) {
             cooldownDuration += cooldownDelta;
         }
     }

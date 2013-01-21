@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.IntMap;
 import com.baptr.darkshaft.Darkshaft;
 import com.baptr.darkshaft.core.Spawner;
 import com.baptr.darkshaft.core.Entity.*;
+import com.baptr.darkshaft.util.PathPlanner.Node;
 import com.baptr.darkshaft.gfx.Defense;
 
 public class MapUtils {
@@ -41,6 +42,23 @@ public class MapUtils {
      */
     public static Array<Defense> getDefenses(){
         return MapUtils.defenses;
+    }
+
+    /**
+     * Determine if map col,row contains a defense.
+     */
+    public static boolean isDefense(int mapCol, int mapRow) {
+        // TODO Use WeightMap or something to avoid iterating each time
+        for(Defense d : getDefenses()) {
+            if(d.getCol() == mapCol && d.getRow() == mapRow) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isDefense(Node n) {
+        return isDefense(n.col, n.row);
     }
     
     /**
