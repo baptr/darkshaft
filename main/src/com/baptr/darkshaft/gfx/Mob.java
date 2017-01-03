@@ -33,8 +33,9 @@ public class Mob extends Unit {
   public Mob(MobType mobType, float x, float y) {
     super(x, y, mobType.regionName);
     type = mobType;
-    // Mobs will have random speeds because they clump up when they spawn...
-    // eventually they will try and not clump up and we can remove this
+    // TODO(baptr): Mobs need random speeds because they clump up when they
+    // spawn...  eventually they will try and not clump up and we can
+    // remove this
     Random r = new Random();
     this.speed = mobType.speed * r.nextFloat();
     this.unitType = type.unitType;
@@ -52,6 +53,7 @@ public class Mob extends Unit {
       TargetHelper.removeTarget(this);
       return true;
     } else if (MapUtils.isDefense(currentPath.first())) {
+      // TODO(baptr): Actually stop to fight it.
       Gdx.app.log(Darkshaft.LOG, name + " fighting tower");
     }
     return false;

@@ -50,11 +50,12 @@ public class Entity extends Sprite implements Comparable<Entity> {
     this.setPosition(x, y);
   }
 
-  public void setAnimation(String animPath) { //TODO Enum
+  public void setAnimation(String animPath) { // TODO Enum
     currentAnimation = animations.get(animPath);
     animStateTime = 0f;
   }
 
+  /** Tick this entity, returning true if it should be destroyed. */
   public boolean update(float delta) {
     if (currentAnimation != null) {
       animStateTime += delta;
@@ -92,6 +93,7 @@ public class Entity extends Sprite implements Comparable<Entity> {
     if (this.getX() < o.getX()) {
       return 1;
     }
+    // TODO(baptr): Why doesn't this check this.X > o.X?
     return 0;
   }
 

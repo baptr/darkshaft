@@ -48,7 +48,7 @@ public abstract class GameScreen extends AbstractScreen {
     mapRenderer = assetManager.get("maps/" + mapName, TileMapRenderer.class);
 
     defenses = new Array<Defense>(false, INITIAL_DEFENSE_CAPACITY);
-    frank = new Avatar(15, -64);
+    frank = new Avatar(15, -64); // TODO(baptr): Position near goal.
     entities = new Array<Entity>(false, INITIAL_DEFENSE_CAPACITY + 2);
     entities.add(frank);
     MapUtils.setRenderer(mapRenderer, defenses);

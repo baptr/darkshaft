@@ -44,7 +44,6 @@ public class CameraInputProcessor extends AbstractInputProcessor {
   //  1 == Scroll Down
   // -1 == Scroll Up
   public boolean scrolled(int direction) {
-    //Gdx.app.log( Darkshaft.LOG, "scrolled: " + getName() + " direction: " + direction);
     // Zoom out
     if (direction > 0 && camera.zoom < MAX_ZOOM) camera.zoom += .1f;
     // Zoom in
@@ -62,8 +61,7 @@ public class CameraInputProcessor extends AbstractInputProcessor {
 
   @Override
   public boolean touchDragged(int x, int y, int pointer) {
-
-    //Gdx.app.log( Darkshaft.LOG, "touchDragged: " + getName() + " to: (" + x + ", " + y + "), pointer: " + pointer);
+    //Gdx.app.log(Darkshaft.LOG, "touchDragged: " + getName() + " to: (" + x + ", " + y + "), pointer: " + pointer);
     this.camera.translate(dragX - x, y - dragY);
     camera.update();
     dragX = x;

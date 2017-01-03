@@ -1,17 +1,18 @@
 package com.baptr.darkshaft.gfx;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.baptr.darkshaft.Darkshaft;
 import com.baptr.darkshaft.util.MapUtils;
 import com.baptr.darkshaft.util.TargetHelper;
 
 public class Tower extends Defense {
 
+  static final String TILE_SET_NAME = "towers";
+
   public enum TowerType {
-    //tileId, color(r,g,b[,a]),        range,  dmg, dur, cooldown
+    // TODO(baptr): Move to a config file?
+    //     tileId, color(r,g,b[,a]),   range,  dmg, dur, cooldown
     BASIC(0, 1f, 1f, 1f, 80f, 10f, 0f, 1f),
     FIRE(0, 1f, 0.25f, 0.25f, 40f, 2f, 10f, 5f),
     WATER(0, 0.4f, 0.5f, 1f, 50f, 15f, 1f, 8f),
@@ -45,15 +46,15 @@ public class Tower extends Defense {
     }
 
     TowerType(
-        int tileId,
+        int tileOffset,
         float r,
         float g,
-        float b,
+        float b, /* no alpha */
         float range,
         float damage,
         float attackLength,
         float attackCooldown) {
-      this(tileId, r, g, b, 1.0f, range, damage, attackLength, attackCooldown);
+      this(tileOffset, r, g, b, 1.0f, range, damage, attackLength, attackCooldown);
     }
 
     int getTileId() {
@@ -64,6 +65,8 @@ public class Tower extends Defense {
       t.setColor(r, g, b, a);
     }
 
+    // TODO(baptr): This is weird. Why not return the color for the tower
+    // to set itself?
     void setTint(Tower t, boolean isMarker) {
       if (isMarker) {
         t.setColor(r, g, b, a / 2f);
@@ -80,8 +83,6 @@ public class Tower extends Defense {
   float cooldownDuration;
   boolean isCooldown;
 
-  static final String TILE_SET_NAME = "towers";
-
   public Tower(TowerType t, int x, int y, boolean isMarker) {
     super(t.tileId, x, y);
     this.type = t;
@@ -93,6 +94,7 @@ public class Tower extends Defense {
   }
 
   public void setTowerType(TowerType t, boolean isMarker) {
+    // TODO(baptr): This should change the sprite, too.
     this.type = t;
     type.setTint(this, isMarker);
   }
@@ -106,16 +108,12 @@ public class Tower extends Defense {
     super.update(delta);
     detectCreeps();
 
-    // Check if we're in cooldown mode
     if (isCooldown) {
-
       cooldownDuration += delta;
-      // if enough time passed that we're out of cooldown, use the remaining
-      // time for any attacks that might happen
+      // If enough time passed that we're out of cooldown, use the remaining
+      // time for any attacks that might happen.
       if (cooldownDuration >= this.type.attackCooldown) {
         delta = cooldownDuration - this.type.attackCooldown;
-        //Gdx.app.log( Darkshaft.LOG, "Done with cooldown. New delta = " +
-        //delta);
         cooldownDuration = 0;
         isCooldown = false;
       }
@@ -146,12 +144,11 @@ public class Tower extends Defense {
       mobVec = new Vector2(m.getX(), m.getY());
       towerVec = new Vector2(this.getX(), this.getY());
       distance = towerVec.dst(mobVec);
+      // TODO(baptr): Maybe prioritize closer targets?
       if (distance <= range && this.targets.size < this.type.maxTargets) {
-        Gdx.app.log(Darkshaft.LOG, m.getName() + " was detected");
         targets.add(m);
       }
       if (distance > range && targets.contains(m, true)) {
-        Gdx.app.log(Darkshaft.LOG, m.getName() + " was removed as a target");
         targets.removeValue(m, true);
       }
     }
@@ -176,6 +173,8 @@ public class Tower extends Defense {
 
     float damage = 0;
     if (this.type.attackLength > 0) {
+      // TODO(baptr): It doesn't make sense for damage to be based on
+      // render time.
       damage = this.type.damagePerSecond * attackDelta;
     } else {
       damage = this.type.damagePerSecond;

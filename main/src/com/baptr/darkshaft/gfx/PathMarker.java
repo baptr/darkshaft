@@ -8,6 +8,7 @@ import com.baptr.darkshaft.screen.GameScreen;
 import com.baptr.darkshaft.util.MapUtils;
 import com.baptr.darkshaft.util.PathPlanner.Node;
 
+/** PathMarker draws each step in the provided path. */
 public class PathMarker extends Sprite {
 
   private FloatArray worldX;

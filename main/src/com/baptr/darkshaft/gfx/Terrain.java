@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.baptr.darkshaft.Darkshaft;
 
 public class Terrain extends Sprite {
-
   public static int TILE_TYPES = 4;
   public static int TILE_WIDTH = 62;
   public static int TILE_X_OFFSET = 30;

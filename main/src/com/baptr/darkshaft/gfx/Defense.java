@@ -22,6 +22,7 @@ public class Defense extends Entity {
     this.col = col;
     this.row = row;
     // Offset blows up here
+    // TODO(baptr): remember what ^ means...
     this.setPosition(
         MapUtils.getWorldX(col, row) - xOffset, MapUtils.getWorldY(col, row) - yOffset);
   }

@@ -3,10 +3,7 @@ package com.baptr.darkshaft.input;
 import com.badlogic.gdx.InputProcessor;
 
 public abstract class AbstractInputProcessor implements InputProcessor {
-
-  public AbstractInputProcessor() {
-    // TODO Auto-generated constructor stub
-  }
+  public AbstractInputProcessor() {}
 
   protected String getName() {
     return getClass().getSimpleName();

@@ -55,6 +55,7 @@ public class Spawner {
     }
   }
 
+  // Check if it's time to spawn more mobs.
   public Array<Mob> check(float delta) {
     spawnTimer += delta;
     if (spawnTimer > currentSpawnRate || tick == 0) {
@@ -73,7 +74,6 @@ public class Spawner {
   // to the current wave. This will expand the shorthand of AxB to add
   // mob "A" B times to the current wave
   private Wave ParseWave(int number, float spawnRate, String waveString) {
-
     Wave wave = new Wave(number, spawnRate);
     int tick = 0;
     Array<String> tokens = tokenizeWave(waveString);
@@ -173,6 +173,8 @@ public class Spawner {
         int mobType = wave.mobs.get(tick).get(i);
         if (mobType > 0) {
           mobType--;
+          // TODO(baptr): jitter time or position offset slightly so
+          // they spawn as a pack, not on top of eachother.
           Mob m =
               new Mob(
                   MobType.values()[mobType],
@@ -196,6 +198,8 @@ public class Spawner {
         }
       }
     } else if (TargetHelper.getNumMobs() == 0) {
+      // TODO(baptr): Seems like an awkward place for this logic.
+      Gdx.app.log(Darkshaft.LOG, "Wave " + waveNumber + " complete, starting next wave.");
       setWave(waveNumber + 1);
     }
 

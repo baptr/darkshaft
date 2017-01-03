@@ -28,7 +28,8 @@ public class Unit extends Entity {
   @Override
   public boolean update(float delta) {
     super.update(delta);
-    if (currentPath != null && currentPath.size > 0) {
+    // Handle movement along the current path.
+    if (this.isMoving()) {
       Node n = currentPath.get(0);
       // TODO: Refactor getWorldX/Y to return the center of the tile
       float nodeX = MapUtils.getWorldX(n.col, n.row) + 32;
