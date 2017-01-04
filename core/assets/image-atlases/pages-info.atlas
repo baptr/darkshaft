@@ -1,0 +1,129 @@
+
+pages-info.png
+size: 64,32
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+gamescreen/bullet
+  rotate: false
+  xy: 42, 20
+  size: 7, 7
+  orig: 7, 7
+  offset: 0, 0
+  index: -1
+gamescreen/marker
+  rotate: false
+  xy: 2, 2
+  size: 38, 25
+  orig: 38, 25
+  offset: 0, 0
+  index: -1
+
+pages-info2.png
+size: 256,64
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Characters/Mobs/Dragon
+  rotate: false
+  xy: 2, 2
+  size: 62, 56
+  orig: 62, 56
+  offset: 0, 0
+  index: -1
+Characters/Mobs/Mob1
+  rotate: false
+  xy: 66, 25
+  size: 43, 33
+  orig: 43, 33
+  offset: 0, 0
+  index: -1
+Characters/Mobs/Mob2
+  rotate: false
+  xy: 111, 25
+  size: 43, 33
+  orig: 43, 33
+  offset: 0, 0
+  index: -1
+
+pages-info3.png
+size: 256,64
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Characters/Frank/Down
+  rotate: false
+  xy: 2, 2
+  size: 24, 43
+  orig: 24, 43
+  offset: 0, 0
+  index: 1
+Characters/Frank/Down
+  rotate: false
+  xy: 28, 2
+  size: 24, 43
+  orig: 24, 43
+  offset: 0, 0
+  index: 2
+Characters/Frank/Down
+  rotate: false
+  xy: 54, 2
+  size: 24, 43
+  orig: 24, 43
+  offset: 0, 0
+  index: 3
+Characters/Frank/East
+  rotate: false
+  xy: 80, 2
+  size: 24, 43
+  orig: 24, 43
+  offset: 0, 0
+  index: 1
+Characters/Frank/East
+  rotate: false
+  xy: 106, 2
+  size: 24, 43
+  orig: 24, 43
+  offset: 0, 0
+  index: 2
+Characters/Frank/East
+  rotate: false
+  xy: 132, 2
+  size: 24, 43
+  orig: 24, 43
+  offset: 0, 0
+  index: 3
+Characters/Frank/South
+  rotate: false
+  xy: 158, 2
+  size: 24, 43
+  orig: 24, 43
+  offset: 0, 0
+  index: 1
+Characters/Frank/South
+  rotate: false
+  xy: 184, 2
+  size: 24, 43
+  orig: 24, 43
+  offset: 0, 0
+  index: 2
+Characters/Frank/South
+  rotate: false
+  xy: 210, 2
+  size: 24, 43
+  orig: 24, 43
+  offset: 0, 0
+  index: 3
+
+pages-info4.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+splashscreen/SplashScreen
+  rotate: false
+  xy: 2, 2
+  size: 800, 600
+  orig: 800, 600
+  offset: 0, 0
+  index: -1
