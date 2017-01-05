@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -30,8 +29,6 @@ public abstract class AbstractScreen implements Screen {
   private static TextureAtlas uiAtlas;
   private static Skin skin;
 
-  private Vector3 tmpVec;
-
   public AbstractScreen(Darkshaft game) {
     this.game = game;
     this.assetManager = game.manager;
@@ -42,7 +39,7 @@ public abstract class AbstractScreen implements Screen {
     input = new InputMultiplexer();
     input.addProcessor(stage);
     preferences = Gdx.app.getPreferences(Darkshaft.LOG);
-    tmpVec = new Vector3();
+    camera.translate(900, -200, 0);
   }
 
   protected String getName() {
@@ -83,17 +80,7 @@ public abstract class AbstractScreen implements Screen {
     Gdx.app.log(Darkshaft.LOG, "Resizing screen: " + getName() + " to: " + width + " x " + height);
 
     // resize the stage
-    viewport.update(width, height, false); // TODO(baptr): maybe true?
-
-    /*
-    // re-configure camera, maintaining position
-    tmpVec.set(camera.position);
-
-    camera.setToOrtho(false, width, height);
-
-    camera.position.set(tmpVec);
-    camera.update();
-    */
+    viewport.update(width, height, false);
   }
 
   public void update(float delta) {

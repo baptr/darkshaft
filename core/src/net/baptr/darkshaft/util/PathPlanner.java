@@ -1,11 +1,13 @@
 package net.baptr.darkshaft.util;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectIntMap;
 import com.badlogic.gdx.utils.ObjectMap;
 import java.util.Iterator;
+import net.baptr.darkshaft.Darkshaft;
 import net.baptr.darkshaft.core.Entity.*;
 import net.baptr.darkshaft.gfx.*;
 
@@ -85,6 +87,20 @@ public class PathPlanner {
     setGoal(endCol, endRow);
 
     Array<Node> path = findPath(new Node(startCol, startRow));
+    if (path == null) {
+      Gdx.app.log(
+          Darkshaft.LOG,
+          "Failed to plan path! ("
+              + startCol
+              + ", "
+              + startRow
+              + ") -> ("
+              + endCol
+              + ", "
+              + endRow
+              + ")");
+      return path;
+    }
     if (p != null) {
       path.removeIndex(0);
       p.setPath(path);

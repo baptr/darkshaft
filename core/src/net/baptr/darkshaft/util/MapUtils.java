@@ -68,7 +68,9 @@ public class MapUtils {
   /** Calculate the map row index for a given world point */
   public static int getMapRow(float worldX, float worldY) {
     return (int)
-        Math.floor((((unitsPerTileY - worldY) / unitsPerTileY) - ((worldX) / unitsPerTileX)) / 2f);
+        Math.floor(
+            mapHeight
+                + (((unitsPerTileY - worldY) / unitsPerTileY) - ((worldX) / unitsPerTileX)) / 2f);
   }
 
   /** Calculate the map column index for a given world point. */
@@ -79,12 +81,12 @@ public class MapUtils {
 
   /** Calculate the world x coordinate from a given map row/col pair */
   public static int getWorldX(int mapCol, int mapRow) {
-    return (mapCol - mapRow - 1) * unitsPerTileX;
+    return (mapCol - mapRow + mapHeight - 1) * unitsPerTileX;
   }
 
   /** Calculate the world y coordinate from a given map row/col pair */
   public static int getWorldY(int mapCol, int mapRow) {
-    return (-mapCol - mapRow - 1) * unitsPerTileY;
+    return (-mapCol - mapRow + mapHeight - 1) * unitsPerTileY;
   }
 
   public static TextureRegion getTileRegion(int tileId) {
@@ -172,7 +174,8 @@ public class MapUtils {
           // Get this spawner's number
           int spawnNum = Integer.parseInt(object.getName().replace("Spawn", ""));
           Rectangle rec = object.getRectangle();
-          spawners[spawnNum].setLocation((int) (rec.x / rec.width), (int) (rec.y / rec.height));
+          spawners[spawnNum]
+              .setLocation((int) (rec.x / rec.width), (int) (mapHeight - 1 - rec.y / rec.height));
           // Iterate over all the wave properties.
           MapProperties props = object.getProperties();
           for (waveNum = 0; props.containsKey("Wave" + waveNum + "_SpawnRate"); waveNum++) {
@@ -184,7 +187,8 @@ public class MapUtils {
         } else if (object.getName().startsWith("End")) {
           int endNum = Integer.parseInt(object.getName().replace("End", ""));
           Rectangle rec = object.getRectangle();
-          spawners[endNum].setEnd((int) (rec.x / rec.width), (int) (rec.y / rec.height));
+          spawners[endNum]
+              .setEnd((int) (rec.x / rec.width), (int) (mapHeight - 1 - rec.y / rec.height));
         }
       }
     }

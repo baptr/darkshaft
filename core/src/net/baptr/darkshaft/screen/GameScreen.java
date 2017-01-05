@@ -53,7 +53,7 @@ public abstract class GameScreen extends AbstractScreen {
     mapRenderer = new IsometricTiledMapRenderer(map, 1f);
 
     defenses = new Array<Defense>(false, INITIAL_DEFENSE_CAPACITY);
-    frank = new Avatar(15, -64); // TODO(baptr): Position near goal.
+    frank = new Avatar(890, -350); // TODO(baptr): Position near goal.
     entities = new Array<Entity>(false, INITIAL_DEFENSE_CAPACITY + 2);
     entities.add(frank);
     MapUtils.setMap(map, defenses);
@@ -115,7 +115,6 @@ public abstract class GameScreen extends AbstractScreen {
   @Override
   public void update(float delta) {
     super.update(delta);
-    // camera.update(); // XXX Needed?
     for (Spawner spawn : spawners) {
       Array<Mob> mobs = spawn.check(delta);
     }
@@ -138,7 +137,7 @@ public abstract class GameScreen extends AbstractScreen {
     mapRenderer.setView(camera);
     mapRenderer.render();
 
-    batch.setProjectionMatrix(camera.combined);
+    batch.setProjectionMatrix(camera.combined); // TODO(baptr): This does nothing?
     batch.begin();
 
     pathMarker.draw(batch);
